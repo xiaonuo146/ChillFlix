@@ -1,0 +1,873 @@
+/* ==========================================================================
+   CineNest / ChillFlix - COMPONENTS DÙNG CHUNG
+   Đồng bộ 100% với Header, Announcement Bar & Design System
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. NÚT BẤM (BUTTONS)
+   -------------------------------------------------------------------------- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    height: 44px;
+    padding: 0 var(--space-6);
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: all 180ms ease-out;
+}
+
+.btn--primary {
+    background-color: var(--primary);
+    color: var(--on-primary);
+}
+
+.btn--primary:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-1px);
+}
+
+.btn--outline {
+    border: 1px solid var(--border);
+    color: var(--text);
+    background: transparent;
+}
+
+.btn--outline:hover {
+    background-color: var(--surface-2);
+    border-color: var(--text-muted);
+}
+
+/* Nút dạng viên thuốc tròn đặc trưng của nút "Đặt phòng" trên thanh Header */
+.btn-booking-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--primary);
+    color: var(--on-primary);
+    font-weight: 700;
+    font-size: 14px;
+    padding: 8px 22px;
+    border-radius: 999px;
+    text-decoration: none;
+    box-shadow: 0 2px 12px rgba(245, 181, 68, 0.28);
+    transition: all 180ms ease;
+    white-space: nowrap;
+}
+
+.btn-booking-pill:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(245, 181, 68, 0.4);
+}
+
+/* Chuẩn tương phản & Focus bàn phím WCAG AA */
+.btn:focus-visible,
+.btn-booking-pill:focus-visible,
+.search__input:focus-visible,
+.action-btn:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+
+/* --------------------------------------------------------------------------
+   2. THANH HEADER CHÍNH (STICKY BLUR GLASS)
+   -------------------------------------------------------------------------- */
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    height: var(--header-height);
+    background-color: rgba(24, 20, 32, 0.94);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    transition: background-color 200ms ease;
+}
+
+[data-theme="light"] .header {
+    background-color: rgba(255, 255, 255, 0.94);
+}
+
+.header__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: var(--space-4);
+}
+
+/* Logo */
+.header__logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    flex-shrink: 0;
+}
+
+.logo__icon {
+    font-size: 26px;
+    line-height: 1;
+}
+
+.logo__text-group {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+}
+
+.logo__brand {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--primary);
+    letter-spacing: -0.3px;
+}
+
+.logo__sub {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+}
+
+/* Thanh điều hướng Menu giữa */
+.header__nav {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+}
+
+.nav__link {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 150ms ease;
+    padding: 6px 0;
+    position: relative;
+}
+
+.nav__link:hover,
+.nav__link.active {
+    color: var(--text);
+}
+
+.nav__link.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--primary);
+    border-radius: 2px;
+}
+
+/* Cụm công cụ bên phải (Search, Theme, Lang, Cart, User) */
+.header__actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Ô tìm kiếm bo tròn */
+.header__search {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search__icon {
+    position: absolute;
+    left: 14px;
+    font-size: 13px;
+    color: var(--text-muted);
+    pointer-events: none;
+}
+
+.search__input {
+    width: 220px;
+    height: 38px;
+    background-color: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0 14px 0 36px;
+    font-size: 13px;
+    font-family: inherit;
+    color: var(--text);
+    outline: none;
+    transition: border-color 180ms, width 200ms ease, background-color 180ms;
+}
+
+.search__input:focus {
+    border-color: var(--primary);
+    background-color: var(--surface);
+    width: 250px;
+}
+
+.search__input::placeholder {
+    color: var(--text-muted);
+}
+
+/* Các nút bấm icon (Theme, Lang) */
+.action-btn {
+    background: transparent;
+    color: var(--text);
+    border: none;
+    font-size: 16px;
+    height: 38px;
+    min-width: 38px;
+    padding: 0 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: background-color 150ms, color 150ms;
+}
+
+.action-btn:hover {
+    background-color: var(--surface-2);
+}
+
+.lang-btn {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.lang-btn strong {
+    color: var(--text);
+}
+
+/* Giỏ hàng kèm badge số lượng */
+.cart-btn {
+    position: relative;
+    text-decoration: none;
+}
+
+.cart__icon {
+    font-size: 18px;
+}
+
+.cart__badge {
+    position: absolute;
+    top: 2px;
+    right: 0px;
+    background-color: var(--danger);
+    color: #FFFFFF;
+    font-size: 10px;
+    font-weight: 700;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--surface);
+}
+
+/* Avatar người dùng */
+.user-dropdown-wrapper {
+    position: relative;
+}
+
+.avatar-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(245, 181, 68, 0.12);
+    border: 1px solid rgba(245, 181, 68, 0.35);
+    padding: 4px 10px 4px 5px;
+    border-radius: 999px;
+    cursor: pointer;
+    color: var(--primary);
+    transition: background-color 150ms, border-color 150ms;
+}
+
+.avatar-btn:hover {
+    background: rgba(245, 181, 68, 0.2);
+    border-color: var(--primary);
+}
+
+.avatar-circle {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: var(--on-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+}
+
+.avatar-arrow {
+    font-size: 10px;
+    transition: transform 150ms ease;
+}
+
+.avatar-btn[aria-expanded="true"] .avatar-arrow {
+    transform: rotate(180deg);
+}
+
+/* Menu Dropdown đổ xuống */
+.user-dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: calc(100% + 8px);
+    width: 230px;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-main);
+    padding: 8px 0;
+    z-index: 110;
+    animation: fadeInDown 150ms ease-out;
+}
+
+.user-dropdown-menu.show {
+    display: block;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dropdown__header {
+    padding: 10px 16px;
+}
+
+.dropdown__name {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text);
+}
+
+.dropdown__rank {
+    font-size: 12px;
+    color: var(--primary);
+    margin-top: 2px;
+}
+
+.dropdown__divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 6px 0;
+}
+
+.dropdown__item {
+    display: block;
+    padding: 9px 16px;
+    font-size: 13px;
+    color: var(--text);
+    text-decoration: none;
+    transition: background-color 150ms;
+}
+
+.dropdown__item:hover {
+    background-color: var(--surface-2);
+}
+
+.dropdown__item--danger {
+    color: var(--danger);
+}
+
+
+/* --------------------------------------------------------------------------
+   3. THANH THÔNG BÁO WEB THỰC (REAL ANNOUNCEMENT BAR)
+   -------------------------------------------------------------------------- */
+.real-announcement-bar {
+    background-color: #120e18;
+    border-bottom: 1px solid var(--border);
+    padding: 8px 0;
+    font-size: 12.5px;
+}
+
+[data-theme="light"] .real-announcement-bar {
+    background-color: #f3ecf7;
+}
+
+.announcement__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.announcement__left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.announcement__badge {
+    background: var(--primary);
+    color: var(--on-primary);
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.announcement__text {
+    color: var(--text);
+}
+
+.announcement__right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text-muted);
+}
+
+.announcement__separator {
+    opacity: 0.35;
+}
+
+
+/* --------------------------------------------------------------------------
+   4. BADGE TRẠNG THÁI (Đơn hàng / Phòng chiếu)
+   -------------------------------------------------------------------------- */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+}
+
+.badge--warning {
+    background: rgba(240, 160, 32, 0.15);
+    color: var(--warning);
+    border: 1px solid rgba(240, 160, 32, 0.3);
+}
+
+.badge--success {
+    background: rgba(63, 185, 80, 0.15);
+    color: var(--success);
+    border: 1px solid rgba(63, 185, 80, 0.3);
+}
+
+.badge--info {
+    background: rgba(90, 169, 255, 0.15);
+    color: var(--info);
+    border: 1px solid rgba(90, 169, 255, 0.3);
+}
+
+.badge--danger {
+    background: rgba(229, 72, 77, 0.15);
+    color: var(--danger);
+    border: 1px solid rgba(229, 72, 77, 0.3);
+}
+
+/* ==========================================================================
+   5. HERO BANNER DẠNG KHUNG ĐIỆN ẢNH (CINEMA ISLAND CARD)
+   ========================================================================== */
+
+/* Khung bọc căn giữa trang và cách thanh thông báo bên trên một khoảng thở */
+.hero-wrapper {
+    padding-top: var(--space-6);
+    position: relative;
+    z-index: 5;
+}
+
+/* Chiếc thẻ Hero đóng khung bo góc chuẩn cao cấp */
+.hero-card {
+    position: relative;
+    min-height: 520px;
+    border-radius: 24px;
+    /* Bo góc mềm mại như ý bạn */
+    overflow: hidden;
+    /* Cắt gọn ảnh backdrop không bị tràn ra ngoài */
+    border: 1px solid var(--border);
+    /* Viền tinh tế ngăn cách với nền đen */
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.55);
+    /* Đổ bóng sâu tạo cảm giác nổi */
+    display: flex;
+    align-items: center;
+    padding: 50px 48px 80px 48px;
+    /* Chừa đáy cho thanh Quick Bar đè nhẹ lên */
+}
+
+[data-theme="light"] .hero-card {
+    box-shadow: 0 12px 36px rgba(29, 23, 34, 0.12);
+}
+
+/* Ảnh Backdrop chạy slideshow từ TMDB bên trong thẻ */
+.hero-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center 25%;
+    filter: brightness(0.7) contrast(1.15);
+    opacity: 0;
+    transform: scale(1.03);
+    transition: opacity 900ms ease-in-out, transform 6000ms ease-out;
+    z-index: 1;
+}
+
+.hero-backdrop.active {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Lớp phủ Gradient điện ảnh trong lòng khung */
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+        linear-gradient(to right, rgba(14, 11, 16, 0.95) 20%, rgba(14, 11, 16, 0.6) 65%, rgba(14, 11, 16, 0.25) 100%),
+        linear-gradient(to top, rgba(14, 11, 16, 0.85) 0%, transparent 50%);
+    z-index: 2;
+}
+
+[data-theme="light"] .hero-overlay {
+    background:
+        linear-gradient(to right, rgba(250, 246, 240, 0.95) 20%, rgba(250, 246, 240, 0.7) 65%, rgba(250, 246, 240, 0.3) 100%),
+        linear-gradient(to top, rgba(250, 246, 240, 0.8) 0%, transparent 50%);
+}
+
+/* Vùng nội dung chữ & nút bấm */
+.hero__content {
+    position: relative;
+    z-index: 3;
+    max-width: 640px;
+    /* Giới hạn độ dài dòng chữ để mắt đọc dễ chịu nhất */
+}
+
+.hero__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: rgba(245, 181, 68, 0.15);
+    border: 1px solid rgba(245, 181, 68, 0.3);
+    color: var(--primary);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: var(--space-4);
+}
+
+.hero__title {
+    font-size: 40px;
+    color: var(--text);
+    margin-bottom: var(--space-4);
+    line-height: 1.22;
+}
+
+.hero__title--highlight {
+    color: var(--primary);
+    font-style: italic;
+}
+
+.hero__desc {
+    font-size: 15.5px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: var(--space-6);
+}
+
+.hero__cta-group {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    margin-bottom: var(--space-8);
+}
+
+.hero__btn {
+    height: 48px;
+    padding: 0 28px;
+    font-size: 15px;
+}
+
+/* Footer chân hero: Tên phim & Dots */
+.hero__footer-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.hero__now-playing {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--text);
+    background: rgba(14, 11, 16, 0.65);
+    backdrop-filter: blur(8px);
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(245, 181, 68, 0.25);
+    cursor: pointer;
+    transition: border-color 200ms;
+}
+
+.hero__now-playing:hover {
+    border-color: var(--primary);
+}
+
+.pulse-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--danger);
+    box-shadow: 0 0 8px var(--danger);
+}
+
+.hero-dots-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.hero-dot {
+    width: 26px;
+    height: 4px;
+    border-radius: 2px;
+    background-color: rgba(255, 255, 255, 0.25);
+    cursor: pointer;
+    transition: all 300ms ease;
+}
+
+.hero-dot:hover {
+    background-color: rgba(255, 255, 255, 0.6);
+}
+
+.hero-dot.active {
+    width: 42px;
+    background-color: var(--primary);
+    box-shadow: 0 0 10px rgba(245, 181, 68, 0.5);
+}
+
+/* --------------------------------------------------------------------------
+   XỬ LÝ RESPONSIVE THÍCH ỨNG (KHÔNG ẢNH HƯỞNG MẮT NHÌN TRÊN MÀN HÌNH NHỎ)
+   -------------------------------------------------------------------------- */
+
+/* Tablet (dưới 1024px) */
+@media (max-width: 1023px) {
+    .hero-card {
+        min-height: 480px;
+        padding: 40px 32px 70px 32px;
+    }
+
+    .hero__title {
+        font-size: 32px;
+    }
+}
+
+/* Mobile (dưới 768px): Tự duỗi phẳng sát mép màn hình để chữ thoáng mắt */
+@media (max-width: 767px) {
+    .hero-wrapper {
+        padding-top: 0;
+        padding-left: 0;
+        padding-right: 0;
+        /* Xóa lề ngoài để chạm mép kính điện thoại */
+    }
+
+    .hero-card {
+        border-radius: 0;
+        /* Bỏ bo góc khi lên điện thoại để tận dụng tối đa diện tích */
+        border-left: none;
+        border-right: none;
+        min-height: 440px;
+        padding: 36px 20px 48px 20px;
+    }
+
+    .hero__title {
+        font-size: 26px;
+    }
+
+    .hero__desc {
+        font-size: 14px;
+    }
+
+    .hero__cta-group {
+        flex-direction: column;
+        align-items: stretch;
+        /* Nút bấm full bề ngang dễ bấm ngón cái */
+        gap: 12px;
+    }
+
+    .hero__btn {
+        width: 100%;
+    }
+
+    .hero__footer-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   THANH ĐẶT NHANH (QUICK BOOKING FLOATING BAR)
+   -------------------------------------------------------------------------- */
+.quick-booking-wrapper {
+    position: relative;
+    z-index: 10;
+    margin-top: -65px;
+    /* Hiệu ứng nổi đè lên mép dưới Hero */
+    margin-bottom: var(--space-6);
+}
+
+.quick-booking-bar {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-main);
+    padding: 18px 24px;
+    display: grid;
+    grid-template-columns: 1.2fr auto 1.3fr auto 1.4fr 1.3fr;
+    align-items: center;
+    gap: 16px;
+}
+
+.quick-divider {
+    width: 1px;
+    height: 48px;
+    background-color: var(--border);
+}
+
+.quick-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.quick-field__label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.quick-field__input {
+    background: transparent;
+    border: none;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 14.5px;
+    font-weight: 600;
+    outline: none;
+    padding: 4px 0;
+    cursor: pointer;
+}
+
+.quick-field__select option {
+    background-color: var(--surface);
+    color: var(--text);
+}
+
+.quick-field__hint {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+/* Stepper chọn người */
+.stepper-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 2px;
+}
+
+.stepper-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 16px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 150ms ease;
+}
+
+.stepper-btn:hover {
+    background: var(--primary);
+    color: var(--on-primary);
+    border-color: var(--primary);
+}
+
+.stepper-value {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--text);
+    min-width: 60px;
+}
+
+.quick-action {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.quick-search-btn {
+    width: 100%;
+    height: 48px;
+    font-size: 14.5px;
+    border-radius: var(--radius-md);
+    box-shadow: 0 4px 14px rgba(245, 181, 68, 0.3);
+}
+
+/* Responsive khi thu nhỏ màn hình */
+@media (max-width: 900px) {
+    .hero-section {
+        min-height: 460px;
+        padding: 40px 0 60px 0;
+    }
+
+    .hero__title {
+        font-size: 30px;
+    }
+
+    .quick-booking-wrapper {
+        margin-top: var(--space-4);
+    }
+
+    .quick-booking-bar {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .quick-divider {
+        display: none;
+    }
+}
