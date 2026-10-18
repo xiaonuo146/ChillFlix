@@ -871,3 +871,208 @@
         display: none;
     }
 }
+
+/* ==========================================================================
+   6. RESPONSIVE HEADER & MOBILE DRAWER (NÚT 3 GẠCH & MENU TRƯỢT)
+   ========================================================================== */
+
+/* Nút 3 gạch Hamburger (mặc định ẩn trên máy tính) */
+.hamburger-btn {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    padding: 8px;
+    flex-shrink: 0;
+}
+
+.hamburger-line {
+    width: 20px;
+    height: 2px;
+    background-color: var(--text);
+    border-radius: 2px;
+    transition: all 200ms ease;
+}
+
+/* Lớp màn đen mờ khi mở Menu trên điện thoại */
+.drawer-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 199;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 250ms ease;
+}
+
+.drawer-overlay.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Khung Menu trượt (Mobile Drawer) */
+.mobile-drawer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 300px;
+    max-width: 85%;
+    height: 100%;
+    background-color: var(--surface);
+    border-right: 1px solid var(--border);
+    z-index: 200;
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
+    transform: translateX(-100%);
+    /* Giấu về bên trái */
+    transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.mobile-drawer.open {
+    transform: translateX(0);
+    /* Trượt ra mượt mà */
+}
+
+.drawer__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+}
+
+.drawer-close-btn {
+    width: 36px;
+    height: 36px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    color: var(--text-muted);
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 150ms ease;
+}
+
+.drawer-close-btn:hover {
+    color: var(--text);
+    background: var(--surface-hover);
+}
+
+/* Danh sách link menu điện thoại */
+.drawer__nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 20px 0;
+}
+
+.drawer__link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: var(--radius-md);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    text-decoration: none;
+    transition: all 150ms ease;
+}
+
+.drawer__link:hover,
+.drawer__link.active {
+    background-color: var(--surface-2);
+    color: var(--primary);
+}
+
+.drawer__link--highlight {
+    background-color: rgba(245, 181, 68, 0.15);
+    color: var(--primary);
+    border: 1px solid rgba(245, 181, 68, 0.3);
+    margin-top: 8px;
+}
+
+.drawer__divider {
+    height: 1px;
+    background-color: var(--border);
+    margin: auto 0 16px 0;
+}
+
+.drawer__info-box {
+    background: var(--surface-2);
+    padding: 12px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 16px;
+    font-size: 12px;
+}
+
+.drawer__info-title {
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 4px;
+}
+
+.drawer__info-text {
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+/* ==========================================================================
+   QUY TẮC HIỂN THỊ KHI XEM TRÊN ĐIỆN THOẠI & TABLET (< 1024px)
+   ========================================================================== */
+@media (max-width: 1023px) {
+
+    /* Hiện nút 3 gạch */
+    .hamburger-btn {
+        display: flex;
+    }
+
+    /* Ẩn thanh menu dài của máy tính */
+    .header__nav {
+        display: none;
+    }
+
+    /* Ẩn ô input tìm kiếm dài, ẩn nút ngôn ngữ trên topbar để chống chật chội */
+    .header__search,
+    .lang-btn {
+        display: none;
+    }
+
+    /* Thanh thông báo ưu đãi: Ẩn bớt vế phải, chỉ giữ câu ưu đãi trung tâm */
+    .announcement__right {
+        display: none;
+    }
+
+    .announcement__container {
+        justify-content: center;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo__sub {
+        display: none;
+        /* Màn hình quá hẹp thì ẩn chữ phụ "CINEMA LOUNGE", chỉ giữ "ChillFlix" */
+    }
+
+    .header__actions {
+        gap: 8px;
+    }
+}

@@ -221,3 +221,41 @@ btnQuickSearch.addEventListener('click', () => {
 
     alert(`Đang tìm phòng cho ${guestCount} người vào ${selectedDate} lúc ${selectedTime}...\n(Sẽ chuyển tiếp sang trang Đặt phòng)`);
 });
+// ==========================================================================
+// XỬ LÝ MỞ / ĐÓNG MENU TRƯỢT DI ĐỘNG (MOBILE DRAWER)
+// ==========================================================================
+const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+const drawerCloseBtn = document.getElementById('drawerCloseBtn');
+const mobileDrawer = document.getElementById('mobileDrawer');
+const drawerOverlay = document.getElementById('drawerOverlay');
+
+function openDrawer() {
+    mobileDrawer.classList.add('open');
+    drawerOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden'; // Khóa cuộn trang khi menu đang mở
+}
+
+function closeDrawer() {
+    mobileDrawer.classList.remove('open');
+    drawerOverlay.classList.remove('open');
+    document.body.style.overflow = ''; // Mở lại cuộn trang
+}
+
+// Bấm nút 3 gạch -> Mở menu
+if (mobileMenuBtn) {
+    mobileMenuBtn.addEventListener('click', openDrawer);
+}
+
+// Bấm nút ✕ hoặc bấm ra ngoài màn đen -> Đóng menu
+if (drawerCloseBtn) {
+    drawerCloseBtn.addEventListener('click', closeDrawer);
+}
+if (drawerOverlay) {
+    drawerOverlay.addEventListener('click', closeDrawer);
+}
+
+// Bấm vào bất kỳ tab nào trong menu -> Tự động đóng menu lại
+const drawerLinks = document.querySelectorAll('.drawer__link');
+drawerLinks.forEach(link => {
+    link.addEventListener('click', closeDrawer);
+});

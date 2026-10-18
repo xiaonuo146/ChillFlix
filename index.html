@@ -18,7 +18,12 @@
     <!-- ==================== 1. THANH HEADER CHÍNH ==================== -->
     <header class="header">
         <div class="container header__container">
-
+            <!-- NÚT 3 GẠCH HAMBURGER (Chỉ hiện trên điện thoại/tablet) -->
+            <button id="mobileMenuBtn" class="hamburger-btn" aria-label="Mở menu điều hướng">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
             <!-- CỤM TRÁI: Logo ChillFlix -->
             <a href="index.html" class="header__logo">
                 <span class="logo__icon">🎬</span>
@@ -86,7 +91,53 @@
             </div>
         </div>
     </header>
+    <!-- ==================== KHUNG MENU TRƯỢT DI ĐỘNG (MOBILE DRAWER) ==================== -->
+    <div id="drawerOverlay" class="drawer-overlay"></div>
 
+    <aside id="mobileDrawer" class="mobile-drawer" aria-label="Menu di động">
+        <div class="drawer__header">
+            <div class="header__logo">
+                <span class="logo__icon">🎬</span>
+                <span class="logo__brand">ChillFlix</span>
+            </div>
+            <!-- Nút đóng ✕ -->
+            <button id="drawerCloseBtn" class="drawer-close-btn" aria-label="Đóng menu">✕</button>
+        </div>
+
+        <!-- Danh sách Tab lớn dễ chạm ngón tay -->
+        <nav class="drawer__nav">
+            <a href="index.html" class="drawer__link active">
+                <span>🏠</span> Trang chủ
+            </a>
+            <a href="#explore" class="drawer__link">
+                <span>🎞️</span> Khám phá phim
+            </a>
+            <a href="#menu" class="drawer__link">
+                <span>🍿</span> Đồ ăn & Thức uống
+            </a>
+            <a href="#booking" class="drawer__link drawer__link--highlight">
+                <span>✨</span> Đặt phòng chiếu ngay
+            </a>
+        </nav>
+
+        <div class="drawer__divider"></div>
+
+        <!-- Tiện ích phụ trong Drawer -->
+        <div class="drawer__footer">
+            <div class="drawer__info-box">
+                <p class="drawer__info-title">Rạp Chiếu Riêng Tư ChillFlix</p>
+                <p class="drawer__info-text">⏰ Giờ mở cửa: 09:00 – 24:00 (Hàng ngày)</p>
+                <p class="drawer__info-text">📞 Hotline: 1900 6828 - 0988 234 567</p>
+            </div>
+
+            <div class="drawer__actions">
+                <button id="drawerLangToggle" class="btn btn--outline"
+                    style="width: 100%; height: 40px; font-size: 13px;">
+                    🌐 Ngôn ngữ: <strong>Tiếng Việt (VI)</strong>
+                </button>
+            </div>
+        </div>
+    </aside>
     <!-- ==================== 2. THANH DẢI THÔNG BÁO WEB THẬT ==================== -->
     <!-- Thay thế dải test demo: Dải này chạy thông báo khuyến mãi, tiêu chuẩn phòng 4K & hotline cho khách -->
     <div class="real-announcement-bar">
