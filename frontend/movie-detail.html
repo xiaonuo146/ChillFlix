@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chi tiết phim | ChillFlix</title>
+
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages/movie-detail.css">
+</head>
+
+<body>
+  <header class="movie-header">
+    <a href="../index.html" class="movie-logo">ChillFlix</a>
+
+    <nav>
+      <a href="../index.html">Trang chủ</a>
+      <a href="../index.html#explore">Khám phá phim</a>
+      <a href="booking.html">Đặt phòng</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="movie-hero">
+      <div class="movie-hero__content">
+        <div class="movie-poster">
+          <img id="moviePoster" src="" alt="Poster phim">
+        </div>
+
+        <div class="movie-info">
+          <span class="movie-label">PHIM ĐANG CHIẾU</span>
+
+          <h1 id="movieTitle">Đang tải phim...</h1>
+
+          <div class="movie-meta">
+            <span id="movieRating">★ --/10</span>
+            <span id="movieYear">Năm: --</span>
+            <span id="movieRuntime">Thời lượng: --</span>
+          </div>
+
+          <p id="movieOverview">
+            Đang tải nội dung phim...
+          </p>
+
+          <button id="watchTrailer" type="button">
+            ▶ Xem trailer
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="quick-booking">
+      <h2>
+        Đặt lịch phòng chiếu tư nhân cho:
+        <span id="bookingMovieTitle">Phim đang chọn</span>
+      </h2>
+
+      <div class="quick-booking__form">
+        <div>
+          <label for="bookingDate">Ngày chiếu</label>
+          <input type="date" id="bookingDate">
+        </div>
+
+        <div>
+          <label for="roomType">Loại phòng</label>
+          <select id="roomType">
+            <option value="couple">Couple (2 người)</option>
+            <option value="group4">Nhóm 4–6 người</option>
+            <option value="vip">VIP (10+ người)</option>
+          </select>
+        </div>
+
+        <button id="findRoom" type="button">
+          Tìm phòng trống ngay
+        </button>
+      </div>
+    </section>
+
+    <section class="movie-extra">
+      <h2>Diễn viên chính</h2>
+      <div id="movieCast" class="movie-cast"></div>
+
+      <h2>Phim tương tự</h2>
+      <div id="similarMovies" class="similar-movies"></div>
+    </section>
+  </main>
+
+  <script src="js/pages/movieDetail.js"></script>
+</body>
+</html>

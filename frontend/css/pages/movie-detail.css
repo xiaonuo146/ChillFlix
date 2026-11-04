@@ -1,0 +1,289 @@
+
+/* ===== TRANG CHI TIẾT PHIM CHILLFLIX ===== */
+
+body {
+    margin: 0;
+    background: #100d16;
+    color: #f7f3fa;
+    font-family: Arial, sans-serif;
+}
+
+/* HEADER */
+.movie-header {
+    height: 76px;
+    padding: 0 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #17121f;
+    border-bottom: 1px solid #30263b;
+}
+
+.movie-logo {
+    font-size: 28px;
+    font-weight: bold;
+    color: #f3bd55;
+    text-decoration: none;
+}
+
+.movie-header nav {
+    display: flex;
+    gap: 30px;
+}
+
+.movie-header nav a {
+    color: #f7f3fa;
+    text-decoration: none;
+    font-size: 15px;
+}
+
+.movie-header nav a:hover {
+    color: #f3bd55;
+}
+
+/* PHẦN THÔNG TIN PHIM */
+.movie-hero {
+    padding: 70px 7%;
+    background: linear-gradient(
+        120deg,
+        #21172e,
+        #100d16
+    );
+}
+
+.movie-hero__content {
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    gap: 55px;
+}
+
+.movie-poster {
+    width: 290px;
+    flex-shrink: 0;
+}
+
+.movie-poster img {
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    border-radius: 14px;
+    background: #30263b;
+}
+
+.movie-info {
+    flex: 1;
+}
+
+.movie-label {
+    display: inline-block;
+    color: #f3bd55;
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.movie-info h1 {
+    font-size: 42px;
+    line-height: 1.2;
+    margin: 0 0 20px;
+}
+
+.movie-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 22px;
+    color: #f3bd55;
+}
+
+.movie-info p {
+    color: #c6becf;
+    line-height: 1.8;
+    max-width: 700px;
+}
+
+#watchTrailer {
+    margin-top: 20px;
+    padding: 14px 28px;
+    background: transparent;
+    color: #f3bd55;
+    border: 1px solid #f3bd55;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+#watchTrailer:hover {
+    background: #f3bd55;
+    color: #17121f;
+}
+
+/* THANH ĐẶT PHÒNG NHANH */
+.quick-booking {
+    max-width: 1200px;
+    margin: 35px auto;
+    padding: 30px;
+    background: #211a2c;
+    border: 1px solid #40334c;
+    border-radius: 16px;
+}
+
+.quick-booking h2 {
+    font-size: 22px;
+    margin: 0 0 25px;
+}
+
+.quick-booking h2 span {
+    color: #f3bd55;
+}
+
+.quick-booking__form {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 20px;
+    align-items: end;
+}
+
+.quick-booking__form > div {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.quick-booking label {
+    font-size: 14px;
+    color: #d4cbdc;
+}
+
+.quick-booking input,
+.quick-booking select {
+    padding: 14px;
+    background: #15111d;
+    color: white;
+    border: 1px solid #50415e;
+    border-radius: 8px;
+    font-size: 15px;
+    min-width: 0;
+}
+
+#findRoom {
+    padding: 15px 24px;
+    background: #f3bd55;
+    color: #18121e;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#findRoom:hover {
+    background: #ffd17a;
+}
+
+/* DIỄN VIÊN VÀ PHIM TƯƠNG TỰ */
+.movie-extra {
+    max-width: 1200px;
+    margin: 60px auto;
+    padding: 0 20px;
+}
+
+.movie-extra h2 {
+    font-size: 26px;
+    margin: 35px 0 20px;
+    color: #f7f3fa;
+}
+
+.movie-cast,
+.similar-movies {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .movie-header {
+        padding: 15px 5%;
+        height: auto;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .movie-header nav {
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .movie-hero {
+        padding: 35px 5%;
+    }
+
+    .movie-hero__content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 25px;
+    }
+
+    .movie-poster {
+        width: 200px;
+    }
+
+    .movie-info h1 {
+        font-size: 30px;
+    }
+
+    .quick-booking {
+        margin: 20px 5%;
+        padding: 20px;
+    }
+
+    .quick-booking__form {
+        grid-template-columns: 1fr;
+    }
+
+    .movie-cast,
+    .similar-movies {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* THẺ DIỄN VIÊN */
+.cast-card,
+.similar-card {
+    background: #211a2c;
+    border: 1px solid #40334c;
+    border-radius: 12px;
+    padding: 24px 18px;
+    transition: transform 0.2s ease;
+}
+
+.cast-card:hover,
+.similar-card:hover {
+    transform: translateY(-4px);
+    border-color: #f3bd55;
+}
+
+.cast-card h3 {
+    color: #f7f3fa;
+    font-size: 17px;
+    margin: 0 0 10px;
+}
+
+.cast-card p {
+    color: #bdb2c9;
+    font-size: 14px;
+    margin: 0;
+}
+
+.similar-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #f3bd55;
+    text-decoration: none;
+    font-weight: bold;
+    min-height: 120px;
+    text-align: center;
+}
