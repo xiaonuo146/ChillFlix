@@ -1,0 +1,183 @@
+
+/* CHILLFLIX - TRANG THANH TOÁN */
+
+.payment-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 20px;
+    align-items: start;
+    margin-top: 24px;
+}
+
+.payment-main {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    min-width: 0;
+}
+
+.payment-panel,
+.payment-summary {
+    background: #241a30;
+    border: 1px solid #493654;
+    border-radius: 12px;
+    padding: 22px;
+    color: #fff;
+}
+
+.payment-panel h2,
+.payment-summary h2 {
+    font-size: 20px;
+    margin: 0 0 18px;
+}
+
+.payment-panel label {
+    display: block;
+    font-size: 14px;
+    margin: 14px 0 7px;
+    color: #e8deed;
+}
+
+.payment-panel input[type="text"],
+.payment-panel input[type="tel"],
+.payment-panel input[type="email"] {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+    background: #17111f;
+    color: #fff;
+    border: 1px solid #53415f;
+    border-radius: 7px;
+    outline: none;
+}
+
+.payment-panel input:focus {
+    border-color: #f7bf52;
+}
+
+.payment-method {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px;
+    margin-bottom: 10px;
+    background: #1a1324;
+    border: 1px solid #493654;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.payment-method input {
+    accent-color: #f7bf52;
+}
+
+.payment-summary {
+    position: sticky;
+    top: 20px;
+}
+
+.payment-summary-row,
+.payment-food-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    font-size: 14px;
+}
+
+.payment-summary-row span,
+.payment-food-item span {
+    color: #c9bad4;
+}
+
+.payment-summary-row strong,
+.payment-food-item strong {
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+.payment-divider {
+    border: 0;
+    border-top: 1px solid #493654;
+    margin: 14px 0;
+}
+
+.payment-total {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 18px 0;
+    font-size: 18px;
+}
+
+.payment-total strong {
+    color: #f7bf52;
+}
+
+.payment-confirm {
+    width: 100%;
+    padding: 14px;
+    background: #f7bf52;
+    border: none;
+    border-radius: 8px;
+    color: #211526;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.payment-confirm:hover {
+    background: #ffd27c;
+}
+
+.payment-note,
+#promoMessage {
+    color: #c9bad4;
+    font-size: 13px;
+    margin-top: 10px;
+}
+
+@media (max-width: 850px) {
+    .payment-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .payment-summary {
+        position: static;
+    }
+}
+.voucher-input-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.voucher-input-group input {
+    flex: 1;
+    min-width: 0;
+}
+
+#applyPromo {
+    background: #f7bf52;
+    color: #211526;
+    border: none;
+    border-radius: 7px;
+    padding: 12px 18px;
+    font-weight: bold;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+#applyPromo:hover {
+    background: #ffd27c;
+}
+
+.payment-method span {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.payment-method small {
+    color: #c9bad4;
+}

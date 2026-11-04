@@ -1,6 +1,9 @@
-import { CONFIG } from './config.js';
 
-// Dữ liệu mẫu chuẩn tiếng Việt theo mockup CineNest
+import { CONFIG } from "./config.js";
+
+// ======================================
+// 1. DỮ LIỆU PHIM MẪU
+// ======================================
 const MOCK_TRENDING_MOVIES = [
     {
         id: 693134,
@@ -40,23 +43,185 @@ const MOCK_TRENDING_MOVIES = [
     }
 ];
 
-// Lấy danh sách phim đang hot
+// ======================================
+// 2. HÀM DÙNG CHUNG
+// ======================================
+
+// Kiểm tra có TMDB API Key hay chưa
+function hasTMDBKey() {
+    return Boolean(
+        CONFIG.TMDB_API_KEY &&
+        CONFIG.TMDB_API_KEY !== "YOUR_TMDB_API_KEY_HERE"
+    );
+}
+
+// Kiểm tra ID phim
+function validateMovieId(movieId) {
+    const id = Number(movieId);
+
+    if (!Number.isInteger(id) || id <= 0) {
+        throw new Error("ID phim không hợp lệ");
+    }
+
+    return id;
+}
+
+// Gọi API TMDB
+async function fetchTMDB(endpoint, language = CONFIG.DEFAULT_LANG || "vi-VN") {
+    const separator = endpoint.includes("?") ? "&" : "?";
+
+    const url =
+        `${CONFIG.TMDB_BASE_URL}${endpoint}` +
+        `${separator}api_key=${encodeURIComponent(CONFIG.TMDB_API_KEY)}` +
+        `&language=${encodeURIComponent(language)}`;
+
+    const response = await fetch(url);
+
+    if (!response.ok) {
+        throw new Error(`Lỗi TMDB: ${response.status}`);
+    }
+
+    return await response.json();
+}
+
+// ======================================
+// 3. LẤY DANH SÁCH PHIM ĐANG HOT
+// ======================================
 export async function getTrendingMovies() {
-    if (!CONFIG.TMDB_API_KEY || CONFIG.TMDB_API_KEY === 'YOUR_TMDB_API_KEY_HERE') {
-        console.info("⚡ Đang sử dụng Mock Data do chưa cấu hình TMDB_API_KEY.");
-        return new Promise(resolve => setTimeout(() => resolve(MOCK_TRENDING_MOVIES), 300));
+    if (!hasTMDBKey()) {
+        console.info("Đang sử dụng dữ liệu phim mẫu.");
+        return MOCK_TRENDING_MOVIES;
     }
 
     try {
-        // Gọi trực tiếp TMDB API với ngôn ngữ tiếng Việt
-        const res = await fetch(
-            `${CONFIG.TMDB_BASE_URL}/trending/movie/week?api_key=${CONFIG.TMDB_API_KEY}&language=${CONFIG.DEFAULT_LANG}`
-        );
-        if (!res.ok) throw new Error(`Lỗi TMDB: ${res.status}`);
-        const data = await res.json();
-        return data.results;
-    } catch (err) {
-        console.error("Lỗi kết nối TMDB, tự động đổi sang Mock data:", err);
+        const data = await fetchTMDB("/trending/movie/week");
+        return data.results || [];
+    } catch (error) {
+        console.error("Lỗi lấy phim đang hot:", error);
         return MOCK_TRENDING_MOVIES;
+    }
+}
+
+// ======================================
+// 4. LẤY CHI TIẾT PHIM
+// ======================================
+export async function getMovieDetails(movieId) {
+    const id = validateMovieId(movieId);
+
+    const mockMovie = MOCK_TRENDING_MOVIES.find(
+        movie => movie.id === id
+    );
+
+    if (!hasTMDBKey()) {
+        if (!mockMovie) {
+            throw new Error("Phim chưa có trong dữ liệu mẫu.");
+        }
+
+        return mockMovie;
+    }
+
+    try {
+        return await fetchTMDB(`/movie/${id}`);
+    } catch (error) {
+        console.error("Lỗi lấy chi tiết phim:", error);
+
+        if (mockMovie) {
+            return mockMovie;
+        }
+
+        throw error;
+    }
+}
+
+// ======================================
+// 5. LẤY DANH SÁCH DIỄN VIÊN
+// ======================================
+export async function getMovieCredits(movieId) {
+    const id = validateMovieId(movieId);
+
+    if (!hasTMDBKey()) {
+        return [];
+    }
+
+    try {
+        const data = await fetchTMDB(`/movie/${id}/credits`);
+        return (data.cast || []).slice(0, 8);
+    } catch (error) {
+        console.error("Lỗi lấy diễn viên:", error);
+        return [];
+    }
+}
+
+// ======================================
+// 6. LẤY PHIM TƯƠNG TỰ
+// ======================================
+export async function getSimilarMovies(movieId) {
+    const id = validateMovieId(movieId);
+
+    const getMockSimilarMovies = () => {
+        return MOCK_TRENDING_MOVIES.filter(
+            movie => movie.id !== id
+        );
+    };
+
+    if (!hasTMDBKey()) {
+        return getMockSimilarMovies();
+    }
+
+    try {
+        const data = await fetchTMDB(`/movie/${id}/similar`);
+        return (data.results || []).slice(0, 8);
+    } catch (error) {
+        console.error("Lỗi lấy phim tương tự:", error);
+        return getMockSimilarMovies();
+    }
+}
+
+// ======================================
+// 7. LẤY TRAILER PHIM
+// ======================================
+export async function getMovieTrailer(movieId) {
+    const id = validateMovieId(movieId);
+
+    // Không có TMDB key thì chưa thể lấy trailer
+    if (!hasTMDBKey()) {
+        return null;
+    }
+
+    try {
+        // Lấy video tiếng Anh để tăng khả năng tìm được trailer
+        const data = await fetchTMDB(
+            `/movie/${id}/videos`,
+            "en-US"
+        );
+
+        const videos = data.results || [];
+
+        // Ưu tiên trailer chính thức trên YouTube
+        const trailer =
+            videos.find(
+                video =>
+                    video.site === "YouTube" &&
+                    video.type === "Trailer" &&
+                    video.official === true
+            ) ||
+            videos.find(
+                video =>
+                    video.site === "YouTube" &&
+                    video.type === "Trailer"
+            );
+
+        if (!trailer || !trailer.key) {
+            return null;
+        }
+
+        return (
+            "https://www.youtube.com/watch?v=" +
+            encodeURIComponent(trailer.key)
+        );
+
+    } catch (error) {
+        console.error("Không lấy được trailer:", error);
+        return null;
     }
 }

@@ -1,0 +1,198 @@
+
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Chọn đồ ăn | ChillFlix</title>
+
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/pages/booking.css">
+    <link rel="stylesheet" href="css/pages/booking-food.css">
+</head>
+
+<body>
+    <!-- HEADER -->
+    <header class="booking-header">
+        <a href="../index.html" class="booking-logo">
+            ChillFlix
+        </a>
+
+        <a href="booking.html" class="booking-back">
+            ← Quay lại chọn phòng
+        </a>
+    </header>
+
+    <main class="booking-container">
+
+        <!-- TIÊU ĐỀ -->
+        <div class="booking-heading">
+            <p class="booking-eyebrow">
+                CHILLFLIX PRIVATE CINEMA
+            </p>
+
+            <h1>Đặt phòng chiếu phim</h1>
+
+            <p>
+                Chọn đồ ăn và nước uống cho buổi xem phim của bạn.
+            </p>
+        </div>
+
+        <!-- THANH TIẾN TRÌNH -->
+        <nav class="booking-steps" aria-label="Các bước đặt phòng">
+            <span class="booking-step">1. Chọn phòng</span>
+
+            <span class="booking-step active">
+                2. Đồ ăn & nước
+            </span>
+
+            <span class="booking-step">3. Thanh toán</span>
+
+            <span class="booking-step">4. Nhận vé</span>
+        </nav>
+
+        <!-- BƯỚC 2 -->
+        <section class="booking-food-section">
+
+            <div class="food-heading">
+                <h2>Đồ ăn & nước uống</h2>
+                <p>
+                    Chọn thêm những món yêu thích để buổi xem phim
+                    của bạn trọn vẹn hơn.
+                </p>
+            </div>
+
+            <div class="food-layout">
+
+                <!-- DANH SÁCH MÓN -->
+                <div class="food-main">
+
+                    <div class="food-filters">
+                        <button
+                            type="button"
+                            class="food-filter active"
+                            data-category="all">
+                            Tất cả
+                        </button>
+
+                        <button
+                            type="button"
+                            class="food-filter"
+                            data-category="combo">
+                            Combo
+                        </button>
+
+                        <button
+                            type="button"
+                            class="food-filter"
+                            data-category="food">
+                            Đồ ăn
+                        </button>
+
+                        <button
+                            type="button"
+                            class="food-filter"
+                            data-category="drink">
+                            Nước uống
+                        </button>
+                    </div>
+
+                    <input
+                        type="search"
+                        id="foodSearch"
+                        class="food-search"
+                        placeholder="Tìm món ăn hoặc nước uống..."
+                        aria-label="Tìm kiếm món ăn"
+                    >
+
+                    <!-- JAVASCRIPT SẼ TẠO CÁC THẺ MÓN ĂN -->
+                    <div id="foodGrid" class="food-grid"></div>
+
+                </div>
+
+                <!-- GIỎ HÀNG -->
+                <aside class="food-cart">
+                    <h3>Đơn hàng của bạn</h3>
+
+                    <div class="summary-row">
+                        <span>Phim</span>
+                        <strong id="foodMovie">Chưa chọn</strong>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Ngày chiếu</span>
+                        <strong id="foodDate">--</strong>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Loại phòng</span>
+                        <strong id="foodRoom">--</strong>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Giờ bắt đầu</span>
+                        <strong id="foodTime">--</strong>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Thời lượng</span>
+                        <strong id="foodDuration">--</strong>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Tiền phòng</span>
+                        <strong id="foodRoomPrice">0đ</strong>
+                    </div>
+
+                    <!-- CÁC MÓN ĐÃ THÊM -->
+                    <div id="foodCartItems">
+                        <p class="booking-hint">
+                            Bạn chưa chọn món nào.
+                        </p>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Tiền đồ ăn</span>
+                        <strong id="foodTotal">0đ</strong>
+                    </div>
+
+                    <div class="summary-total">
+                        <span>Tổng cộng</span>
+                        <strong id="foodGrandTotal">0đ</strong>
+                    </div>
+
+                    <button
+                        type="button"
+                        id="backToRoom"
+                        class="food-back-button">
+                        ← Quay lại chọn phòng
+                    </button>
+
+                    <button
+                        type="button"
+                        id="continueToPayment"
+                        class="booking-continue">
+                        Tiếp tục thanh toán →
+                    </button>
+
+                    <p class="booking-hint">
+                        Giá phòng và món ăn hiện là dữ liệu mẫu.
+                        Chưa xác nhận đặt phòng hoặc thanh toán.
+                    </p>
+                </aside>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- JAVASCRIPT CỦA BƯỚC 2 -->
+    <script
+        type="module"
+        src="js/pages/bookingFood.js">
+    </script>
+</body>
+</html>

@@ -1,0 +1,385 @@
+
+/* =========================================
+   CHILLFLIX - BƯỚC 2: ĐỒ ĂN & NƯỚC UỐNG
+   ========================================= */
+
+/* Khu vực chọn món */
+.booking-food-section {
+    margin-top: 24px;
+    padding-bottom: 60px;
+}
+
+.food-heading {
+    margin-bottom: 24px;
+}
+
+.food-heading h2 {
+    color: #ffffff;
+    font-size: 28px;
+    margin: 0 0 8px;
+}
+
+.food-heading p {
+    color: #b9a9c9;
+    font-size: 14px;
+    margin: 0;
+}
+
+/* Bố cục danh sách món và giỏ hàng */
+.food-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 280px;
+    gap: 24px;
+    align-items: start;
+}
+
+.food-main {
+    min-width: 0;
+}
+
+/* Các nút lọc */
+.food-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.food-filter {
+    border: 1px solid #493452;
+    border-radius: 24px;
+    padding: 10px 18px;
+    background: #24192e;
+    color: #ffffff;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.food-filter:hover {
+    border-color: #f6bd50;
+    color: #f6bd50;
+}
+
+.food-filter.active {
+    background: #f6bd50;
+    border-color: #f6bd50;
+    color: #1c1421;
+    font-weight: bold;
+}
+
+/* Ô tìm kiếm */
+.food-search {
+    width: 100%;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    border: 1px solid #493452;
+    border-radius: 9px;
+    background: #191321;
+    color: #ffffff;
+    font-size: 14px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.food-search::placeholder {
+    color: #9b8aa9;
+}
+
+.food-search:focus {
+    border-color: #f6bd50;
+}
+
+/* Lưới món ăn */
+.food-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+
+/* Thẻ món ăn */
+.food-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: 14px;
+    background: #241a30;
+    border: 1px solid #493452;
+    border-radius: 12px;
+    transition: 0.2s;
+}
+
+.food-card:hover {
+    border-color: #f6bd50;
+    transform: translateY(-3px);
+}
+
+/* Ảnh/icon món */
+.food-card-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 120px;
+    margin-bottom: 14px;
+    border-radius: 9px;
+    background: #352440;
+    font-size: 48px;
+}
+
+/* Tên món */
+.food-card h3 {
+    color: #ffffff;
+    font-size: 16px;
+    margin: 0 0 8px;
+}
+
+/* Mô tả món */
+.food-card p {
+    color: #b9a9c9;
+    font-size: 12px;
+    line-height: 1.5;
+    margin: 0 0 18px;
+    flex-grow: 1;
+}
+
+/* Giá và nút thêm */
+.food-card-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.food-card-bottom strong {
+    color: #f6bd50;
+    font-size: 15px;
+}
+
+.food-add-button {
+    padding: 9px 13px;
+    border: none;
+    border-radius: 7px;
+    background: #f6bd50;
+    color: #211622;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.food-add-button:hover {
+    background: #ffd47a;
+}
+
+/* =========================================
+   GIỎ HÀNG
+   ========================================= */
+
+.food-cart {
+    position: sticky;
+    top: 24px;
+    padding: 20px;
+    background: #241a30;
+    border: 1px solid #493452;
+    border-radius: 12px;
+    color: #ffffff;
+}
+
+.food-cart h3 {
+    font-size: 18px;
+    margin: 0 0 20px;
+}
+
+.food-cart .summary-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+    font-size: 13px;
+}
+
+.food-cart .summary-row span {
+    color: #b9a9c9;
+}
+
+.food-cart .summary-row strong {
+    color: #ffffff;
+    text-align: right;
+}
+
+/* Các món trong giỏ */
+#foodCartItems {
+    margin: 16px 0;
+}
+
+.food-cart-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.food-cart-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+}
+
+.food-cart-item-info strong {
+    font-size: 12px;
+}
+
+.food-cart-item-info small {
+    color: #b9a9c9;
+    font-size: 11px;
+}
+
+/* Nút tăng giảm số lượng */
+.food-quantity {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex-shrink: 0;
+}
+
+.food-quantity button {
+    width: 25px;
+    height: 25px;
+    border: 1px solid #665075;
+    border-radius: 5px;
+    background: transparent;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.food-quantity button:hover {
+    border-color: #f6bd50;
+    color: #f6bd50;
+}
+
+.food-quantity span {
+    font-size: 12px;
+}
+
+/* Tổng cộng */
+.food-cart .summary-total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin: 18px 0;
+    padding-top: 16px;
+    border-top: 1px solid #493452;
+}
+
+.food-cart .summary-total strong {
+    color: #f6bd50;
+    font-size: 18px;
+}
+
+/* Nút quay lại */
+.food-back-button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+    border: 1px solid #665075;
+    border-radius: 7px;
+    background: transparent;
+    color: #ffffff;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.food-back-button:hover {
+    border-color: #f6bd50;
+}
+
+/* Nút tiếp tục thanh toán */
+.food-cart .booking-continue {
+    display: block;
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 7px;
+    background: #f6bd50;
+    color: #211622;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.food-cart .booking-continue:hover {
+    background: #ffd47a;
+}
+
+.food-cart .booking-hint {
+    color: #b9a9c9;
+    font-size: 12px;
+    line-height: 1.5;
+    margin-top: 12px;
+}
+
+/* =========================================
+   RESPONSIVE - MÀN HÌNH NHỎ
+   ========================================= */
+
+@media (max-width: 1000px) {
+    .food-layout {
+        grid-template-columns: minmax(0, 1fr) 250px;
+        gap: 16px;
+    }
+
+    .food-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 700px) {
+    .food-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .food-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .food-cart {
+        position: static;
+    }
+}
+
+@media (max-width: 450px) {
+    .food-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .food-heading h2 {
+        font-size: 24px;
+    }
+
+    .food-filter {
+        padding: 8px 12px;
+    }
+}
+/* Thông tin phòng đã chọn */
+.food-booking-info {
+    margin-bottom: 16px;
+}
+
+.food-booking-info .summary-row {
+    margin-bottom: 12px;
+}
+
+.food-booking-info .summary-row strong {
+    max-width: 60%;
+    overflow-wrap: anywhere;
+}
+
+/* Đường phân cách */
+.food-divider {
+    border: none;
+    border-top: 1px solid #493452;
+    margin: 16px 0;
+}

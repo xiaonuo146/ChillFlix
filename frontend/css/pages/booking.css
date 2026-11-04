@@ -1,0 +1,539 @@
+
+/* Trang đặt phòng ChillFlix */
+
+body {
+    background: #100d16;
+    color: #f8f5ff;
+    font-family: Arial, sans-serif;
+}
+
+.booking-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px max(24px, calc((100% - 1160px) / 2));
+    background: #17111e;
+    border-bottom: 1px solid #352940;
+}
+
+.booking-logo {
+    color: #f6be52;
+    font-size: 24px;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.booking-back {
+    color: #ddd3e5;
+    text-decoration: none;
+}
+
+.booking-container {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 42px 20px 80px;
+}
+
+.booking-heading h1 {
+    font-size: clamp(26px, 4vw, 38px);
+    margin: 10px 0;
+}
+
+.booking-heading p,
+.booking-hint {
+    color: #afa3bc;
+}
+
+.booking-eyebrow {
+    color: #f6be52 !important;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.booking-steps {
+    display: flex;
+    gap: 12px;
+    margin: 30px 0;
+    flex-wrap: wrap;
+}
+
+.booking-step {
+    flex: 1;
+    min-width: 140px;
+    padding: 15px;
+    border: 1px solid #3b2d47;
+    border-radius: 10px;
+    text-align: center;
+    color: #a99bb6;
+}
+
+.booking-step.active {
+    background: #f6be52;
+    color: #211526;
+    border-color: #f6be52;
+    font-weight: bold;
+}
+
+.booking-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 24px;
+    align-items: start;
+}
+
+.booking-main {
+    display: grid;
+    gap: 24px;
+}
+
+.booking-panel,
+.booking-summary {
+    background: #21192b;
+    border: 1px solid #42334f;
+    border-radius: 14px;
+    padding: 26px;
+}
+
+.booking-panel h2,
+.booking-summary h2 {
+    margin: 0 0 22px;
+    font-size: 20px;
+}
+
+.booking-panel label {
+    display: block;
+    margin: 18px 0 8px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.booking-panel input,
+.booking-panel select {
+    display: block;
+    width: 100%;
+    padding: 13px;
+    background: #15101d;
+    color: white;
+    border: 1px solid #51405e;
+    border-radius: 8px;
+    color-scheme: dark;
+}
+
+.time-slots {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.time-slot {
+    padding: 14px 8px;
+    background: #17111f;
+    color: #f5effa;
+    border: 1px solid #554462;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.time-slot:hover:not(:disabled) {
+    border-color: #f6be52;
+}
+
+.time-slot.selected {
+    background: #f6be52;
+    border-color: #f6be52;
+    color: #211526;
+    font-weight: bold;
+}
+
+.time-slot:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.booking-summary {
+    position: sticky;
+    top: 20px;
+}
+
+.summary-row,
+.summary-total {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 18px;
+}
+
+.summary-row span {
+    color: #afa3bc;
+}
+
+.summary-row strong {
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+.summary-total {
+    border-top: 1px solid #51405e;
+    padding-top: 20px;
+    font-size: 18px;
+}
+
+.summary-total strong {
+    color: #f6be52;
+}
+
+.booking-continue {
+    width: 100%;
+    padding: 15px;
+    background: #f6be52;
+    color: #211526;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.booking-continue:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+@media (max-width: 800px) {
+    .booking-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .booking-summary {
+        position: static;
+    }
+}
+
+@media (max-width: 480px) {
+    .time-slots {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+/* Danh sách thẻ phòng */
+.room-card-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.room-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 18px;
+    background: #21192d;
+    border: 1px solid #453653;
+    border-radius: 12px;
+    color: #fff;
+    text-align: left;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.room-card:hover {
+    border-color: #f5bf55;
+    transform: translateY(-2px);
+}
+
+.room-card.active {
+    border: 2px solid #f5bf55;
+    background: #30243a;
+}
+
+.room-card-icon {
+    font-size: 30px;
+}
+
+.room-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.room-card-info strong {
+    font-size: 16px;
+}
+
+.room-card-info small {
+    color: #b9abc7;
+    font-size: 12px;
+}
+
+.room-card-info b {
+    color: #f5bf55;
+    font-size: 15px;
+}
+
+.room-card-check {
+    display: none;
+    color: #f5bf55;
+}
+
+.room-card.active .room-card-check {
+    display: block;
+}
+
+@media (max-width: 700px) {
+    .room-card-list {
+        grid-template-columns: 1fr;
+    }
+}
+/* ====================================
+   BƯỚC 2 - ĐỒ ĂN & NƯỚC UỐNG
+==================================== */
+
+.booking-food-section[hidden] {
+    display: none;
+}
+
+.booking-food-section {
+    margin-top: 28px;
+}
+
+.food-heading {
+    margin-bottom: 24px;
+}
+
+.food-heading h2 {
+    color: #fff;
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+.food-heading p {
+    color: #b8a9cb;
+}
+
+.food-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: 24px;
+    align-items: start;
+}
+
+.food-main {
+    min-width: 0;
+}
+
+.food-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.food-filter {
+    padding: 10px 20px;
+    border: 1px solid #463653;
+    border-radius: 20px;
+    background: #21182d;
+    color: #fff;
+    cursor: pointer;
+}
+
+.food-filter.active,
+.food-filter:hover {
+    background: #f5bd52;
+    color: #17101e;
+    border-color: #f5bd52;
+}
+
+.food-search {
+    width: 100%;
+    padding: 13px 16px;
+    margin-bottom: 22px;
+    border: 1px solid #463653;
+    border-radius: 10px;
+    background: #17111f;
+    color: #fff;
+}
+
+.food-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.food-card {
+    padding: 16px;
+    background: #241a30;
+    border: 1px solid #463653;
+    border-radius: 12px;
+}
+
+.food-card-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 125px;
+    margin-bottom: 12px;
+    border-radius: 10px;
+    background: #33243f;
+    font-size: 48px;
+}
+
+.food-card h3 {
+    font-size: 16px;
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+.food-card p {
+    font-size: 13px;
+    color: #b8a9cb;
+    min-height: 36px;
+}
+
+.food-card-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 14px;
+}
+
+.food-card-price {
+    color: #f5bd52;
+    font-weight: bold;
+}
+
+.food-add-button {
+    padding: 8px 12px;
+    border: 0;
+    border-radius: 8px;
+    background: #f5bd52;
+    color: #17101e;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.food-cart {
+    padding: 22px;
+    border: 1px solid #463653;
+    border-radius: 12px;
+    background: #241a30;
+    position: sticky;
+    top: 20px;
+}
+
+.food-cart h3 {
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+.food-cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 0;
+    border-bottom: 1px solid #463653;
+    color: #fff;
+}
+
+.food-cart-item button {
+    padding: 4px 9px;
+    border: 1px solid #665276;
+    border-radius: 6px;
+    background: transparent;
+    color: #fff;
+    cursor: pointer;
+}
+
+.food-back-button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 18px;
+    margin-bottom: 10px;
+    border: 1px solid #665276;
+    border-radius: 8px;
+    background: transparent;
+    color: #fff;
+    cursor: pointer;
+}
+
+.food-cart .booking-continue {
+    width: 100%;
+}
+
+@media (max-width: 900px) {
+    .food-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .food-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .food-cart {
+        position: static;
+    }
+}
+
+@media (max-width: 520px) {
+    .food-grid {
+        grid-template-columns: 1fr;
+    }
+}
+/* Ẩn bước không được chọn */
+.booking-layout[hidden],
+.booking-food-section[hidden] {
+    display: none !important;
+}
+/* Căn giữa toàn bộ giao diện bước 2 */
+.booking-food-section {
+    width: 100%;
+    max-width: 1100px;
+    margin: 30px auto 60px;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.food-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: 24px;
+    align-items: start;
+}
+
+.food-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+
+@media (max-width: 900px) {
+    .food-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .food-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 520px) {
+    .food-grid {
+        grid-template-columns: 1fr;
+    }
+}
+.booking-food-section {
+    margin-top: 24px;
+}
+
+.food-heading {
+    margin-bottom: 24px;
+}
+
+.food-heading h2 {
+    margin-top: 0;
+}

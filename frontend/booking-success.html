@@ -1,0 +1,174 @@
+
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Nhận vé | ChillFlix</title>
+
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/pages/booking.css">
+    <link rel="stylesheet" href="css/pages/booking-success.css">
+</head>
+
+<body>
+    <header class="booking-header">
+        <a href="../index.html" class="booking-logo">
+            ChillFlix
+        </a>
+
+        <a href="../index.html" class="booking-back">
+            ← Về trang chủ
+        </a>
+    </header>
+
+    <main class="booking-container">
+
+        <div class="booking-heading">
+            <p class="booking-eyebrow">
+                CHILLFLIX PRIVATE CINEMA
+            </p>
+
+            <h1>Vé đặt phòng của bạn</h1>
+
+            <p>
+                Cảm ơn bạn đã lựa chọn ChillFlix!
+            </p>
+        </div>
+
+        <nav class="booking-steps"
+             aria-label="Các bước đặt phòng">
+
+            <span class="booking-step">
+                1. Chọn phòng
+            </span>
+
+            <span class="booking-step">
+                2. Đồ ăn & nước
+            </span>
+
+            <span class="booking-step">
+                3. Thanh toán
+            </span>
+
+            <span class="booking-step active">
+                4. Nhận vé
+            </span>
+        </nav>
+
+        <section class="success-container">
+
+            <div class="success-icon">✓</div>
+
+            <h2>Đã lưu thông tin đặt phòng!</h2>
+
+            <p class="success-note">
+                Đây là vé mô phỏng để kiểm tra giao diện.
+                Đơn đặt phòng chưa được xác nhận trên
+                hệ thống thực tế.
+            </p>
+
+            <div class="ticket">
+
+                <div class="ticket-header">
+                    <h2>CHILLFLIX</h2>
+                    <p>PRIVATE CINEMA TICKET</p>
+                </div>
+
+                <div class="ticket-code">
+                    <span>Mã vé mẫu</span>
+                    <strong id="ticketCode">---</strong>
+                </div>
+
+                <div class="ticket-divider"></div>
+
+                <div class="ticket-row">
+                    <span>Phim</span>
+                    <strong id="ticketMovie">---</strong>
+                </div>
+
+                <div class="ticket-row">
+                    <span>Ngày chiếu</span>
+                    <strong id="ticketDate">---</strong>
+                </div>
+
+                <div class="ticket-row">
+                    <span>Giờ bắt đầu</span>
+                    <strong id="ticketTime">---</strong>
+                </div>
+
+                <div class="ticket-row">
+                    <span>Thời lượng</span>
+                    <strong id="ticketDuration">---</strong>
+                </div>
+
+                <div class="ticket-row">
+                    <span>Loại phòng</span>
+                    <strong id="ticketRoom">---</strong>
+                </div>
+
+                <div class="ticket-divider"></div>
+
+                <div class="ticket-row">
+                    <span>Khách hàng</span>
+                    <strong id="ticketCustomer">---</strong>
+                </div>
+
+                <div class="ticket-row">
+                    <span>Số điện thoại</span>
+                    <strong id="ticketPhone">---</strong>
+                </div>
+
+                <div class="ticket-row">
+                    <span>Email</span>
+                    <strong id="ticketEmail">---</strong>
+                </div>
+
+                <div class="ticket-row">
+                    <span>Phương thức thanh toán</span>
+                    <strong id="ticketPayment">---</strong>
+                </div>
+
+                <div class="ticket-divider"></div>
+
+                <h3>Đồ ăn & nước uống</h3>
+
+                <div id="ticketFoods">
+                    <p>Không có món ăn.</p>
+                </div>
+
+                <div class="ticket-divider"></div>
+
+                <div class="ticket-total">
+                    <span>Tổng thanh toán dự kiến</span>
+                    <strong id="ticketTotal">0đ</strong>
+                </div>
+
+            </div>
+
+            <div class="ticket-actions">
+                <button type="button"
+                        id="printTicket"
+                        class="booking-continue">
+                    In / Lưu vé PDF
+                </button>
+
+                <a href="../index.html"
+                   class="ticket-home">
+                    Về trang chủ
+                </a>
+            </div>
+
+        </section>
+
+    </main>
+
+    <script type="module"
+            src="js/pages/bookingSuccess.js">
+    </script>
+</body>
+</html>

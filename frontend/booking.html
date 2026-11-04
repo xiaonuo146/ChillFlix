@@ -1,0 +1,378 @@
+
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Đặt phòng | ChillFlix</title>
+
+    <!-- CSS dùng chung -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+
+    <!-- CSS riêng của trang đặt phòng -->
+    <link rel="stylesheet" href="css/pages/booking.css">
+</head>
+
+<body>
+
+    <!-- =====================================
+         HEADER
+    ====================================== -->
+    <header class="booking-header">
+        <a href="../index.html" class="booking-logo">
+            ChillFlix
+        </a>
+
+        <a href="movie-detail.html" class="booking-back" id="backToMovie">
+            ← Quay lại
+        </a>
+    </header>
+
+    <!-- =====================================
+         NỘI DUNG CHÍNH
+    ====================================== -->
+    <main class="booking-container">
+
+        <!-- TIÊU ĐỀ -->
+        <div class="booking-heading">
+            <p class="booking-eyebrow">
+                CHILLFLIX PRIVATE CINEMA
+            </p>
+
+            <h1>Đặt phòng chiếu phim</h1>
+
+            <p>
+                Chọn không gian và thời gian phù hợp với bạn.
+            </p>
+        </div>
+
+        <!-- =====================================
+             THANH TIẾN TRÌNH ĐẶT PHÒNG
+        ====================================== -->
+        <nav class="booking-steps" aria-label="Các bước đặt phòng">
+            <span class="booking-step active" aria-current="step">
+                1. Chọn phòng
+            </span>
+
+            <span class="booking-step">
+                2. Đồ ăn &amp; nước
+            </span>
+
+            <span class="booking-step">
+                3. Thanh toán
+            </span>
+
+            <span class="booking-step">
+                4. Nhận vé
+            </span>
+        </nav>
+
+        <!-- =====================================
+             BỐ CỤC ĐẶT PHÒNG
+        ====================================== -->
+        <div class="booking-layout">
+
+            <!-- CỘT TRÁI -->
+            <section class="booking-main">
+
+                <!-- =====================================
+                     THÔNG TIN ĐẶT PHÒNG
+                ====================================== -->
+                <div class="booking-panel">
+
+                    <h2>Thông tin đặt phòng</h2>
+
+                    <!-- PHIM ĐÃ CHỌN -->
+                    <label for="selectedMovie">
+                        Phim đã chọn
+                    </label>
+
+                    <input
+                        id="selectedMovie"
+                        type="text"
+                        value="Đang tải phim..."
+                        readonly
+                    >
+
+                    <!-- NGÀY CHIẾU -->
+                    <label for="selectedDate">
+                        Ngày chiếu
+                    </label>
+
+                    <input
+                        id="selectedDate"
+                        type="date"
+                        required
+                    >
+
+                    <!-- LOẠI PHÒNG -->
+                    <label for="selectedRoom">
+                        Loại phòng
+                    </label>
+
+                    <select id="selectedRoom">
+                        <option value="couple">
+                            Couple A / B - 120.000đ/giờ
+                        </option>
+
+                        <option value="group4">
+                            Nhóm 4 Sao Hỏa - 180.000đ/giờ
+                        </option>
+
+                        <option value="vip">
+                            Nhóm 10 Hành Tinh - 350.000đ/giờ
+                        </option>
+                    </select>
+
+                    <!-- =====================================
+                         THẺ CHỌN PHÒNG
+                    ====================================== -->
+                    <div class="room-card-list">
+
+                        <!-- PHÒNG COUPLE -->
+                        <button
+                            type="button"
+                            class="room-card active"
+                            data-room="couple"
+                            aria-pressed="true"
+                        >
+                            <span class="room-card-icon">
+                                💛
+                            </span>
+
+                            <span class="room-card-info">
+                                <strong>
+                                    Couple A / B
+                                </strong>
+
+                                <small>
+                                    Phòng riêng dành cho 2 người
+                                </small>
+
+                                <b>
+                                    120.000đ/giờ
+                                </b>
+                            </span>
+
+                            <span class="room-card-check">
+                                ✓
+                            </span>
+                        </button>
+
+                        <!-- PHÒNG NHÓM 4 -->
+                        <button
+                            type="button"
+                            class="room-card"
+                            data-room="group4"
+                            aria-pressed="false"
+                        >
+                            <span class="room-card-icon">
+                                🎬
+                            </span>
+
+                            <span class="room-card-info">
+                                <strong>
+                                    Nhóm 4 Sao Hỏa
+                                </strong>
+
+                                <small>
+                                    Không gian dành cho 4 người
+                                </small>
+
+                                <b>
+                                    180.000đ/giờ
+                                </b>
+                            </span>
+
+                            <span class="room-card-check">
+                                ✓
+                            </span>
+                        </button>
+
+                        <!-- PHÒNG VIP -->
+                        <button
+                            type="button"
+                            class="room-card"
+                            data-room="vip"
+                            aria-pressed="false"
+                        >
+                            <span class="room-card-icon">
+                                👑
+                            </span>
+
+                            <span class="room-card-info">
+                                <strong>
+                                    Nhóm 10 Hành Tinh
+                                </strong>
+
+                                <small>
+                                    Phòng VIP dành cho tối đa 10 người
+                                </small>
+
+                                <b>
+                                    350.000đ/giờ
+                                </b>
+                            </span>
+
+                            <span class="room-card-check">
+                                ✓
+                            </span>
+                        </button>
+
+                    </div>
+
+                    <!-- =====================================
+                         THỜI LƯỢNG
+                    ====================================== -->
+                    <label for="duration">
+                        Thời lượng
+                    </label>
+
+                    <select id="duration">
+                        <option value="2">
+                            2 giờ
+                        </option>
+
+                        <option value="2.5">
+                            2 giờ 30 phút
+                        </option>
+
+                        <option value="3">
+                            3 giờ
+                        </option>
+
+                        <option value="3.5">
+                            3 giờ 30 phút
+                        </option>
+
+                        <option value="4">
+                            4 giờ
+                        </option>
+                    </select>
+
+                </div>
+
+                <!-- =====================================
+                     CHỌN KHUNG GIỜ
+                ====================================== -->
+                <div class="booking-panel">
+
+                    <h2>Chọn khung giờ</h2>
+
+                    <p class="booking-hint">
+                        Giờ chiếu dự kiến từ 09:00 đến 22:00.
+                    </p>
+
+                    <!-- JavaScript sẽ tạo các nút giờ tại đây -->
+                    <div
+                        id="timeSlots"
+                        class="time-slots"
+                    ></div>
+
+                    <!-- Thông báo về khung giờ -->
+                    <p
+                        id="timeMessage"
+                        class="booking-hint"
+                        aria-live="polite"
+                    ></p>
+
+                </div>
+
+            </section>
+
+            <!-- =====================================
+                 CỘT PHẢI: TÓM TẮT ĐẶT CHỖ
+            ====================================== -->
+            <aside class="booking-summary">
+
+                <h2>Thông tin đặt chỗ</h2>
+
+                <!-- TÊN PHIM -->
+                <div class="summary-row">
+                    <span>Phim</span>
+
+                    <strong id="summaryMovie">
+                        Đang tải...
+                    </strong>
+                </div>
+
+                <!-- NGÀY CHIẾU -->
+                <div class="summary-row">
+                    <span>Ngày</span>
+
+                    <strong id="summaryDate">
+                        --
+                    </strong>
+                </div>
+
+                <!-- PHÒNG -->
+                <div class="summary-row">
+                    <span>Phòng</span>
+
+                    <strong id="summaryRoom">
+                        Couple A / B
+                    </strong>
+                </div>
+
+                <!-- GIỜ BẮT ĐẦU -->
+                <div class="summary-row">
+                    <span>Giờ bắt đầu</span>
+
+                    <strong id="summaryTime">
+                        Chưa chọn
+                    </strong>
+                </div>
+
+                <!-- THỜI LƯỢNG -->
+                <div class="summary-row">
+                    <span>Thời lượng</span>
+
+                    <strong id="summaryDuration">
+                        2 giờ
+                    </strong>
+                </div>
+
+                <!-- TỔNG TIỀN PHÒNG -->
+                <div class="summary-total">
+                    <span>Tạm tính</span>
+
+                    <strong id="summaryPrice">
+                        240.000đ
+                    </strong>
+                </div>
+
+                <!-- NÚT CHUYỂN SANG BƯỚC 2 -->
+                <button
+                    id="continueBooking"
+                    class="booking-continue"
+                    type="button"
+                    disabled
+                >
+                    Tiếp tục chọn món →
+                </button>
+
+                <!-- GHI CHÚ -->
+                <p class="booking-hint">
+                    Giá và giờ trống hiện là dữ liệu giao diện mẫu.
+                    Chưa xác nhận giữ phòng.
+                </p>
+
+            </aside>
+
+        </div>
+
+    </main>
+
+    <!-- =====================================
+         JAVASCRIPT TRANG ĐẶT PHÒNG
+    ====================================== -->
+    <script
+        type="module"
+        src="js/pages/booking.js"
+    ></script>
+
+</body>
+</html>

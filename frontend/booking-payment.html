@@ -1,0 +1,337 @@
+
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Thanh toán | ChillFlix</title>
+
+    <!-- CSS dùng chung -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+
+    <!-- CSS đặt phòng -->
+    <link rel="stylesheet" href="css/pages/booking.css">
+
+    <!-- CSS trang thanh toán -->
+    <link rel="stylesheet" href="css/pages/booking-payment.css">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="booking-header">
+
+        <a href="../index.html" class="booking-logo">
+            ChillFlix
+        </a>
+
+        <a href="booking-food.html" class="booking-back">
+            ← Quay lại chọn món
+        </a>
+
+    </header>
+
+    <main class="booking-container">
+
+        <!-- TIÊU ĐỀ -->
+        <div class="booking-heading">
+
+            <p class="booking-eyebrow">
+                CHILLFLIX PRIVATE CINEMA
+            </p>
+
+            <h1>Thanh toán đặt phòng</h1>
+
+            <p>
+                Kiểm tra thông tin và hoàn tất đặt phòng của bạn.
+            </p>
+
+        </div>
+
+        <!-- THANH TIẾN TRÌNH -->
+        <nav class="booking-steps" aria-label="Các bước đặt phòng">
+
+            <span class="booking-step">
+                1. Chọn phòng
+            </span>
+
+            <span class="booking-step">
+                2. Đồ ăn & nước
+            </span>
+
+            <span class="booking-step active">
+                3. Thanh toán
+            </span>
+
+            <span class="booking-step">
+                4. Nhận vé
+            </span>
+
+        </nav>
+
+        <!-- BỐ CỤC THANH TOÁN -->
+        <div class="payment-layout">
+
+            <!-- CỘT TRÁI -->
+            <section class="payment-main">
+
+                <!-- THÔNG TIN KHÁCH HÀNG -->
+                <div class="payment-panel">
+
+                    <h2>Thông tin khách hàng</h2>
+
+                    <form id="paymentForm">
+
+                        <label for="customerName">
+                            Họ và tên *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="customerName"
+                            name="customerName"
+                            placeholder="Nhập họ và tên"
+                            autocomplete="name"
+                            required
+                        >
+
+                        <label for="customerPhone">
+                            Số điện thoại *
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="customerPhone"
+                            name="customerPhone"
+                            placeholder="Nhập số điện thoại"
+                            autocomplete="tel"
+                            pattern="0[0-9]{9}"
+                            title="Nhập 10 chữ số, bắt đầu bằng số 0"
+                            required
+                        >
+
+                        <label for="customerEmail">
+                            Email *
+                        </label>
+
+                        <input
+                            type="email"
+                            id="customerEmail"
+                            name="customerEmail"
+                            placeholder="Nhập email nhận vé"
+                            autocomplete="email"
+                            required
+                        >
+
+                    </form>
+
+                </div>
+
+                <!-- MÃ GIẢM GIÁ -->
+                <div class="payment-panel">
+
+                    <h2>Mã giảm giá</h2>
+
+                    <div class="voucher-input-group">
+
+                        <input
+                            type="text"
+                            id="voucherCode"
+                            placeholder="Nhập mã giảm giá"
+                            autocomplete="off"
+                        >
+
+                        <button
+                            type="button"
+                            id="applyVoucher"
+                        >
+                            Áp dụng
+                        </button>
+
+                    </div>
+
+                    <p
+                        id="voucherMessage"
+                        class="payment-note"
+                        aria-live="polite"
+                    >
+                        Nhập mã khuyến mãi nếu bạn có.
+                    </p>
+
+                    <p class="payment-note">
+                        Mã thử nghiệm: PHIM20 – Giảm 20%.
+                    </p>
+
+                </div>
+
+                <!-- PHƯƠNG THỨC THANH TOÁN -->
+                <div class="payment-panel">
+
+                    <h2>Phương thức thanh toán</h2>
+
+                    <div class="payment-methods">
+
+                        <label class="payment-method">
+
+                            <input
+                                type="radio"
+                                name="paymentMethod"
+                                value="momo"
+                                checked
+                            >
+
+                            <span>
+                                <strong>MoMo</strong>
+                                <small>Ví điện tử MoMo</small>
+                            </span>
+
+                        </label>
+
+                        <label class="payment-method">
+
+                            <input
+                                type="radio"
+                                name="paymentMethod"
+                                value="vnpay"
+                            >
+
+                            <span>
+                                <strong>VNPay</strong>
+                                <small>Thanh toán qua VNPay</small>
+                            </span>
+
+                        </label>
+
+                        <label class="payment-method">
+
+                            <input
+                                type="radio"
+                                name="paymentMethod"
+                                value="vietqr"
+                            >
+
+                            <span>
+                                <strong>VietQR</strong>
+                                <small>Chuyển khoản ngân hàng bằng QR</small>
+                            </span>
+
+                        </label>
+
+                    </div>
+
+                    <p class="payment-note">
+                        Đây là giao diện thanh toán mẫu.
+                        Chưa kết nối cổng thanh toán thực tế.
+                    </p>
+
+                </div>
+
+            </section>
+
+            <!-- CỘT PHẢI: CHI TIẾT ĐƠN HÀNG -->
+            <aside class="payment-summary">
+
+                <h2>Chi tiết đơn đặt phòng</h2>
+
+                <!-- PHIM -->
+                <div class="payment-summary-row">
+                    <span>Phim</span>
+                    <strong id="paymentMovie">--</strong>
+                </div>
+
+                <!-- NGÀY CHIẾU -->
+                <div class="payment-summary-row">
+                    <span>Ngày chiếu</span>
+                    <strong id="paymentDate">--</strong>
+                </div>
+
+                <!-- LOẠI PHÒNG -->
+                <div class="payment-summary-row">
+                    <span>Loại phòng</span>
+                    <strong id="paymentRoom">--</strong>
+                </div>
+
+                <!-- GIỜ BẮT ĐẦU -->
+                <div class="payment-summary-row">
+                    <span>Giờ bắt đầu</span>
+                    <strong id="paymentTime">--</strong>
+                </div>
+
+                <!-- THỜI LƯỢNG -->
+                <div class="payment-summary-row">
+                    <span>Thời lượng</span>
+                    <strong id="paymentDuration">--</strong>
+                </div>
+
+                <hr class="payment-divider">
+
+                <!-- DANH SÁCH ĐỒ ĂN -->
+                <h3>Đồ ăn & nước uống</h3>
+
+                <div id="paymentFoodList">
+                    <p class="payment-note">
+                        Chưa có món nào.
+                    </p>
+                </div>
+
+                <hr class="payment-divider">
+
+                <!-- TIỀN PHÒNG -->
+                <div class="payment-summary-row">
+                    <span>Tiền phòng</span>
+                    <strong id="paymentRoomTotal">0đ</strong>
+                </div>
+
+                <!-- TIỀN ĐỒ ĂN -->
+                <div class="payment-summary-row">
+                    <span>Tiền đồ ăn</span>
+                    <strong id="paymentFoodTotal">0đ</strong>
+                </div>
+
+                <!-- GIẢM GIÁ -->
+                <div class="payment-summary-row">
+                    <span>Giảm giá</span>
+                    <strong id="paymentDiscount">0đ</strong>
+                </div>
+
+                <hr class="payment-divider">
+
+                <!-- TỔNG TIỀN -->
+                <div class="payment-total">
+                    <span>Tổng thanh toán</span>
+                    <strong id="paymentGrandTotal">0đ</strong>
+                </div>
+
+                <!-- XÁC NHẬN -->
+                <button
+                    type="submit"
+                    form="paymentForm"
+                    id="confirmPayment"
+                    class="payment-confirm"
+                >
+                    Xác nhận đặt phòng →
+                </button>
+
+                <p class="payment-note">
+                    Đây là thao tác xác nhận mẫu.
+                    Chưa giữ phòng hoặc thanh toán thực tế.
+                </p>
+
+            </aside>
+
+        </div>
+
+    </main>
+
+    <!-- JAVASCRIPT TRANG THANH TOÁN -->
+    <script
+        type="module"
+        src="js/pages/bookingPayment.js">
+    </script>
+
+</body>
+</html>
