@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Khám Phá Phim - ChillFlix Cinema Lounge</title>
+  
+  <link rel="stylesheet" href="./variables.css">
+  <link rel="stylesheet" href="./base.css">
+  <link rel="stylesheet" href="./components.css">
+</head>
+<body>
+
+  <!-- ==================== HEADER (DÙNG CHUNG) ==================== -->
+  <header class="header">
+    <div class="container header__container">
+      <button id="mobileMenuBtn" class="hamburger-btn" aria-label="Mở menu">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+
+      <a href="index.html" class="header__logo">
+        <span class="logo__icon">🎬</span>
+        <div class="logo__text-group">
+          <span class="logo__brand">ChillFlix</span>
+          <span class="logo__sub">CINEMA LOUNGE</span>
+        </div>
+      </a>
+
+      <nav class="header__nav" aria-label="Điều hướng chính">
+        <a href="index.html" class="nav__link">Trang chủ</a>
+        <a href="explore.html" class="nav__link active">Khám phá phim</a>
+        <a href="#menu" class="nav__link">Đồ ăn & Uống</a>
+        <a href="#booking" class="btn-booking-pill">Đặt phòng</a>
+      </nav>
+
+      <div class="header__actions">
+        <button id="themeToggle" class="action-btn" title="Chế độ Sáng/Tối">
+          <span id="themeIcon">🌙</span>
+        </button>
+        <button id="langToggle" class="action-btn lang-btn">
+          <span class="lang-text"><strong>VI</strong> / EN</span>
+        </button>
+        <a href="#cart" class="action-btn cart-btn">
+          <span class="cart__icon">☕</span>
+          <span class="cart__badge">2</span>
+        </a>
+        <div class="user-dropdown-wrapper">
+          <button id="userMenuBtn" class="avatar-btn">
+            <span class="avatar-circle">👤</span>
+            <span class="avatar-arrow">▾</span>
+          </button>
+          <div id="userDropdown" class="user-dropdown-menu">
+            <div class="dropdown__header">
+              <p class="dropdown__name">Nguyễn Hoàng Nam</p>
+              <p class="dropdown__rank">Hạng Bạc · 1.240 CinePoint</p>
+            </div>
+            <hr class="dropdown__divider" />
+            <a href="#profile" class="dropdown__item">Hồ sơ cá nhân</a>
+            <a href="#history" class="dropdown__item">Lịch sử xem</a>
+            <hr class="dropdown__divider" />
+            <a href="#logout" class="dropdown__item dropdown__item--danger">Đăng xuất</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- DRAWER DI ĐỘNG -->
+  <div id="drawerOverlay" class="drawer-overlay"></div>
+  <aside id="mobileDrawer" class="mobile-drawer">
+    <div class="drawer__header">
+      <div class="header__logo"><span class="logo__icon">🎬</span><span class="logo__brand">ChillFlix</span></div>
+      <button id="drawerCloseBtn" class="drawer-close-btn">✕</button>
+    </div>
+    <nav class="drawer__nav">
+      <a href="index.html" class="drawer__link"><span>🏠</span> Trang chủ</a>
+      <a href="explore.html" class="drawer__link active"><span>🎞️</span> Khám phá phim</a>
+      <a href="#menu" class="drawer__link"><span>🍿</span> Đồ ăn & Thức uống</a>
+      <a href="#booking" class="drawer__link drawer__link--highlight"><span>✨</span> Đặt phòng chiếu ngay</a>
+    </nav>
+  </aside>
+
+  <!-- ==================== NỘI DUNG CHÍNH KHÁM PHÁ PHIM ==================== -->
+  <main class="container explore-page">
+    
+    <!-- 1. Tiêu đề H1 -->
+    <div class="explore-header">
+      <h1 class="explore-title">Khám Phá Phim Chiếu Rạp</h1>
+      <p class="explore-subtitle">Chọn bộ phim bạn muốn thưởng thức, sau đó chọn không gian phòng chiếu riêng tư phù hợp.</p>
+    </div>
+
+    <!-- 2. Thanh tìm kiếm lớn (Full-width Search Bar) -->
+    <div class="search-hero-box">
+      <span class="search-hero-icon">🔍</span>
+      <input 
+        type="text" 
+        id="exploreSearchInput" 
+        class="search-hero-input" 
+        placeholder="Tìm theo tên phim bom tấn, đạo diễn hoặc diễn viên..." 
+        autocomplete="off"
+      />
+      <button type="button" id="clearSearchBtn" class="search-clear-btn" aria-label="Xóa tìm kiếm">✕</button>
+    </div>
+
+    <!-- 3. Hàng thanh lọc thông minh (Filter Bar) -->
+    <div class="filter-bar">
+      <!-- Cụm chip lọc nhanh -->
+      <div class="filter-chips">
+        <button class="filter-chip active" data-filter="trending">🔥 Đang hot</button>
+        <button class="filter-chip" data-filter="now_playing">✨ Mới chiếu</button>
+        <button class="filter-chip" data-filter="top_rated">★ Điểm cao nhất</button>
+        <button class="filter-chip" data-filter="cinema_ready">🍿 Quán có sẵn 4K</button>
+      </div>
+
+      <!-- Cụm Select Thể loại & Sắp xếp -->
+      <div class="filter-selects">
+        <select id="genreSelect" class="filter-select" aria-label="Lọc theo thể loại">
+          <option value="all">Tất cả thể loại</option>
+          <option value="28">Hành động</option>
+          <option value="878">Khoa học viễn tưởng</option>
+          <option value="10749">Tình cảm / Lãng mạn</option>
+          <option value="27">Kinh dị / Giật gân</option>
+          <option value="16">Hoạt hình / Anime</option>
+          <option value="35">Hài hước</option>
+        </select>
+
+        <select id="sortSelect" class="filter-select" aria-label="Sắp xếp kết quả">
+          <option value="popularity">Độ phổ biến</option>
+          <option value="rating">Điểm đánh giá cao</option>
+          <option value="release_date">Mới phát hành</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- 4. Lưới phim chính -->
+    <div id="exploreMovieGrid" class="movie-grid">
+      <!-- Javascript sẽ render danh sách phim vào đây -->
+    </div>
+
+    <!-- Trạng thái trống (Empty State khi tìm không thấy) -->
+    <div id="emptyState" class="empty-state" style="display: none;">
+      <div class="empty-state__icon">🎞️</div>
+      <h3 class="empty-state__title">Không tìm thấy phim phù hợp</h3>
+      <p class="empty-state__desc">Hãy thử từ khóa khác hoặc bấm nút bên dưới để xem danh sách phim đang hot.</p>
+      <button type="button" id="resetFilterBtn" class="btn btn--primary" style="margin-top: 16px;">
+        Xem tất cả phim
+      </button>
+    </div>
+
+    <!-- 5. Phân trang / Nút xem thêm -->
+    <div class="explore-pagination">
+      <p id="movieCountText" class="pagination-info">Đang hiển thị 12 phim</p>
+      <button type="button" id="loadMoreBtn" class="btn btn--outline load-more-btn">
+        Xem thêm phim ➔
+      </button>
+    </div>
+
+  </main>
+
+  <!-- Script Module -->
+  <script type="module" src="./js/explore.js"></script>
+</body>
+</html>
