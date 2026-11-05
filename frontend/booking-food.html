@@ -4,18 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Chọn đồ ăn | ChillFlix</title>
+    <title>Đồ ăn & nước uống | ChillFlix</title>
 
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/pages/booking.css">
     <link rel="stylesheet" href="css/pages/booking-food.css">
+    <link rel="stylesheet" href="css/theme.css">
+
+    <script>
+        (function () {
+            const theme = localStorage.getItem("chillflix-theme");
+            document.documentElement.setAttribute(
+                "data-theme",
+                theme === "light" ? "light" : "dark"
+            );
+        })();
+    </script>
 </head>
 
 <body>
-    <!-- HEADER -->
     <header class="booking-header">
         <a href="../index.html" class="booking-logo">
             ChillFlix
@@ -27,136 +36,171 @@
     </header>
 
     <main class="booking-container">
-
-        <!-- TIÊU ĐỀ -->
         <div class="booking-heading">
             <p class="booking-eyebrow">
                 CHILLFLIX PRIVATE CINEMA
             </p>
 
             <h1>Đặt phòng chiếu phim</h1>
-
-            <p>
-                Chọn đồ ăn và nước uống cho buổi xem phim của bạn.
-            </p>
+            <p>Chọn món ngon cho buổi xem phim của bạn.</p>
         </div>
 
-        <!-- THANH TIẾN TRÌNH -->
         <nav class="booking-steps" aria-label="Các bước đặt phòng">
             <span class="booking-step">1. Chọn phòng</span>
-
-            <span class="booking-step active">
-                2. Đồ ăn & nước
-            </span>
-
+            <span class="booking-step active">2. Đồ ăn & nước</span>
             <span class="booking-step">3. Thanh toán</span>
-
             <span class="booking-step">4. Nhận vé</span>
         </nav>
 
-        <!-- BƯỚC 2 -->
         <section class="booking-food-section">
-
             <div class="food-heading">
-                <h2>Đồ ăn & nước uống</h2>
-                <p>
-                    Chọn thêm những món yêu thích để buổi xem phim
-                    của bạn trọn vẹn hơn.
-                </p>
+                <div>
+                    <p class="food-eyebrow">CHILLFLIX FOOD & DRINK</p>
+                    <h2>Ăn ngon, xem phim hay</h2>
+                    <p>
+                        Bắp rang, món ăn vặt, thức uống và
+                        những combo tiết kiệm dành riêng cho bạn.
+                    </p>
+                </div>
             </div>
 
             <div class="food-layout">
-
-                <!-- DANH SÁCH MÓN -->
                 <div class="food-main">
 
-                    <div class="food-filters">
+                    <div class="food-promo-banner">
+                        <div>
+                            <span class="food-promo-label">
+                                ƯU ĐÃI COMBO
+                            </span>
+                            <h3>Đi xem phim, chọn combo tiết kiệm hơn!</h3>
+                            <p>
+                                Kết hợp bắp rang, đồ ăn và nước uống
+                                với giá ưu đãi so với mua lẻ.
+                            </p>
+                        </div>
                         <button
                             type="button"
-                            class="food-filter active"
-                            data-category="all">
-                            Tất cả
-                        </button>
-
-                        <button
-                            type="button"
-                            class="food-filter"
-                            data-category="combo">
-                            Combo
-                        </button>
-
-                        <button
-                            type="button"
-                            class="food-filter"
-                            data-category="food">
-                            Đồ ăn
-                        </button>
-
-                        <button
-                            type="button"
-                            class="food-filter"
-                            data-category="drink">
-                            Nước uống
+                            id="viewCombos"
+                            class="food-promo-button">
+                            Xem combo
                         </button>
                     </div>
 
-                    <input
-                        type="search"
-                        id="foodSearch"
-                        class="food-search"
-                        placeholder="Tìm món ăn hoặc nước uống..."
-                        aria-label="Tìm kiếm món ăn"
-                    >
+                    <div class="food-toolbar">
+                        <div class="food-filters">
+                            <button
+                                type="button"
+                                class="food-filter active"
+                                data-category="all">
+                                Tất cả
+                            </button>
 
-                    <!-- JAVASCRIPT SẼ TẠO CÁC THẺ MÓN ĂN -->
-                    <div id="foodGrid" class="food-grid"></div>
+                            <button
+                                type="button"
+                                class="food-filter"
+                                data-category="combo">
+                                Combo ưu đãi
+                            </button>
 
+                            <button
+                                type="button"
+                                class="food-filter"
+                                data-category="food">
+                                Đồ ăn
+                            </button>
+
+                            <button
+                                type="button"
+                                class="food-filter"
+                                data-category="drink">
+                                Nước uống
+                            </button>
+                        </div>
+
+                        <input
+                            type="search"
+                            id="foodSearch"
+                            class="food-search"
+                            placeholder="Tìm món bạn thích..."
+                            aria-label="Tìm kiếm món ăn hoặc nước uống">
+                    </div>
+
+                    <div class="food-results-heading">
+                        <h3 id="foodCategoryTitle">Tất cả món</h3>
+                        <span id="foodResultCount"></span>
+                    </div>
+
+                    <div
+                        id="foodGrid"
+                        class="food-grid"
+                        aria-live="polite">
+                    </div>
                 </div>
 
-                <!-- GIỎ HÀNG -->
                 <aside class="food-cart">
-                    <h3>Đơn hàng của bạn</h3>
-
-                    <div class="summary-row">
-                        <span>Phim</span>
-                        <strong id="foodMovie">Chưa chọn</strong>
+                    <div class="food-cart-heading">
+                        <div>
+                            <p class="food-cart-eyebrow">CHILLFLIX</p>
+                            <h3>Đơn hàng của bạn</h3>
+                        </div>
+                        <span class="food-cart-icon">🛒</span>
                     </div>
 
-                    <div class="summary-row">
-                        <span>Ngày chiếu</span>
-                        <strong id="foodDate">--</strong>
+                    <div class="food-booking-info">
+                        <div class="summary-row">
+                            <span>Phim</span>
+                            <strong id="foodMovie">Chưa chọn</strong>
+                        </div>
+
+                        <div class="summary-row">
+                            <span>Ngày chiếu</span>
+                            <strong id="foodDate">--</strong>
+                        </div>
+
+                        <div class="summary-row">
+                            <span>Loại phòng</span>
+                            <strong id="foodRoom">--</strong>
+                        </div>
+
+                        <div class="summary-row">
+                            <span>Giờ bắt đầu</span>
+                            <strong id="foodTime">--</strong>
+                        </div>
+
+                        <div class="summary-row">
+                            <span>Thời lượng</span>
+                            <strong id="foodDuration">--</strong>
+                        </div>
+
+                        <div class="summary-row">
+                            <span>Tiền phòng</span>
+                            <strong id="foodRoomPrice">0đ</strong>
+                        </div>
                     </div>
 
-                    <div class="summary-row">
-                        <span>Loại phòng</span>
-                        <strong id="foodRoom">--</strong>
+                    <hr class="food-divider">
+
+                    <div class="food-cart-subheading">
+                        <h4>Món đã chọn</h4>
+                        <span id="foodCartCount">0 món</span>
                     </div>
 
-                    <div class="summary-row">
-                        <span>Giờ bắt đầu</span>
-                        <strong id="foodTime">--</strong>
-                    </div>
-
-                    <div class="summary-row">
-                        <span>Thời lượng</span>
-                        <strong id="foodDuration">--</strong>
-                    </div>
-
-                    <div class="summary-row">
-                        <span>Tiền phòng</span>
-                        <strong id="foodRoomPrice">0đ</strong>
-                    </div>
-
-                    <!-- CÁC MÓN ĐÃ THÊM -->
                     <div id="foodCartItems">
                         <p class="booking-hint">
                             Bạn chưa chọn món nào.
                         </p>
                     </div>
 
+                    <hr class="food-divider">
+
                     <div class="summary-row">
                         <span>Tiền đồ ăn</span>
                         <strong id="foodTotal">0đ</strong>
+                    </div>
+
+                    <div class="summary-row food-saving-row" id="foodSavingRow">
+                        <span>Đã tiết kiệm nhờ combo</span>
+                        <strong id="foodSavings">0đ</strong>
                     </div>
 
                     <div class="summary-total">
@@ -183,16 +227,11 @@
                         Chưa xác nhận đặt phòng hoặc thanh toán.
                     </p>
                 </aside>
-
             </div>
         </section>
-
     </main>
 
-    <!-- JAVASCRIPT CỦA BƯỚC 2 -->
-    <script
-        type="module"
-        src="js/pages/bookingFood.js">
-    </script>
+    <script type="module" src="js/pages/bookingFood.js"></script>
+    <script src="js/theme.js"></script>
 </body>
 </html>

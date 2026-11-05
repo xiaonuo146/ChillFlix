@@ -1,34 +1,83 @@
 
 /* =========================================
-   CHILLFLIX - BƯỚC 2: ĐỒ ĂN & NƯỚC UỐNG
+   CHILLFLIX - FOOD & DRINK
+   DARK / LIGHT THEME
    ========================================= */
 
-/* Khu vực chọn món */
 .booking-food-section {
-    margin-top: 24px;
-    padding-bottom: 60px;
+    margin-top: 30px;
+    padding-bottom: 70px;
 }
 
+/* =========================================
+   BIEN MAU GIAO DIEN
+   ========================================= */
+
+html[data-theme="dark"] .booking-food-section {
+    --food-bg: #241a30;
+    --food-bg-soft: #30223c;
+    --food-input: #191321;
+    --food-border: #493452;
+    --food-text: #ffffff;
+    --food-muted: #b9a9c9;
+    --food-accent: #f6bd50;
+    --food-accent-hover: #ffd47a;
+    --food-button-text: #211622;
+    --food-image-bg: #352440;
+    --food-shadow: rgba(0, 0, 0, 0.18);
+}
+
+html[data-theme="light"] .booking-food-section {
+    --food-bg: #ffffff;
+    --food-bg-soft: #f8f3fb;
+    --food-input: #ffffff;
+    --food-border: #e6ddeb;
+    --food-text: #261c30;
+    --food-muted: #75677f;
+    --food-accent: #e9a92e;
+    --food-accent-hover: #f6bd50;
+    --food-button-text: #261c30;
+    --food-image-bg: #f3edf6;
+    --food-shadow: rgba(40, 22, 50, 0.07);
+}
+
+/* =========================================
+   TIEU DE
+   ========================================= */
+
 .food-heading {
-    margin-bottom: 24px;
+    margin-bottom: 25px;
+}
+
+.food-eyebrow {
+    color: #d7a54b !important;
+    font-size: 11px !important;
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin-bottom: 8px !important;
 }
 
 .food-heading h2 {
-    color: #ffffff;
-    font-size: 28px;
-    margin: 0 0 8px;
+    color: var(--food-text);
+    font-size: 30px;
+    font-weight: 800;
+    margin: 0 0 10px;
 }
 
 .food-heading p {
-    color: #b9a9c9;
+    color: var(--food-muted);
     font-size: 14px;
+    line-height: 1.7;
     margin: 0;
 }
 
-/* Bố cục danh sách món và giỏ hàng */
+/* =========================================
+   BO CUC
+   ========================================= */
+
 .food-layout {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 280px;
+    grid-template-columns: minmax(0, 1fr) 300px;
     gap: 24px;
     align-items: start;
 }
@@ -37,156 +86,397 @@
     min-width: 0;
 }
 
-/* Các nút lọc */
+/* =========================================
+   BANNER COMBO
+   ========================================= */
+
+.food-promo-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 26px;
+    margin-bottom: 25px;
+    border-radius: 16px;
+    border: 1px solid #705075;
+    background:
+        radial-gradient(
+            circle at 95% 10%,
+            rgba(246, 189, 80, 0.24),
+            transparent 45%
+        ),
+        linear-gradient(
+            120deg,
+            #24152f,
+            #43284d
+        );
+    color: #ffffff;
+}
+
+.food-promo-label {
+    display: inline-block;
+    margin-bottom: 10px;
+    padding: 6px 11px;
+    border-radius: 20px;
+    background: rgba(246, 189, 80, 0.17);
+    color: #f6bd50;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.food-promo-banner h3 {
+    margin: 0 0 9px;
+    color: #ffffff;
+    font-size: 21px;
+    line-height: 1.4;
+}
+
+.food-promo-banner p {
+    margin: 0;
+    max-width: 450px;
+    color: #e1d5e6;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.food-promo-button {
+    flex-shrink: 0;
+    border: none;
+    border-radius: 9px;
+    padding: 12px 18px;
+    background: #f6bd50;
+    color: #211622;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.food-promo-button:hover {
+    background: #ffd47a;
+    transform: translateY(-2px);
+}
+
+/* =========================================
+   BO LOC VA TIM KIEM
+   ========================================= */
+
+.food-toolbar {
+    margin-bottom: 20px;
+}
+
 .food-filters {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 16px;
+    gap: 9px;
+    margin-bottom: 15px;
 }
 
 .food-filter {
-    border: 1px solid #493452;
-    border-radius: 24px;
-    padding: 10px 18px;
-    background: #24192e;
-    color: #ffffff;
+    border: 1px solid var(--food-border);
+    border-radius: 25px;
+    padding: 10px 16px;
+    background: var(--food-bg);
+    color: var(--food-text);
     font-size: 13px;
+    font-weight: 600;
     cursor: pointer;
     transition: 0.2s;
 }
 
 .food-filter:hover {
-    border-color: #f6bd50;
-    color: #f6bd50;
+    border-color: var(--food-accent);
+    color: var(--food-accent);
 }
 
 .food-filter.active {
-    background: #f6bd50;
-    border-color: #f6bd50;
-    color: #1c1421;
-    font-weight: bold;
+    background: var(--food-accent);
+    border-color: var(--food-accent);
+    color: var(--food-button-text);
+    font-weight: 800;
 }
 
-/* Ô tìm kiếm */
 .food-search {
+    display: block;
     width: 100%;
-    padding: 14px 16px;
-    margin-bottom: 20px;
-    border: 1px solid #493452;
-    border-radius: 9px;
-    background: #191321;
-    color: #ffffff;
+    box-sizing: border-box;
+    padding: 13px 16px;
+    border: 1px solid var(--food-border);
+    border-radius: 10px;
+    background: var(--food-input);
+    color: var(--food-text);
     font-size: 14px;
     outline: none;
-    box-sizing: border-box;
+    transition: 0.2s;
 }
 
 .food-search::placeholder {
-    color: #9b8aa9;
+    color: var(--food-muted);
 }
 
 .food-search:focus {
-    border-color: #f6bd50;
+    border-color: var(--food-accent);
+    box-shadow: 0 0 0 3px rgba(246, 189, 80, 0.12);
 }
 
-/* Lưới món ăn */
+.food-results-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.food-results-heading h3 {
+    margin: 0;
+    color: var(--food-text);
+    font-size: 19px;
+}
+
+.food-results-heading span {
+    color: var(--food-muted);
+    font-size: 12px;
+}
+
+/* =========================================
+   LUOI SAN PHAM
+   ========================================= */
+
 .food-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 16px;
+    gap: 17px;
 }
 
-/* Thẻ món ăn */
+/* =========================================
+   THE SAN PHAM
+   ========================================= */
+
 .food-card {
     display: flex;
     flex-direction: column;
     min-width: 0;
-    padding: 14px;
-    background: #241a30;
-    border: 1px solid #493452;
-    border-radius: 12px;
-    transition: 0.2s;
+    overflow: hidden;
+    border: 1px solid var(--food-border);
+    border-radius: 15px;
+    background: var(--food-bg);
+    box-shadow: 0 5px 16px var(--food-shadow);
+    transition: transform 0.2s, border-color 0.2s;
 }
 
 .food-card:hover {
-    border-color: #f6bd50;
-    transform: translateY(-3px);
-}
-
-/* Ảnh/icon món */
-.food-card-image {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 120px;
-    margin-bottom: 14px;
-    border-radius: 9px;
-    background: #352440;
-    font-size: 48px;
-}
-
-/* Tên món */
-.food-card h3 {
-    color: #ffffff;
-    font-size: 16px;
-    margin: 0 0 8px;
-}
-
-/* Mô tả món */
-.food-card p {
-    color: #b9a9c9;
-    font-size: 12px;
-    line-height: 1.5;
-    margin: 0 0 18px;
-    flex-grow: 1;
-}
-
-/* Giá và nút thêm */
-.food-card-bottom {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-}
-
-.food-card-bottom strong {
-    color: #f6bd50;
-    font-size: 15px;
-}
-
-.food-add-button {
-    padding: 9px 13px;
-    border: none;
-    border-radius: 7px;
-    background: #f6bd50;
-    color: #211622;
-    font-size: 12px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.food-add-button:hover {
-    background: #ffd47a;
+    border-color: var(--food-accent);
+    transform: translateY(-4px);
 }
 
 /* =========================================
-   GIỎ HÀNG
+   ANH MON AN - ANH CHUP THAT
+   ========================================= */
+
+.food-card-image {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 175px;
+    margin: 0;
+    overflow: hidden;
+    border-radius: 0;
+    background: var(--food-image-bg);
+}
+
+.food-card-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.35s ease;
+}
+
+.food-card:hover .food-card-image img {
+    transform: scale(1.05);
+}
+
+/* Hien thi khi chua co anh that */
+
+.food-image-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 15px;
+    box-sizing: border-box;
+    color: var(--food-muted);
+    font-size: 12px;
+    text-align: center;
+    line-height: 1.5;
+}
+
+/* =========================================
+   NHAN COMBO / GIAM GIA
+   ========================================= */
+
+.food-card-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 2;
+    display: inline-block;
+    padding: 7px 10px;
+    border-radius: 7px;
+    background: #d83d50;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 800;
+    box-shadow: 0 3px 9px rgba(0, 0, 0, 0.16);
+}
+
+.food-card-badge.combo {
+    background: #d83d50;
+}
+
+.food-card-badge.new {
+    background: #277c62;
+}
+
+.food-card-content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 15px;
+}
+
+.food-card h3 {
+    margin: 0 0 8px;
+    color: var(--food-text);
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 1.4;
+}
+
+.food-card p {
+    flex-grow: 1;
+    margin: 0 0 14px;
+    color: var(--food-muted);
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+/* =========================================
+   GIA MON
+   ========================================= */
+
+.food-price-box {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.food-old-price {
+    color: var(--food-muted);
+    font-size: 12px;
+    text-decoration: line-through;
+}
+
+.food-price {
+    color: var(--food-accent);
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.food-save-label {
+    display: inline-block;
+    margin-top: 5px;
+    color: #28a078;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+html[data-theme="dark"] .food-save-label {
+    color: #6dd7a7;
+}
+
+.food-card-bottom {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: auto;
+}
+
+.food-add-button {
+    flex-shrink: 0;
+    min-width: 62px;
+    padding: 10px 12px;
+    border: none;
+    border-radius: 9px;
+    background: var(--food-accent);
+    color: var(--food-button-text);
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.food-add-button:hover {
+    background: var(--food-accent-hover);
+    transform: translateY(-2px);
+}
+
+/* =========================================
+   GIO HANG
    ========================================= */
 
 .food-cart {
     position: sticky;
     top: 24px;
     padding: 20px;
-    background: #241a30;
-    border: 1px solid #493452;
-    border-radius: 12px;
-    color: #ffffff;
+    border: 1px solid var(--food-border);
+    border-radius: 15px;
+    background: var(--food-bg);
+    color: var(--food-text);
+    box-shadow: 0 6px 20px var(--food-shadow);
 }
 
-.food-cart h3 {
+.food-cart-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 22px;
+}
+
+.food-cart-eyebrow {
+    margin: 0 0 5px;
+    color: var(--food-accent);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+.food-cart-heading h3 {
+    margin: 0;
+    color: var(--food-text);
     font-size: 18px;
-    margin: 0 0 20px;
+}
+
+.food-cart-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: var(--food-bg-soft);
+    font-size: 20px;
+}
+
+.food-booking-info {
+    margin-bottom: 15px;
 }
 
 .food-cart .summary-row {
@@ -194,30 +484,62 @@
     align-items: flex-start;
     justify-content: space-between;
     gap: 12px;
-    margin-bottom: 14px;
-    font-size: 13px;
+    margin-bottom: 13px;
+    font-size: 12px;
 }
 
 .food-cart .summary-row span {
-    color: #b9a9c9;
+    color: var(--food-muted);
 }
 
 .food-cart .summary-row strong {
-    color: #ffffff;
+    max-width: 60%;
+    color: var(--food-text);
+    font-size: 12px;
     text-align: right;
+    overflow-wrap: anywhere;
 }
 
-/* Các món trong giỏ */
+.food-divider {
+    height: 0;
+    margin: 18px 0;
+    border: none;
+    border-top: 1px solid var(--food-border);
+}
+
+.food-cart-subheading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.food-cart-subheading h4 {
+    margin: 0;
+    color: var(--food-text);
+    font-size: 14px;
+}
+
+.food-cart-subheading span {
+    color: var(--food-muted);
+    font-size: 12px;
+}
+
+/* =========================================
+   MON TRONG GIO HANG
+   ========================================= */
+
 #foodCartItems {
-    margin: 16px 0;
+    margin: 12px 0;
 }
 
 .food-cart-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 8px;
-    margin-bottom: 14px;
+    gap: 9px;
+    margin-bottom: 15px;
 }
 
 .food-cart-item-info {
@@ -228,15 +550,16 @@
 }
 
 .food-cart-item-info strong {
+    color: var(--food-text);
     font-size: 12px;
+    line-height: 1.4;
 }
 
 .food-cart-item-info small {
-    color: #b9a9c9;
+    color: var(--food-muted);
     font-size: 11px;
 }
 
-/* Nút tăng giảm số lượng */
 .food-quantity {
     display: flex;
     align-items: center;
@@ -245,90 +568,128 @@
 }
 
 .food-quantity button {
-    width: 25px;
-    height: 25px;
-    border: 1px solid #665075;
-    border-radius: 5px;
-    background: transparent;
-    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    border: 1px solid var(--food-border);
+    border-radius: 7px;
+    background: var(--food-bg-soft);
+    color: var(--food-text);
+    font-size: 15px;
     cursor: pointer;
 }
 
 .food-quantity button:hover {
-    border-color: #f6bd50;
-    color: #f6bd50;
+    border-color: var(--food-accent);
+    color: var(--food-accent);
 }
 
 .food-quantity span {
+    min-width: 12px;
+    color: var(--food-text);
     font-size: 12px;
+    font-weight: 700;
+    text-align: center;
 }
 
-/* Tổng cộng */
+/* =========================================
+   TIET KIEM VA TONG TIEN
+   ========================================= */
+
+.food-saving-row span,
+.food-saving-row strong {
+    color: #27986e !important;
+}
+
+html[data-theme="dark"] .food-saving-row span,
+html[data-theme="dark"] .food-saving-row strong {
+    color: #6dd7a7 !important;
+}
+
 .food-cart .summary-total {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 10px;
-    margin: 18px 0;
-    padding-top: 16px;
-    border-top: 1px solid #493452;
+    margin: 20px 0;
+    padding-top: 17px;
+    border-top: 1px solid var(--food-border);
+}
+
+.food-cart .summary-total span {
+    color: var(--food-text);
+    font-size: 15px;
+    font-weight: 800;
 }
 
 .food-cart .summary-total strong {
-    color: #f6bd50;
-    font-size: 18px;
+    color: var(--food-accent);
+    font-size: 21px;
+    font-weight: 800;
 }
 
-/* Nút quay lại */
+/* =========================================
+   NUT GIO HANG
+   ========================================= */
+
 .food-back-button {
     display: block;
     width: 100%;
     padding: 12px;
     margin-bottom: 10px;
-    border: 1px solid #665075;
-    border-radius: 7px;
+    border: 1px solid var(--food-border);
+    border-radius: 9px;
     background: transparent;
-    color: #ffffff;
-    font-weight: bold;
+    color: var(--food-text);
+    font-size: 13px;
+    font-weight: 700;
     cursor: pointer;
 }
 
 .food-back-button:hover {
-    border-color: #f6bd50;
+    border-color: var(--food-accent);
 }
 
-/* Nút tiếp tục thanh toán */
 .food-cart .booking-continue {
     display: block;
     width: 100%;
-    padding: 13px;
+    padding: 14px;
     border: none;
-    border-radius: 7px;
-    background: #f6bd50;
-    color: #211622;
-    font-weight: bold;
+    border-radius: 9px;
+    background: var(--food-accent);
+    color: var(--food-button-text);
+    font-size: 13px;
+    font-weight: 800;
     cursor: pointer;
 }
 
 .food-cart .booking-continue:hover {
-    background: #ffd47a;
+    background: var(--food-accent-hover);
+}
+
+.food-cart .booking-continue:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .food-cart .booking-hint {
-    color: #b9a9c9;
-    font-size: 12px;
-    line-height: 1.5;
     margin-top: 12px;
+    color: var(--food-muted);
+    font-size: 11px;
+    line-height: 1.6;
 }
 
 /* =========================================
-   RESPONSIVE - MÀN HÌNH NHỎ
+   RESPONSIVE
    ========================================= */
 
-@media (max-width: 1000px) {
+@media (max-width: 1100px) {
     .food-layout {
-        grid-template-columns: minmax(0, 1fr) 250px;
-        gap: 16px;
+        grid-template-columns: minmax(0, 1fr) 270px;
+        gap: 18px;
     }
 
     .food-grid {
@@ -336,7 +697,7 @@
     }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 760px) {
     .food-layout {
         grid-template-columns: 1fr;
     }
@@ -348,38 +709,70 @@
     .food-cart {
         position: static;
     }
+
+    .food-promo-banner {
+        padding: 20px;
+    }
 }
 
-@media (max-width: 450px) {
+@media (max-width: 520px) {
+    .food-heading h2 {
+        font-size: 25px;
+    }
+
+    .food-promo-banner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .food-promo-banner h3 {
+        font-size: 19px;
+    }
+
+    .food-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .food-card-image {
+        height: 135px;
+    }
+
+    .food-card-content {
+        padding: 11px;
+    }
+
+    .food-card h3 {
+        font-size: 13px;
+    }
+
+    .food-card p {
+        font-size: 11px;
+    }
+
+    .food-price {
+        font-size: 14px;
+    }
+
+    .food-add-button {
+        min-width: 40px;
+        padding: 9px 8px;
+        font-size: 11px;
+    }
+
+    .food-filter {
+        padding: 9px 12px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 350px) {
     .food-grid {
         grid-template-columns: 1fr;
     }
 
-    .food-heading h2 {
-        font-size: 24px;
+    .food-card-image {
+        height: 190px;
     }
-
-    .food-filter {
-        padding: 8px 12px;
-    }
-}
-/* Thông tin phòng đã chọn */
-.food-booking-info {
-    margin-bottom: 16px;
-}
-
-.food-booking-info .summary-row {
-    margin-bottom: 12px;
-}
-
-.food-booking-info .summary-row strong {
-    max-width: 60%;
-    overflow-wrap: anywhere;
-}
-
-/* Đường phân cách */
-.food-divider {
-    border: none;
-    border-top: 1px solid #493452;
-    margin: 16px 0;
 }
