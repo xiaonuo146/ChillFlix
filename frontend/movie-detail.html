@@ -1,93 +1,381 @@
-
 <!DOCTYPE html>
 <html lang="vi" data-theme="dark">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chi tiết phim | ChillFlix</title>
 
-  <link rel="stylesheet" href="css/variables.css">
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/components.css">
-  <link rel="stylesheet" href="css/pages/movie-detail.css">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi Tiết Phim | ChillFlix Cinema Lounge</title>
+
+    <!-- CSS dùng chung của hệ thống Design System -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <!-- CSS riêng CHỈ dành cho các thành phần mới của trang này -->
+    <link rel="stylesheet" href="css/pages/movie-detail.css">
 </head>
 
 <body>
-  <header class="movie-header">
-    <a href="../index.html" class="movie-logo">ChillFlix</a>
 
-    <nav>
-      <a href="../index.html">Trang chủ</a>
-      <a href="../index.html#explore">Khám phá phim</a>
-      <a href="booking.html">Đặt phòng</a>
-    </nav>
-  </header>
+    <!-- ==================== 1. THANH HEADER CHÍNH (DÙNG CHUNG 100% TRANG CHỦ) ==================== -->
+    <header class="header">
+        <div class="container header__container">
+            <button id="mobileMenuBtn" class="hamburger-btn" aria-label="Mở menu điều hướng">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
 
-  <main>
-    <section class="movie-hero">
-      <div class="movie-hero__content">
-        <div class="movie-poster">
-          <img id="moviePoster" src="" alt="Poster phim">
+            <a href="index.html" class="header__logo">
+                <span class="logo__icon">🎬</span>
+                <div class="logo__text-group">
+                    <span class="logo__brand">ChillFlix</span>
+                    <span class="logo__sub">CINEMA LOUNGE</span>
+                </div>
+            </a>
+
+            <nav class="header__nav" aria-label="Điều hướng chính">
+                <a href="index.html" class="nav__link">Trang chủ</a>
+                <a href="explore.html" class="nav__link active">Khám phá phim</a>
+                <a href="booking-food.html" class="nav__link">Đồ ăn & Uống</a>
+                <a href="booking.html" class="btn-booking-pill">Đặt phòng</a>
+            </nav>
+
+            <div class="header__actions">
+                <div class="header__search">
+                    <span class="search__icon">🔍</span>
+                    <input type="text" class="search__input" placeholder="Tìm phim, phòng chiếu..." aria-label="Tìm kiếm phim" />
+                </div>
+
+                <button id="themeToggle" class="action-btn" title="Chuyển chế độ Sáng / Tối">
+                    <span id="themeIcon">🌙</span>
+                </button>
+
+                <button id="langToggle" class="action-btn lang-btn" title="Đổi ngôn ngữ">
+                    <span class="lang-text"><strong>VI</strong> / EN</span>
+                </button>
+
+                <a href="booking-food.html" class="action-btn cart-btn">
+                    <span class="cart__icon">🍿</span>
+                    <span class="cart__badge">2</span>
+                </a>
+
+                <div class="user-dropdown-wrapper">
+                    <button id="userMenuBtn" class="avatar-btn" aria-expanded="false">
+                        <span class="avatar-circle">👤</span>
+                        <span class="avatar-arrow">▾</span>
+                    </button>
+                    <div id="userDropdown" class="user-dropdown-menu">
+                        <div class="dropdown__header">
+                            <p class="dropdown__name">Nguyễn Hoàng Nam</p>
+                            <p class="dropdown__rank">Hạng Bạc · 1.240 CinePoint</p>
+                        </div>
+                        <hr class="dropdown__divider" />
+                        <a href="profile.html" class="dropdown__item">Hồ sơ cá nhân</a>
+                        <a href="profile.html#history" class="dropdown__item">Lịch sử xem phim</a>
+                        <a href="profile.html#vouchers" class="dropdown__item">Voucher của tôi (3)</a>
+                        <hr class="dropdown__divider" />
+                        <a href="admin/dashboard.html" class="dropdown__item" style="color: var(--primary);">⚙️ Cổng Quản Trị (Admin)</a>
+                        <hr class="dropdown__divider" />
+                        <a href="index.html" class="dropdown__item dropdown__item--danger">Đăng xuất</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MOBILE DRAWER -->
+    <div id="drawerOverlay" class="drawer-overlay"></div>
+    <aside id="mobileDrawer" class="mobile-drawer">
+        <div class="drawer__header">
+            <div class="header__logo"><span class="logo__icon">🎬</span><span class="logo__brand">ChillFlix</span></div>
+            <button id="drawerCloseBtn" class="drawer-close-btn">✕</button>
+        </div>
+        <nav class="drawer__nav">
+            <a href="index.html" class="drawer__link"><span>🏠</span> Trang chủ</a>
+            <a href="explore.html" class="drawer__link active"><span>🎞️</span> Khám phá phim</a>
+            <a href="booking-food.html" class="drawer__link"><span>🍿</span> Đồ ăn & Thức uống</a>
+            <a href="booking.html" class="drawer__link drawer__link--highlight"><span>✨</span> Đặt phòng chiếu ngay</a>
+        </nav>
+    </aside>
+
+    <!-- MAIN CHÍNH -->
+    <main>
+        <!-- ==================== 1. HERO BANNER CHI TIẾT PHIM ==================== -->
+        <section class="detail-hero" id="detailHeroSection">
+            <div class="detail-hero__backdrop" id="detailBackdrop"></div>
+            <div class="detail-hero__overlay"></div>
+
+            <div class="container detail-hero__container">
+                <!-- Poster bên trái có Badge 4K IMAX -->
+                <div class="detail-poster-box">
+                    <div class="detail-poster-badge">✦ 4K IMAX • ATMOS</div>
+                    <img id="moviePoster" src="" alt="Poster phim" class="detail-poster-img" />
+                </div>
+
+                <!-- Thông tin chi tiết bên phải -->
+                <div class="detail-info">
+                    <div class="detail-tagline-top">Phim đang chiếu / Bom tấn chiếu rạp riêng</div>
+                    <h1 id="movieTitle" class="detail-title">Đang tải tên phim...</h1>
+                    <div id="movieOriginalTitle" class="detail-sub-title">Loading original title...</div>
+
+                    <!-- Meta info -->
+                    <div class="detail-meta-row">
+                        <span id="movieYear">2024</span>
+                        <span class="meta-dot">•</span>
+                        <span id="movieRuntime">166 phút</span>
+                        <span class="meta-dot">•</span>
+                        <span id="movieDirector">Đạo diễn: Denis Villeneuve</span>
+                        <span class="detail-age-badge" id="movieAgeLimit">T16</span>
+                    </div>
+
+                    <!-- Danh sách thể loại Genres -->
+                    <div class="detail-genres" id="movieGenres">
+                        <span class="genre-chip">Khoa học viễn tưởng</span>
+                        <span class="genre-chip">Phiêu lưu hành động</span>
+                        <span class="genre-chip">Kỳ ảo sử thi</span>
+                    </div>
+
+                    <!-- Điểm số & Giải thưởng -->
+                    <div class="detail-rating-row">
+                        <div class="rating-badge-tmdb">
+                            <span class="star-icon">★</span>
+                            <strong id="movieRating">8.8</strong>
+                            <span class="rating-sub" id="movieVoteCount">/ 10 · 12.420 đánh giá TMDB</span>
+                        </div>
+                        <div class="award-badge">
+                            🏆 Đề cử 10 giải Oscar & Phim rạp riêng được yêu thích nhất
+                        </div>
+                    </div>
+
+                    <!-- Câu châm ngôn Quote -->
+                    <blockquote class="detail-quote" id="movieQuote">
+                        “Định mệnh của vũ trụ thức tỉnh trên sa mạc Arrakis.”
+                    </blockquote>
+
+                    <!-- Tóm tắt nội dung -->
+                    <p class="detail-overview" id="movieOverview">
+                        Đang tải nội dung tóm tắt bộ phim...
+                    </p>
+
+                    <!-- Cụm CTA Nút bấm -->
+                    <div class="detail-cta-group">
+                        <button type="button" id="watchTrailer" class="btn btn--outline detail-btn">
+                            <span>▶</span> Xem Trailer Chính Thức
+                        </button>
+                        <button type="button" id="btnBookThisMovie" class="btn btn--primary detail-btn detail-btn--highlight">
+                            <span>🎬</span> Đặt phòng xem phim này ➔
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+<!-- ==================== 2. KHỐI ĐẶT PHÒNG NHANH TINH GỌN (CHỌN LỊCH & GIỜ CHUẨN) ==================== -->
+        <section class="container" style="margin-top: -32px; position: relative; z-index: 10;">
+            <div class="mini-booking-card">
+                <div class="mini-booking-header">
+                    <div class="mini-booking-title">
+                        <span>📅</span> Đặt lịch phòng chiếu cho: <strong id="miniBookingMovieName" style="color: var(--primary);">Đang tải...</strong>
+                    </div>
+                    <div class="mini-booking-badge">
+                        🏷 Giá chỉ từ <strong>120.000đ/giờ</strong> · 100% Không gian riêng tư
+                    </div>
+                </div>
+
+                <!-- FORM 1 HÀNG DUY NHẤT: NGÀY + GIỜ + PHÒNG + NÚT -->
+                <div class="mini-booking-compact-grid">
+                    <!-- 1. Chọn ngày qua lịch -->
+                    <div class="compact-field">
+                        <label class="compact-label" for="detailBookingDate">📅 Ngày chiếu</label>
+                        <input type="date" id="detailBookingDate" class="compact-input" />
+                    </div>
+
+                    <!-- 2. Tự chọn giờ nhận phòng -->
+                    <div class="compact-field">
+                        <label class="compact-label" for="detailBookingTime">⏰ Giờ nhận phòng</label>
+                        <select id="detailBookingTime" class="compact-select">
+                            <!-- JS sẽ tự đổ danh sách từ 09:00 đến 22:30 -->
+                        </select>
+                    </div>
+
+                    <!-- 3. Chọn không gian phòng -->
+                    <div class="compact-field">
+                        <label class="compact-label" for="detailBookingRoom">👥 Không gian phòng</label>
+                        <select id="detailBookingRoom" class="compact-select">
+                            <option value="couple">Phòng Couple (1-2 người) · 120k/h</option>
+                            <option value="group4">Phòng Nhóm 4 - 6 người · 180k/h</option>
+                            <option value="vip">VIP Lounge (Tối đa 10+) · 350k/h</option>
+                        </select>
+                    </div>
+
+                    <!-- 4. Nút bấm đặt phòng -->
+                    <div class="compact-action">
+                        <button type="button" id="btnMiniSearch" class="btn btn--primary compact-submit-btn">
+                            <span>🔍</span> Đặt phòng ngay ➔
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== 3. DIỄN VIÊN CHÍNH (STARRING CAST) ==================== -->
+        <section class="container" style="padding-top: 48px;">
+            <div class="section-title-box">
+                <span class="sub-label">STARRING CAST</span>
+                <h2>Diễn viên chính</h2>
+            </div>
+            <div id="movieCast" class="cast-grid">
+                <!-- Javascript đổ dữ liệu diễn viên vào đây -->
+            </div>
+        </section>
+
+        <!-- ==================== 4. THÔNG SỐ KỸ THUẬT & ĐẶC QUYỀN PHÒNG CHIẾU (ĐỘNG 100%) ==================== -->
+        <section class="container" style="padding-top: 48px;">
+            <div class="specs-perks-layout">
+                <!-- Cột trái: Thông số sản xuất thật từ TMDB -->
+                <div class="specs-card">
+                    <h3 class="box-title">🎬 Thông số kỹ thuật & Sản xuất</h3>
+                    <div class="specs-table" id="movieTechSpecs">
+                        <div class="spec-item">
+                            <span class="spec-label">Đạo diễn</span>
+                            <strong class="spec-val" id="specDirector">Đang tải...</strong>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Kịch bản / Biên kịch</span>
+                            <strong class="spec-val" id="specWriter">Đang tải...</strong>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Ngày phát hành</span>
+                            <strong class="spec-val" id="specReleaseDate">--</strong>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Thời lượng chiếu</span>
+                            <strong class="spec-val" id="specRuntime">--</strong>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Ngôn ngữ gốc</span>
+                            <strong class="spec-val" id="specLanguage">Tiếng Anh · Phụ đề Tiếng Việt</strong>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Độ tuổi phân loại</span>
+                            <strong class="spec-val" id="specAgeLimit" style="color: var(--primary);">T16 - Khán giả từ 16 tuổi trở lên</strong>
+                        </div>
+                        <div class="spec-item spec-item--full">
+                            <span class="spec-label">Định dạng độc quyền tại ChillFlix</span>
+                            <strong class="spec-val">💎 Bản phim 4K Master HDR 60fps · Âm thanh Dolby Atmos 7.1 / 5.1</strong>
+                        </div>
+                        <div class="spec-item spec-item--full">
+                            <span class="spec-label">Quốc gia sản xuất</span>
+                            <strong class="spec-val" id="specCountries">Đang cập nhật...</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cột phải: Đặc quyền phòng chiếu (Nội dung tự biến đổi theo phim) -->
+                <div class="perks-card">
+                    <span class="perks-badge">ĐẶC QUYỀN PHÒNG CHIẾU</span>
+                    <h3 class="perks-title" id="perksMovieTitle">Trải nghiệm xem phim tại ChillFlix</h3>
+                    <p class="perks-desc" id="perksMovieDesc">
+                        Tận hưởng không gian phòng chiếu riêng tư chuẩn rạp với màn chiếu Laser 4K sắc nét và hệ thống sofa da chỉnh điện êm ái.
+                    </p>
+
+                    <div class="perk-feature">
+                        <div class="perk-icon">🔊</div>
+                        <div class="perk-info">
+                            <strong>Hệ thống loa vòm đa chiều Dolby Atmos</strong>
+                            <p id="perksSoundDesc">Tái hiện chân thực từng hiệu ứng âm thanh sống động</p>
+                        </div>
+                    </div>
+
+                    <div class="perk-feature">
+                        <div class="perk-icon">🍿</div>
+                        <div class="perk-info">
+                            <strong>Combo Cafe & Bắp Rang Bơ Nóng</strong>
+                            <p>Phục vụ tận phòng qua nút bấm chuông thông minh</p>
+                        </div>
+                    </div>
+
+                    <a href="booking-food.html" class="perks-btn">
+                        <span>🍿</span> Xem Menu Đồ Uống & Snack ➔
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== 5. PHIM TƯƠNG TỰ ĐỀ XUẤT ==================== -->
+        <section class="container" style="padding-top: 56px; padding-bottom: 72px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px;">
+                <div class="section-title-box">
+                    <span class="sub-label">ĐỀ XUẤT ĐIỆN ẢNH</span>
+                    <h2>Phim tương tự bạn có thể thích</h2>
+                </div>
+                <a href="explore.html" style="color: var(--primary); font-size: 14px; font-weight: 600; text-decoration: none;">
+                    Khám phá thêm ➔
+                </a>
+            </div>
+
+            <div id="similarMovies" class="similar-grid">
+                <!-- Javascript đổ dữ liệu 6 phim tương tự vào đây -->
+            </div>
+        </section>
+    </main>
+
+    <!-- ==================== FOOTER 4 CỘT (DÙNG CHUNG 100% TRANG CHỦ) ==================== -->
+    <footer style="background: var(--surface); border-top: 1px solid var(--border); padding: 48px 0 24px; margin-top: auto;">
+        <div class="container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 36px; margin-bottom: 36px;">
+            <div>
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 14px;">
+                    <span style="font-size: 26px;">🎬</span>
+                    <div style="display: flex; align-items: baseline; gap: 6px;">
+                        <span style="font-family: var(--font-serif); font-size: 22px; font-weight: 700; color: var(--primary);">ChillFlix</span>
+                        <span style="font-size: 11px; font-weight: 600; letter-spacing: 1px; color: var(--text-muted);">CINEMA LOUNGE</span>
+                    </div>
+                </div>
+                <p style="font-size: 13.5px; color: var(--text-muted); line-height: 1.6; margin-bottom: 12px;">
+                    Không gian thưởng thức điện ảnh tư nhân kết hợp cafe lãng mạn cao cấp chuẩn rạp 4K Dolby Atmos.
+                </p>
+                <p style="font-size: 12.5px; color: var(--text-muted); display: flex; align-items: center; gap: 6px;">
+                    <span>🕒</span> Mở cửa: <strong>09:00 – 24:00</strong> (Hàng ngày)
+                </p>
+            </div>
+
+            <div>
+                <h4 style="font-size: 14.5px; font-weight: 700; color: var(--text); margin-bottom: 14px; text-transform: uppercase;">Liên hệ & Địa chỉ</h4>
+                <p style="font-size: 13px; color: var(--text-muted); line-height: 1.9; margin: 0;">
+                    📍 124 Hoàng Cầu, Q. Đống Đa, Hà Nội<br>
+                    📞 Hotline: <a href="tel:19006828" style="color: var(--text); text-decoration: none;"><strong>1900 6828</strong></a> - 0988 234 567<br>
+                    ✉️ <a href="mailto:booking@chillflix.vn" style="color: var(--primary); text-decoration: none;">booking@chillflix.vn</a>
+                </p>
+            </div>
+
+            <div>
+                <h4 style="font-size: 14.5px; font-weight: 700; color: var(--text); margin-bottom: 14px; text-transform: uppercase;">Chính sách & Hỗ trợ</h4>
+                <ul style="list-style: none; padding: 0; margin: 0; font-size: 13px; line-height: 2.1;">
+                    <li><a href="privacy-policy.html" style="color: var(--text-muted); text-decoration: none;">Chính sách bảo mật thông tin</a></li>
+                    <li><a href="privacy-policy.html#cancel" style="color: var(--text-muted); text-decoration: none;">Quy định & Hủy đổi phòng</a></li>
+                    <li><a href="profile.html#vouchers" style="color: var(--text-muted); text-decoration: none;">Hướng dẫn thanh toán & Voucher</a></li>
+                    <li><a href="admin/dashboard.html" style="color: var(--primary); font-weight: 600; text-decoration: none;">⚙️ Cổng Quản trị viên (Admin)</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 style="font-size: 14.5px; font-weight: 700; color: var(--text); margin-bottom: 14px; text-transform: uppercase;">Chứng nhận Điện ảnh</h4>
+                <div style="background: var(--surface-2); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+                    <div style="display: inline-block; background: var(--primary); color: var(--on-primary); font-size: 10.5px; font-weight: 800; padding: 2px 6px; border-radius: 4px; margin-bottom: 6px;">TMDB API</div>
+                    <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5; margin: 0;">
+                        This product uses the TMDB API but is not endorsed or certified by TMDB.
+                    </p>
+                </div>
+            </div>
         </div>
 
-        <div class="movie-info">
-          <span class="movie-label">PHIM ĐANG CHIẾU</span>
-
-          <h1 id="movieTitle">Đang tải phim...</h1>
-
-          <div class="movie-meta">
-            <span id="movieRating">★ --/10</span>
-            <span id="movieYear">Năm: --</span>
-            <span id="movieRuntime">Thời lượng: --</span>
-          </div>
-
-          <p id="movieOverview">
-            Đang tải nội dung phim...
-          </p>
-
-          <button id="watchTrailer" type="button">
-            ▶ Xem trailer
-          </button>
+        <div class="container" style="border-top: 1px solid var(--border); padding-top: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 12.5px; color: var(--text-muted);">
+            <div>© 2026 ChillFlix Private Cinema Lounge. All rights reserved.</div>
+            <div>Hệ thống phòng chiếu phim cafe riêng tư chuẩn 5 sao</div>
         </div>
-      </div>
-    </section>
+    </footer>
 
-    <section class="quick-booking">
-      <h2>
-        Đặt lịch phòng chiếu tư nhân cho:
-        <span id="bookingMovieTitle">Phim đang chọn</span>
-      </h2>
-
-      <div class="quick-booking__form">
-        <div>
-          <label for="bookingDate">Ngày chiếu</label>
-          <input type="date" id="bookingDate">
-        </div>
-
-        <div>
-          <label for="roomType">Loại phòng</label>
-          <select id="roomType">
-            <option value="couple">Couple (2 người)</option>
-            <option value="group4">Nhóm 4–6 người</option>
-            <option value="vip">VIP (10+ người)</option>
-          </select>
-        </div>
-
-        <button id="findRoom" type="button">
-          Tìm phòng trống ngay
-        </button>
-      </div>
-    </section>
-
-    <section class="movie-extra">
-      <h2>Diễn viên chính</h2>
-      <div id="movieCast" class="movie-cast"></div>
-
-      <h2>Phim tương tự</h2>
-      <div id="similarMovies" class="similar-movies"></div>
-    </section>
-  </main>
-
- <script type="module" src="js/pages/movieDetail.js"></script>
+    <!-- SCRIPT CHÍNH CHO TRANG CHI TIẾT -->
+    <script type="module" src="js/pages/movieDetail.js"></script>
 </body>
 </html>

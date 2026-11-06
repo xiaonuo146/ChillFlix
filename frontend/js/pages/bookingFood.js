@@ -1,564 +1,343 @@
+/* ==========================================================================
+   CHILLFLIX - BƯỚC 2: ĐỒ ĂN & THỨC UỐNG (ĐÃ TÍCH HỢP ẢNH THẬT SẴN CÓ)
+   ========================================================================== */
 
-/* =========================================
-   CHILLFLIX - FOOD & DRINK
-   ========================================= */
-
-// 1. DANH SACH MON AN VA COMBO
-// Anh that duoc luu trong:
-// frontend/assets/images/food/
-
-const imageFolder = "assets/images/food/";
-
+// 1. DANH SÁCH THỰC ĐƠN CHUẨN MOCKUP 4 (KÈM ẢNH ĐỒ ĂN THẬT SẴN CÓ)
 const menuItems = [
-    // ===== COMBO UU DAI =====
+    // ===== COMBO ƯU ĐÃI =====
     {
         id: 1,
-        name: "Combo Couple",
+        name: "Combo Couple Cine",
         category: "combo",
-        description: "1 bắp rang bơ + 2 Coca-Cola",
-        price: 75000,
-        originalPrice: 89000,
-        image: "combo-couple.jpg"
+        tag: "Bán chạy",
+        description: "1 Bắp phô mai lớn + 2 Trà đào cam sả + Khăn ướt thơm",
+        price: 99000,
+        originalPrice: 125000,
+        imageUrl: "https://images.unsplash.com/photo-1585647347483-22b66260dfff?auto=format&fit=crop&w=600&q=80"
     },
     {
         id: 2,
-        name: "Combo Hẹn Hò",
+        name: "Combo Bắp Nước Tiết Kiệm",
         category: "combo",
-        description: "1 bắp mix 2 vị + 2 trà đào cam sả",
-        price: 109000,
-        originalPrice: 131000,
-        image: "combo-hen-ho.jpg"
+        tag: "Best Seller",
+        description: "1 Bắp bơ lớn tự chọn vị + 1 Nước ngọt ướp lạnh",
+        price: 75000,
+        originalPrice: 95000,
+        imageUrl: "https://images.unsplash.com/photo-1578849278619-e73505e9610f?auto=format&fit=crop&w=600&q=80"
     },
     {
         id: 3,
-        name: "Combo Bạn Bè",
+        name: "Combo Party Nhóm 4",
         category: "combo",
-        description: "2 bắp rang bơ + 4 Coca-Cola",
-        price: 149000,
-        originalPrice: 178000,
-        image: "combo-ban-be.jpg"
+        tag: "Nhóm 4 người",
+        description: "2 Bắp mix lớn + 1 Nachos sốt phô mai + 4 Trà trái cây",
+        price: 169000,
+        originalPrice: 215000,
+        imageUrl: "https://images.unsplash.com/photo-1513456852971-30c0b8199d4d?auto=format&fit=crop&w=600&q=80"
     },
     {
         id: 4,
-        name: "Combo Party",
+        name: "Combo Đêm Muộn Chill",
         category: "combo",
-        description: "2 bắp mix + 1 nachos + 4 Coca-Cola",
-        price: 199000,
-        originalPrice: 253000,
-        image: "combo-party.jpg"
+        tag: "Sau 21:00",
+        description: "1 Khoai tây múi cau giòn nóng + 2 Trà hoa cúc mật ong ấm",
+        price: 85000,
+        originalPrice: 105000,
+        imageUrl: "https://images.unsplash.com/photo-1576107232684-1279f390859f?auto=format&fit=crop&w=600&q=80"
     },
+
+    // ===== ĐỒ UỐNG PHA CHẾ =====
     {
         id: 5,
-        name: "Combo Bắp Phô Mai",
-        category: "combo",
-        description: "1 bắp phô mai + 2 Coca-Cola",
-        price: 79000,
-        originalPrice: 93000,
-        image: "combo-pho-mai.jpg"
+        name: "Trà Đào Cam Sả Ủ Lạnh",
+        category: "drink",
+        tag: "Bán chạy",
+        description: "Vị trà thanh mát, đào ngâm giòn ngọt, thoảng hương sả tươi",
+        price: 38000,
+        imageUrl: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=600&q=80"
     },
     {
         id: 6,
-        name: "Combo Ăn Vặt",
-        category: "combo",
-        description: "1 nachos + 1 khoai tây chiên + 2 Coca-Cola",
-        price: 109000,
-        originalPrice: 134000,
-        image: "combo-an-vat.jpg"
+        name: "Trà Sữa Bơ Nướng Cine",
+        category: "drink",
+        tag: "Hot Trend",
+        description: "Trà Oolong nướng đậm vị quyện lớp kem bơ sánh mịn béo ngậy",
+        price: 45000,
+        imageUrl: "https://images.unsplash.com/photo-1558857563-b371033873b8?auto=format&fit=crop&w=600&q=80"
     },
-
-    // ===== BAP RANG =====
     {
         id: 7,
-        name: "Bắp rang bơ",
-        category: "food",
-        description: "Bắp rang bơ thơm giòn trong ly bắp rạp phim",
-        price: 45000,
-        image: "bap-rang-bo.jpg"
+        name: "Cà Phê Muối Kem Béo",
+        category: "drink",
+        description: "Cà phê pha phin truyền thống phủ lớp kem muối mặn dịu",
+        price: 35000,
+        imageUrl: "https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?auto=format&fit=crop&w=600&q=80"
     },
     {
         id: 8,
-        name: "Bắp caramel",
-        category: "food",
-        description: "Bắp rang phủ caramel ngọt dịu",
-        price: 45000,
-        image: "bap-caramel.jpg"
+        name: "Trà Hoa Cúc Mật Ong",
+        category: "drink",
+        tag: "Thư giãn",
+        description: "Hoa cúc sấy lạnh kết hợp mật ong rừng giúp thư giãn tinh thần",
+        price: 39000,
+        imageUrl: "https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=600&q=80"
     },
     {
         id: 9,
-        name: "Bắp phô mai",
-        category: "food",
-        description: "Bắp rang phủ bột phô mai béo thơm",
-        price: 49000,
-        image: "bap-pho-mai.jpg"
+        name: "Matcha Latte Kem Sữa",
+        category: "drink",
+        description: "Bột Matcha Nhật Bản đánh bông cùng sữa tươi thanh trùng",
+        price: 42000,
+        imageUrl: "https://images.unsplash.com/photo-1515823064-d6e0c04616a7?auto=format&fit=crop&w=600&q=80"
     },
     {
         id: 10,
-        name: "Bắp mix 2 vị",
-        category: "food",
-        description: "Kết hợp bắp caramel và bắp phô mai",
-        price: 55000,
-        image: "bap-mix.jpg"
+        name: "Soda Việt Quất Bạc Hà",
+        category: "drink",
+        description: "Sảng khoái lăn tăn gas cùng mứt việt quất và lá bạc hà tươi",
+        price: 38000,
+        imageUrl: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=600&q=80"
     },
-
-    // ===== MON AN VAT =====
     {
         id: 11,
-        name: "Nachos phô mai",
-        category: "food",
-        description: "Bánh nachos giòn dùng cùng sốt phô mai",
-        price: 55000,
-        image: "nachos.jpg"
+        name: "Coca-Cola / Sprite Tươi",
+        category: "drink",
+        description: "Lon 320ml ướp lạnh sâu kèm ly đá viên tinh khiết",
+        price: 22000,
+        imageUrl: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80"
     },
+
+    // ===== BẮP RANG & SNACK NÓNG =====
     {
         id: 12,
-        name: "Khoai tây chiên",
+        name: "Bắp Phô Mai Caramel Mix",
         category: "food",
-        description: "Khoai tây chiên vàng giòn",
-        price: 35000,
-        image: "khoai-tay-chien.jpg"
+        tag: "Bán chạy",
+        description: "Bắp nổ tươi tại chỗ, áo đều sốt caramel và bột phô mai béo thơm",
+        price: 49000,
+        imageUrl: "https://images.unsplash.com/photo-1505686994434-e3cc5abf1330?auto=format&fit=crop&w=600&q=80"
     },
     {
         id: 13,
-        name: "Xúc xích chiên",
+        name: "Nachos Giòn & Sốt Phô Mai",
         category: "food",
-        description: "Xúc xích chiên nóng, ăn kèm tương",
-        price: 35000,
-        image: "xuc-xich-chien.jpg"
+        tag: "Mới",
+        description: "Bánh ngô Mexico giòn tan chấm sốt phô mai ấm và salsa cà chua",
+        price: 55000,
+        imageUrl: "https://images.unsplash.com/photo-1582169296194-e4d644c48063?auto=format&fit=crop&w=600&q=80"
     },
     {
         id: 14,
-        name: "Gà chiên giòn",
+        name: "Khoai Tây Múi Cau Thảo Mộc",
         category: "food",
-        description: "Gà chiên giòn rụm, đậm vị",
-        price: 59000,
-        image: "ga-chien.jpg"
+        description: "Khoai tây nguyên vỏ chiên vàng giòn lắc lá hương thảo",
+        price: 35000,
+        imageUrl: "https://images.unsplash.com/photo-1630384060421-cb20d0e0649d?auto=format&fit=crop&w=600&q=80"
     },
-
-    // ===== NUOC UONG =====
     {
         id: 15,
-        name: "Trà đào cam sả",
-        category: "drink",
-        description: "Trà đào kết hợp cam tươi và sả",
-        price: 38000,
-        image: "tra-dao-cam-sa.jpg"
+        name: "Gà Popcorn Chiên Giòn",
+        category: "food",
+        description: "Gà viên chiên nóng giòn rụm dùng kèm tương ớt mận",
+        price: 59000,
+        imageUrl: "https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&w=600&q=80"
     },
     {
         id: 16,
-        name: "Trà sữa",
-        category: "drink",
-        description: "Trà sữa thơm béo, mát lạnh",
-        price: 45000,
-        image: "tra-sua.jpg"
-    },
-    {
-        id: 17,
-        name: "Cà phê muối",
-        category: "drink",
-        description: "Cà phê đậm vị cùng lớp kem muối",
-        price: 35000,
-        image: "ca-phe-muoi.jpg"
-    },
-    {
-        id: 18,
-        name: "Trà hoa cúc mật ong",
-        category: "drink",
-        description: "Trà hoa cúc thanh nhẹ cùng mật ong",
+        name: "Xúc Xích Đức Áp Chảo",
+        category: "food",
+        description: "Xúc xích xông khói khía mặt nướng thơm lừng kèm mù tạt mật ong",
         price: 39000,
-        image: "tra-hoa-cuc.jpg"
-    },
-    {
-        id: 19,
-        name: "Matcha latte",
-        category: "drink",
-        description: "Matcha kết hợp sữa tươi",
-        price: 42000,
-        image: "matcha-latte.jpg"
-    },
-    {
-        id: 20,
-        name: "Soda việt quất bạc hà",
-        category: "drink",
-        description: "Soda việt quất mát lạnh",
-        price: 38000,
-        image: "soda-viet-quat.jpg"
-    },
-    {
-        id: 21,
-        name: "Coca-Cola",
-        category: "drink",
-        description: "Coca-Cola mát lạnh",
-        price: 22000,
-        image: "coca-cola.jpg"
-    },
-    {
-        id: 22,
-        name: "Sprite",
-        category: "drink",
-        description: "Sprite vị chanh tươi mát",
-        price: 22000,
-        image: "sprite.jpg"
-    },
-    {
-        id: 23,
-        name: "Nước suối",
-        category: "drink",
-        description: "Nước uống tinh khiết",
-        price: 15000,
-        image: "nuoc-suoi.jpg"
+        imageUrl: "https://images.unsplash.com/photo-1619740455993-9e612b1af08a?auto=format&fit=crop&w=600&q=80"
     }
 ];
 
-// 2. LAY PHAN TU HTML
-
-const foodGrid = document.getElementById("foodGrid");
-const foodSearch = document.getElementById("foodSearch");
-const filterButtons = document.querySelectorAll(".food-filter");
-
-const foodMovie = document.getElementById("foodMovie");
-const foodDate = document.getElementById("foodDate");
-const foodRoom = document.getElementById("foodRoom");
-const foodTime = document.getElementById("foodTime");
-const foodDuration = document.getElementById("foodDuration");
-
-const foodRoomPrice = document.getElementById("foodRoomPrice");
-const foodCartItems = document.getElementById("foodCartItems");
-const foodTotal = document.getElementById("foodTotal");
-const foodGrandTotal = document.getElementById("foodGrandTotal");
-
-const foodSavings = document.getElementById("foodSavings");
-const foodSavingRow = document.getElementById("foodSavingRow");
-const foodCartCount = document.getElementById("foodCartCount");
-const foodCategoryTitle = document.getElementById("foodCategoryTitle");
-const foodResultCount = document.getElementById("foodResultCount");
-
-const backToRoom = document.getElementById("backToRoom");
-const continueToPayment =
-    document.getElementById("continueToPayment");
-
-const viewCombos = document.getElementById("viewCombos");
-
-// 3. DOC DU LIEU DAT PHONG
-
-let bookingData = null;
-
-try {
-    const savedBooking =
-        sessionStorage.getItem("chillflixBooking");
-
-    if (savedBooking) {
-        bookingData = JSON.parse(savedBooking);
-    }
-} catch (error) {
-    console.error("Lỗi đọc thông tin đặt phòng:", error);
-}
-
-const roomPrices = {
-    couple: 120000,
-    group4: 180000,
-    vip: 350000
-};
-
-const roomNames = {
-    couple: "Couple A / B",
+// 2. BẢNG TRA TÊN & ĐƠN GIÁ PHÒNG ĐỒNG BỘ TỪ BƯỚC 1
+const ROOM_NAMES = {
+    couple: "Nest Couple A",
+    couple_a: "Nest Couple A",
+    couple_b: "Nest Couple B",
     group4: "Nhóm 4 Sao Hỏa",
     vip: "Nhóm 10 Hành Tinh"
 };
 
-function calculateRoomPrice() {
-    if (!bookingData) return 0;
+const ROOM_PRICES = {
+    couple: 120000,
+    couple_a: 120000,
+    couple_b: 120000,
+    group4: 180000,
+    vip: 350000
+};
 
-    const savedPrice = Number(bookingData.roomTotal);
-
-    if (Number.isFinite(savedPrice) && savedPrice > 0) {
-        return savedPrice;
-    }
-
-    const pricePerHour =
-        roomPrices[bookingData.roomType] || 0;
-
-    const hours = Number(bookingData.duration) || 0;
-
-    return pricePerHour * hours;
+// 3. ĐỌC DỮ LIỆU ĐẶT PHÒNG TỪ SESSIONSTORAGE
+let bookingData = null;
+try {
+    const saved = sessionStorage.getItem("chillflixBooking");
+    if (saved) bookingData = JSON.parse(saved);
+} catch (err) {
+    console.error("Lỗi đọc sessionStorage:", err);
 }
-
-const roomPrice = calculateRoomPrice();
-
-// 4. GIO HANG
 
 const cart = {};
 let currentCategory = "all";
 
+// Khôi phục món đã chọn nếu khách quay lại trang này
 if (bookingData && Array.isArray(bookingData.foods)) {
     bookingData.foods.forEach(item => {
         const id = Number(item.id);
-        const quantity = Number(item.quantity);
-
-        const exists = menuItems.some(
-            menuItem => menuItem.id === id
-        );
-
-        if (
-            exists &&
-            Number.isInteger(quantity) &&
-            quantity > 0
-        ) {
-            cart[id] = quantity;
+        const qty = Number(item.quantity);
+        if (menuItems.some(m => m.id === id) && qty > 0) {
+            cart[id] = qty;
         }
     });
 }
 
-// 5. DINH DANG TIEN
+// 4. LẤY PHẦN TỬ DOM
+const foodGrid = document.getElementById("foodGrid");
+const foodSearch = document.getElementById("foodSearch");
+const filterButtons = document.querySelectorAll(".food-filter");
+const foodCategoryTitle = document.getElementById("foodCategoryTitle");
+const foodResultCount = document.getElementById("foodResultCount");
 
+const foodCartItems = document.getElementById("foodCartItems");
+const foodCartCount = document.getElementById("foodCartCount");
+const cartBadgeCount = document.getElementById("cartBadgeCount");
+const fnbServiceNote = document.getElementById("fnbServiceNote");
+
+const foodRoom = document.getElementById("foodRoom");
+const foodRoomPrice = document.getElementById("foodRoomPrice");
+const foodTotal = document.getElementById("foodTotal");
+const foodSavings = document.getElementById("foodSavings");
+const foodSavingRow = document.getElementById("foodSavingRow");
+const foodGrandTotal = document.getElementById("foodGrandTotal");
+
+const backToRoom = document.getElementById("backToRoom");
+const continueToPayment = document.getElementById("continueToPayment");
+const viewCombos = document.getElementById("viewCombos");
+
+if (fnbServiceNote && bookingData?.fnbNote) {
+    fnbServiceNote.value = bookingData.fnbNote;
+}
+
+// 5. HÀM TIỆN ÍCH ĐỊNH DẠNG
 function formatMoney(amount) {
-    return new Intl.NumberFormat("vi-VN")
-        .format(amount) + "đ";
+    return new Intl.NumberFormat("vi-VN").format(Number(amount) || 0) + "đ";
 }
 
-function formatDuration(hours) {
-    const value = Number(hours);
-
-    if (!Number.isFinite(value) || value <= 0) {
-        return "--";
-    }
-
-    const wholeHours = Math.floor(value);
-    const minutes = Math.round(
-        (value - wholeHours) * 60
-    );
-
-    if (minutes === 0) {
-        return wholeHours + " giờ";
-    }
-
-    return wholeHours + " giờ " + minutes + " phút";
+function getRoomPrice() {
+    if (!bookingData) return 0;
+    if (Number(bookingData.roomTotal) > 0) return Number(bookingData.roomTotal);
+    const rate = ROOM_PRICES[bookingData.roomType] || 120000;
+    return rate * (Number(bookingData.duration) || 2);
 }
 
-// 6. THONG TIN DAT PHONG
+const roomPrice = getRoomPrice();
 
-function renderBookingInfo() {
+// 6. HIỂN THỊ DẢI TÓM TẮT PHÒNG ĐÃ CHỌN (CONTEXT STRIP)
+function renderBookingContext() {
+    const stripMovie = document.getElementById("stripMovie");
+    const stripRoom = document.getElementById("stripRoom");
+    const stripDate = document.getElementById("stripDate");
+    const stripTime = document.getElementById("stripTime");
+    const stripRoomPrice = document.getElementById("stripRoomPrice");
+
     if (!bookingData) {
-        foodMovie.textContent = "Chưa chọn phim";
-        foodDate.textContent = "--";
-        foodRoom.textContent = "--";
-        foodTime.textContent = "--";
-        foodDuration.textContent = "--";
-        foodRoomPrice.textContent = "0đ";
-
-        continueToPayment.disabled = true;
+        if (stripMovie) stripMovie.textContent = "Bạn đang xem Menu trước (Chưa chọn phòng)";
+        if (stripRoom) stripRoom.textContent = "Chưa chọn";
+        if (stripDate) stripDate.textContent = "--";
+        if (stripTime) stripTime.textContent = "--";
+        if (stripRoomPrice) stripRoomPrice.textContent = "0đ";
+        if (foodRoom) foodRoom.textContent = "Chưa chọn phòng";
+        if (continueToPayment) continueToPayment.textContent = "Chọn phòng chiếu trước ➔";
         return;
     }
 
-    foodMovie.textContent =
-        bookingData.movieTitle || "Chưa xác định";
+    const rName = bookingData.roomName || ROOM_NAMES[bookingData.roomType] || "Phòng riêng";
+    const dur = Number(bookingData.duration) || 2;
 
-    foodDate.textContent =
-        bookingData.date || "--";
-
-    foodRoom.textContent =
-        roomNames[bookingData.roomType] ||
-        bookingData.roomType ||
-        "--";
-
-    foodTime.textContent =
-        bookingData.startTime || "--";
-
-    foodDuration.textContent =
-        formatDuration(bookingData.duration);
-
-    foodRoomPrice.textContent =
-        formatMoney(roomPrice);
-
-    continueToPayment.disabled = !(
-        bookingData.movieId &&
-        bookingData.date &&
-        bookingData.roomType &&
-        bookingData.startTime &&
-        Number(bookingData.duration) > 0 &&
-        roomPrice > 0
-    );
+    if (stripMovie) stripMovie.textContent = bookingData.movieTitle || "Phim đã chọn";
+    if (stripRoom) stripRoom.textContent = rName;
+    if (stripDate) stripDate.textContent = bookingData.date || "--";
+    if (stripTime) stripTime.textContent = `${bookingData.startTime || "--"} (${dur.toFixed(1)} giờ)`;
+    if (stripRoomPrice) stripRoomPrice.textContent = formatMoney(roomPrice);
+    if (foodRoom) foodRoom.textContent = rName;
 }
 
-// 7. HIEN THI ANH THAT
-// Neu chua co file anh, hien placeholder.
-
-function createFoodImage(item) {
-    const imageBox = document.createElement("div");
-    imageBox.className = "food-card-image";
-
-    const img = document.createElement("img");
-    img.src = imageFolder + item.image;
-    img.alt = item.name;
-    img.loading = "lazy";
-
-    img.addEventListener("error", () => {
-        img.remove();
-
-        const placeholder = document.createElement("div");
-        placeholder.className = "food-image-placeholder";
-        placeholder.textContent =
-            "Chưa có ảnh chụp thật của " + item.name;
-
-        imageBox.appendChild(placeholder);
-    }, { once: true });
-
-    imageBox.appendChild(img);
-
-    if (item.category === "combo") {
-        const badge = document.createElement("span");
-        badge.className = "food-card-badge combo";
-
-        const saving =
-            item.originalPrice - item.price;
-
-        badge.textContent =
-            "Tiết kiệm " + formatMoney(saving);
-
-        imageBox.appendChild(badge);
-    }
-
-    return imageBox;
-}
-
-// 8. HIEN THI DANH SACH MON
-
+// 7. HIỂN THỊ LƯỚI MÓN ĂN
 function renderMenu() {
-    const keyword = foodSearch.value
-        .trim()
-        .toLocaleLowerCase("vi-VN");
+    const keyword = (foodSearch?.value || "").trim().toLocaleLowerCase("vi-VN");
 
-    const filteredItems = menuItems.filter(item => {
-        const matchCategory =
-            currentCategory === "all" ||
-            item.category === currentCategory;
-
-        const matchSearch =
-            item.name.toLocaleLowerCase("vi-VN")
-                .includes(keyword) ||
-            item.description.toLocaleLowerCase("vi-VN")
-                .includes(keyword);
-
-        return matchCategory && matchSearch;
+    const filtered = menuItems.filter(item => {
+        const matchCat = currentCategory === "all" || item.category === currentCategory;
+        const matchKey =
+            item.name.toLocaleLowerCase("vi-VN").includes(keyword) ||
+            item.description.toLocaleLowerCase("vi-VN").includes(keyword);
+        return matchCat && matchKey;
     });
 
-    const categoryTitles = {
-        all: "Tất cả món",
-        combo: "Combo ưu đãi",
-        food: "Đồ ăn",
-        drink: "Nước uống"
+    const titles = {
+        all: "Tất cả thực đơn F&B",
+        combo: "Combo Siêu Ưu Đãi",
+        drink: "Đồ Uống Pha Chế Thủ Công",
+        food: "Bắp Rang Nóng & Snack"
     };
 
-    foodCategoryTitle.textContent =
-        categoryTitles[currentCategory];
-
-    foodResultCount.textContent =
-        filteredItems.length + " món";
+    if (foodCategoryTitle) foodCategoryTitle.textContent = titles[currentCategory] || "Thực đơn";
+    if (foodResultCount) foodResultCount.textContent = `Hiển thị ${filtered.length} món`;
 
     foodGrid.replaceChildren();
 
-    if (filteredItems.length === 0) {
-        const message = document.createElement("p");
-        message.className = "booking-hint";
-        message.textContent =
-            "Không tìm thấy món phù hợp.";
-
-        foodGrid.appendChild(message);
+    if (filtered.length === 0) {
+        foodGrid.innerHTML = `<p class="booking-hint">Không tìm thấy món ăn phù hợp với từ khóa "${foodSearch.value}".</p>`;
         return;
     }
 
-    filteredItems.forEach(item => {
+    filtered.forEach(item => {
         const card = document.createElement("article");
         card.className = "food-card";
 
-        const imageBox = createFoodImage(item);
-        card.appendChild(imageBox);
-
-        const content = document.createElement("div");
-        content.className = "food-card-content";
-
-        const title = document.createElement("h3");
-        title.textContent = item.name;
-
-        const description = document.createElement("p");
-        description.textContent = item.description;
-
-        const bottom = document.createElement("div");
-        bottom.className = "food-card-bottom";
-
-        const priceBox = document.createElement("div");
-        priceBox.className = "food-price-box";
-
+        // Huy hiệu giảm giá hoặc bán chạy
+        let badgeHTML = "";
         if (item.originalPrice) {
-            const oldPrice = document.createElement("span");
-            oldPrice.className = "food-old-price";
-            oldPrice.textContent =
-                formatMoney(item.originalPrice);
-
-            priceBox.appendChild(oldPrice);
+            const saved = item.originalPrice - item.price;
+            badgeHTML = `<span class="food-card-badge">Tiết kiệm ${formatMoney(saved)}</span>`;
+        } else if (item.tag) {
+            badgeHTML = `<span class="food-card-badge tag-hot">${item.tag}</span>`;
         }
 
-        const price = document.createElement("strong");
-        price.className = "food-price";
-        price.textContent = formatMoney(item.price);
-        priceBox.appendChild(price);
+        const oldPriceHTML = item.originalPrice
+            ? `<span class="food-old-price">${formatMoney(item.originalPrice)}</span>`
+            : "";
 
-        if (item.originalPrice) {
-            const saveLabel = document.createElement("span");
-            saveLabel.className = "food-save-label";
-            saveLabel.textContent =
-                "Giảm " +
-                formatMoney(item.originalPrice - item.price);
+        card.innerHTML = `
+            <div class="food-card-image">
+                ${badgeHTML}
+                <img src="${item.imageUrl}" alt="${item.name}" loading="lazy" />
+            </div>
+            <div class="food-card-content">
+                <h3>${item.name}</h3>
+                <p>${item.description}</p>
+                <div class="food-card-bottom">
+                    <div class="food-price-box">
+                        ${oldPriceHTML}
+                        <strong class="food-price">${formatMoney(item.price)}</strong>
+                    </div>
+                    <button type="button" class="food-add-button" aria-label="Thêm ${item.name}">+</button>
+                </div>
+            </div>
+        `;
 
-            priceBox.appendChild(saveLabel);
-        }
-
-        const addButton = document.createElement("button");
-        addButton.type = "button";
-        addButton.className = "food-add-button";
-        addButton.textContent = "+ Thêm";
-
-        addButton.addEventListener("click", () => {
-            addToCart(item.id);
+        card.querySelector(".food-add-button").addEventListener("click", () => {
+            cart[item.id] = (cart[item.id] || 0) + 1;
+            renderCart();
+            saveCartState();
         });
 
-        bottom.appendChild(priceBox);
-        bottom.appendChild(addButton);
-
-        content.appendChild(title);
-        content.appendChild(description);
-        content.appendChild(bottom);
-
-        card.appendChild(content);
         foodGrid.appendChild(card);
     });
 }
 
-// 9. THEM MON
-
-function addToCart(itemId) {
-    cart[itemId] = (cart[itemId] || 0) + 1;
-
-    renderCart();
-    saveCart();
-}
-
-// 10. TANG GIAM SO LUONG
-
-function changeQuantity(itemId, amount) {
-    if (!cart[itemId]) return;
-
-    cart[itemId] += amount;
-
-    if (cart[itemId] <= 0) {
-        delete cart[itemId];
-    }
-
-    renderCart();
-    saveCart();
-}
-
-// 11. DANH SACH MON DA CHON
-
+// 8. QUẢN LÝ GIỎ HÀNG & TÍNH TIỀN
 function getSelectedFoods() {
     return menuItems
         .filter(item => (cart[item.id] || 0) > 0)
@@ -570,234 +349,160 @@ function getSelectedFoods() {
         }));
 }
 
-// 12. TINH TIEN
-
-function calculateFoodTotal() {
-    return getSelectedFoods().reduce(
-        (total, item) =>
-            total + item.price * item.quantity,
-        0
-    );
-}
-
-function calculateSavings() {
-    return menuItems.reduce((total, item) => {
-        if (!item.originalPrice) return total;
-
-        const quantity = cart[item.id] || 0;
-
-        return total +
-            (item.originalPrice - item.price) * quantity;
-    }, 0);
-}
-
-// 13. LUU DU LIEU
-
-function saveCart() {
-    if (!bookingData) return;
-
-    bookingData.foods = getSelectedFoods();
-    bookingData.foodTotal = calculateFoodTotal();
-    bookingData.roomTotal = roomPrice;
-    bookingData.grandTotal =
-        roomPrice + bookingData.foodTotal;
-
-    sessionStorage.setItem(
-        "chillflixBooking",
-        JSON.stringify(bookingData)
-    );
-}
-
-// 14. HIEN THI GIO HANG
-
 function renderCart() {
     foodCartItems.replaceChildren();
+    const selected = getSelectedFoods();
+    const totalQty = selected.reduce((sum, i) => sum + i.quantity, 0);
 
-    const selectedFoods = getSelectedFoods();
+    if (foodCartCount) foodCartCount.textContent = `${totalQty} món`;
+    if (cartBadgeCount) cartBadgeCount.textContent = String(totalQty);
 
-    const totalQuantity = selectedFoods.reduce(
-        (total, item) => total + item.quantity,
-        0
-    );
+    if (selected.length === 0) {
+        foodCartItems.innerHTML = `<p class="booking-hint">Bạn chưa chọn món nào (Có thể bấm tiếp tục nếu chỉ thuê phòng).</p>`;
+    } else {
+        selected.forEach(item => {
+            const row = document.createElement("div");
+            row.className = "food-cart-item";
+            row.innerHTML = `
+                <div class="food-cart-item-info">
+                    <strong>${item.name}</strong>
+                    <small>${formatMoney(item.price * item.quantity)}</small>
+                </div>
+                <div class="food-quantity">
+                    <button type="button" class="btn-dec" aria-label="Giảm">−</button>
+                    <span>${item.quantity}</span>
+                    <button type="button" class="btn-inc" aria-label="Tăng">+</button>
+                </div>
+            `;
 
-    foodCartCount.textContent =
-        totalQuantity + " món";
+            row.querySelector(".btn-dec").addEventListener("click", () => {
+                cart[item.id]--;
+                if (cart[item.id] <= 0) delete cart[item.id];
+                renderCart();
+                saveCartState();
+            });
 
-    if (selectedFoods.length === 0) {
-        const message = document.createElement("p");
-        message.className = "booking-hint";
-        message.textContent =
-            "Bạn chưa chọn món nào.";
+            row.querySelector(".btn-inc").addEventListener("click", () => {
+                cart[item.id]++;
+                renderCart();
+                saveCartState();
+            });
 
-        foodCartItems.appendChild(message);
+            foodCartItems.appendChild(row);
+        });
     }
 
-    selectedFoods.forEach(item => {
-        const row = document.createElement("div");
-        row.className = "food-cart-item";
+    const totalFood = selected.reduce((sum, i) => sum + i.price * i.quantity, 0);
+    const totalSavings = menuItems.reduce((sum, m) => {
+        if (!m.originalPrice) return sum;
+        return sum + (m.originalPrice - m.price) * (cart[m.id] || 0);
+    }, 0);
 
-        const info = document.createElement("div");
-        info.className = "food-cart-item-info";
+    if (foodRoomPrice) foodRoomPrice.textContent = formatMoney(roomPrice);
+    if (foodTotal) foodTotal.textContent = formatMoney(totalFood);
+    if (foodGrandTotal) foodGrandTotal.textContent = formatMoney(roomPrice + totalFood);
 
-        const name = document.createElement("strong");
-        name.textContent =
-            item.name + " x" + item.quantity;
-
-        const subtotal = document.createElement("small");
-        subtotal.textContent =
-            formatMoney(item.price * item.quantity);
-
-        info.appendChild(name);
-        info.appendChild(subtotal);
-
-        const quantityBox = document.createElement("div");
-        quantityBox.className = "food-quantity";
-
-        const decrease = document.createElement("button");
-        decrease.type = "button";
-        decrease.textContent = "−";
-        decrease.setAttribute(
-            "aria-label",
-            "Giảm số lượng " + item.name
-        );
-
-        decrease.addEventListener("click", () => {
-            changeQuantity(item.id, -1);
-        });
-
-        const quantity = document.createElement("span");
-        quantity.textContent = item.quantity;
-
-        const increase = document.createElement("button");
-        increase.type = "button";
-        increase.textContent = "+";
-        increase.setAttribute(
-            "aria-label",
-            "Tăng số lượng " + item.name
-        );
-
-        increase.addEventListener("click", () => {
-            changeQuantity(item.id, 1);
-        });
-
-        quantityBox.appendChild(decrease);
-        quantityBox.appendChild(quantity);
-        quantityBox.appendChild(increase);
-
-        row.appendChild(info);
-        row.appendChild(quantityBox);
-
-        foodCartItems.appendChild(row);
-    });
-
-    const totalFoodPrice = calculateFoodTotal();
-    const savings = calculateSavings();
-
-    foodRoomPrice.textContent =
-        formatMoney(roomPrice);
-
-    foodTotal.textContent =
-        formatMoney(totalFoodPrice);
-
-    foodGrandTotal.textContent =
-        formatMoney(roomPrice + totalFoodPrice);
-
-    foodSavings.textContent =
-        formatMoney(savings);
-
-    foodSavingRow.style.display =
-        savings > 0 ? "flex" : "none";
+    if (foodSavingRow && foodSavings) {
+        foodSavings.textContent = `-${formatMoney(totalSavings)}`;
+        foodSavingRow.style.display = totalSavings > 0 ? "flex" : "none";
+    }
 }
 
-// 15. LOC DANH MUC
+function saveCartState() {
+    const selected = getSelectedFoods();
+    const totalFood = selected.reduce((sum, i) => sum + i.price * i.quantity, 0);
+    const noteText = fnbServiceNote ? fnbServiceNote.value.trim() : "";
 
-function selectCategory(category) {
-    currentCategory = category;
+    const updated = {
+        ...(bookingData || {}),
+        foods: selected,
+        foodTotal: totalFood,
+        fnbNote: noteText,
+        roomTotal: roomPrice,
+        grandTotal: roomPrice + totalFood
+    };
 
-    filterButtons.forEach(button => {
-        button.classList.toggle(
-            "active",
-            button.dataset.category === category
-        );
-    });
-
-    renderMenu();
+    bookingData = updated;
+    sessionStorage.setItem("chillflixBooking", JSON.stringify(updated));
 }
 
-filterButtons.forEach(button => {
-    button.addEventListener("click", () => {
-        selectCategory(button.dataset.category);
+// 9. SỰ KIỆN TƯƠNG TÁC
+filterButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+        currentCategory = btn.dataset.category;
+        filterButtons.forEach(b => b.classList.toggle("active", b === btn));
+        renderMenu();
     });
 });
 
-// 16. TIM KIEM
+foodSearch?.addEventListener("input", renderMenu);
+fnbServiceNote?.addEventListener("input", saveCartState);
 
-foodSearch.addEventListener("input", renderMenu);
+viewCombos?.addEventListener("click", () => {
+    if (foodSearch) foodSearch.value = "";
+    currentCategory = "combo";
+    filterButtons.forEach(b => b.classList.toggle("active", b.dataset.category === "combo"));
+    renderMenu();
+    document.querySelector(".food-toolbar")?.scrollIntoView({ behavior: "smooth" });
+});
 
-// 17. NUT XEM COMBO
-
-if (viewCombos) {
-    viewCombos.addEventListener("click", () => {
-        foodSearch.value = "";
-        selectCategory("combo");
-
-        document.querySelector(".food-toolbar")
-            .scrollIntoView({
-                behavior: "smooth",
-                block: "start"
-            });
-    });
-}
-
-// 18. QUAY LAI CHON PHONG
-
-backToRoom.addEventListener("click", () => {
-    saveCart();
+backToRoom?.addEventListener("click", () => {
+    saveCartState();
     window.location.href = "booking.html";
 });
 
-// 19. TIEP TUC THANH TOAN
-
-continueToPayment.addEventListener("click", () => {
-    if (!bookingData) {
-        alert(
-            "Chưa có thông tin đặt phòng.\n" +
-            "Vui lòng quay lại chọn phòng."
-        );
+continueToPayment?.addEventListener("click", () => {
+    saveCartState();
+    // Nếu khách vào thẳng từ menu Header mà chưa chọn phòng -> dẫn về Bước 1 chọn phòng
+    if (!bookingData || !bookingData.date || !bookingData.startTime) {
+        window.location.href = "booking.html";
         return;
     }
-
-    if (
-        !bookingData.movieId ||
-        !bookingData.date ||
-        !bookingData.roomType ||
-        !bookingData.startTime ||
-        Number(bookingData.duration) <= 0 ||
-        roomPrice <= 0
-    ) {
-        alert(
-            "Thông tin đặt phòng chưa đầy đủ.\n" +
-            "Vui lòng quay lại Bước 1 để kiểm tra."
-        );
-        return;
-    }
-
-    saveCart();
     window.location.href = "booking-payment.html";
 });
 
-// 20. KHOI TAO
+// Sự kiện Header dùng chung (Sáng/Tối, Avatar, Drawer)
+function initHeaderControls() {
+    const savedTheme = localStorage.getItem("chillflix-theme") || "dark";
+    document.documentElement.setAttribute("data-theme", savedTheme);
+    const themeIcon = document.getElementById("themeIcon");
+    if (themeIcon) themeIcon.textContent = savedTheme === "light" ? "☀️" : "🌙";
 
-function initBookingFood() {
-    console.log("ChillFlix Food & Drink loaded");
+    document.getElementById("themeToggle")?.addEventListener("click", () => {
+        const cur = document.documentElement.getAttribute("data-theme");
+        const next = cur === "light" ? "dark" : "light";
+        document.documentElement.setAttribute("data-theme", next);
+        if (themeIcon) themeIcon.textContent = next === "light" ? "☀️" : "🌙";
+        localStorage.setItem("chillflix-theme", next);
+    });
 
-    renderBookingInfo();
-    renderMenu();
-    renderCart();
+    const userBtn = document.getElementById("userMenuBtn");
+    const userDropdown = document.getElementById("userDropdown");
+    userBtn?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        userDropdown?.classList.toggle("show");
+    });
+    document.addEventListener("click", () => userDropdown?.classList.remove("show"));
 
-    if (bookingData) {
-        saveCart();
-    }
+    const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+    const drawerCloseBtn = document.getElementById("drawerCloseBtn");
+    const mobileDrawer = document.getElementById("mobileDrawer");
+    const drawerOverlay = document.getElementById("drawerOverlay");
+
+    mobileMenuBtn?.addEventListener("click", () => {
+        mobileDrawer?.classList.add("open");
+        drawerOverlay?.classList.add("open");
+    });
+    const closeDrawer = () => {
+        mobileDrawer?.classList.remove("open");
+        drawerOverlay?.classList.remove("open");
+    };
+    drawerCloseBtn?.addEventListener("click", closeDrawer);
+    drawerOverlay?.addEventListener("click", closeDrawer);
 }
 
-initBookingFood();
+// KHỞI CHẠY
+initHeaderControls();
+renderBookingContext();
+renderMenu();
+renderCart();

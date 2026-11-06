@@ -1,377 +1,360 @@
-
 import {
     getMovieDetails,
     getMovieCredits,
     getSimilarMovies,
     getMovieTrailer
-} from "../../../js/api.js";
+} from "../api.js";
+import { CONFIG } from "../config.js";
 
 // ==========================================
-// DỮ LIỆU DIỄN VIÊN MẪU
-// Dùng khi nhóm chưa có TMDB API key
+// 1. DỮ LIỆU DIỄN VIÊN DỰ PHÒNG (KHI MẤT MẠNG)
 // ==========================================
-const MOCK_CAST = {
-    693134: [
-        {
-            name: "Timothée Chalamet",
-            character: "Paul Atreides",
-            profile_path: "/BE2sdjpgsa2rNTFa66f7upkaOP.jpg"
-        },
-        {
-            name: "Zendaya",
-            character: "Chani",
-            profile_path: "/3WdOloHpjtjL96uVOhFRRCcYSwq.jpg"
-        },
-        {
-            name: "Rebecca Ferguson",
-            character: "Lady Jessica",
-            profile_path: "/6NRlV9oUipeakZ6qWZ2Ew8C43j6h.jpg"
-        },
-        {
-            name: "Javier Bardem",
-            character: "Stilgar",
-            profile_path: "/oifhfVhUcuDjE61V5bS5dfShQrm.jpg"
-        }
-    ],
-    872585: [
-        {
-            name: "Cillian Murphy",
-            character: "J. Robert Oppenheimer",
-            profile_path: null
-        },
-        {
-            name: "Emily Blunt",
-            character: "Kitty Oppenheimer",
-            profile_path: null
-        },
-        {
-            name: "Robert Downey Jr.",
-            character: "Lewis Strauss",
-            profile_path: null
-        },
-        {
-            name: "Florence Pugh",
-            character: "Jean Tatlock",
-            profile_path: null
-        }
-    ],
-    1022789: [
-        {
-            name: "Amy Poehler",
-            character: "Joy (lồng tiếng)",
-            profile_path: null
-        },
-        {
-            name: "Maya Hawke",
-            character: "Anxiety (lồng tiếng)",
-            profile_path: null
-        }
-    ]
-};
-
-// Chuyển đường dẫn ảnh TMDB thành URL đầy đủ
-function getTMDBImage(path, size = "w500") {
-    if (!path) return "";
-    return `https://image.tmdb.org/t/p/${size}${path}`;
-}
+const MOCK_CAST = [
+    { name: "Timothée Chalamet", character: "Paul Atreides", profile_path: "/BE2sdjpgsa2rNTFa66f7upkaOP.jpg" },
+    { name: "Zendaya", character: "Chani", profile_path: "/3WdOloHpjtjL96uVOhFRRCcYSwq.jpg" },
+    { name: "Rebecca Ferguson", character: "Lady Jessica", profile_path: "/6NRlV9oUipeakZ6qWZ2Ew8C43j6h.jpg" },
+    { name: "Javier Bardem", character: "Stilgar", profile_path: "/oifhfVhUcuDjE61V5bS5dfShQrm.jpg" },
+    { name: "Austin Butler", character: "Feyd-Rautha", profile_path: "/20bWpXg7rM6N80v4K5Gj1J0n0Wq.jpg" },
+    { name: "Florence Pugh", character: "Công chúa Irulan", profile_path: "/7x7yQ3V1qJ5Gk2l5y2W0v8M3.jpg" },
+    { name: "Josh Brolin", character: "Gurney Halleck", profile_path: "/nJdVf8V0oVq5M2k3l1P8v9N2.jpg" },
+    { name: "Stellan Skarsgård", character: "Baron Harkonnen", profile_path: "/k7l8m9n0o1p2q3r4s5t6u7v8.jpg" }
+];
 
 // ==========================================
-// HIỂN THỊ DIỄN VIÊN
-// ==========================================
-function renderCast(container, cast) {
-    container.replaceChildren();
-
-    if (!cast.length) {
-        container.textContent = "Diễn viên đang cập nhật.";
-        return;
-    }
-
-    cast.forEach(actor => {
-        const card = document.createElement("div");
-        card.className = "cast-card";
-
-        const image = document.createElement("img");
-        image.className = "cast-card__image";
-        image.alt = actor.name || "Diễn viên";
-        image.loading = "lazy";
-
-        if (actor.profile_path) {
-            image.src = getTMDBImage(
-                actor.profile_path,
-                "w185"
-            );
-        } else {
-            image.style.display = "none";
-        }
-
-        image.onerror = () => {
-            image.style.display = "none";
-        };
-
-        const info = document.createElement("div");
-        info.className = "cast-card__info";
-
-        const name = document.createElement("h3");
-        name.textContent = actor.name || "Đang cập nhật";
-
-        const role = document.createElement("p");
-        role.textContent =
-            actor.character || actor.role || "Diễn viên";
-
-        info.append(name, role);
-        card.append(image, info);
-        container.appendChild(card);
-    });
-}
-
-// ==========================================
-// HIỂN THỊ PHIM TƯƠNG TỰ
-// ==========================================
-function renderSimilarMovies(container, movies) {
-    container.replaceChildren();
-
-    if (!movies.length) {
-        container.textContent = "Chưa có phim gợi ý.";
-        return;
-    }
-
-    movies.forEach(movie => {
-        const card = document.createElement("a");
-        card.className = "similar-card";
-        card.href =
-            "movie-detail.html?id=" +
-            encodeURIComponent(movie.id);
-
-        const poster = document.createElement("img");
-        poster.className = "similar-card__poster";
-        poster.alt = "Poster " + movie.title;
-        poster.loading = "lazy";
-
-        if (movie.poster_path) {
-            poster.src = getTMDBImage(
-                movie.poster_path,
-                "w342"
-            );
-        } else {
-            poster.style.display = "none";
-        }
-
-        poster.onerror = () => {
-            poster.style.display = "none";
-        };
-
-        const info = document.createElement("div");
-        info.className = "similar-card__info";
-
-        const title = document.createElement("h3");
-        title.textContent = movie.title || "Chưa có tên";
-
-        info.appendChild(title);
-
-        if (movie.vote_average != null) {
-            const rating = document.createElement("p");
-            rating.className = "similar-card__rating";
-            rating.textContent =
-                "★ " +
-                Number(movie.vote_average).toFixed(1) +
-                "/10";
-
-            info.appendChild(rating);
-        }
-
-        card.append(poster, info);
-        container.appendChild(card);
-    });
-}
-
-// ==========================================
-// CHẠY TRANG CHI TIẾT PHIM
+// 2. KHỞI CHẠY TRANG CHI TIẾT PHIM
 // ==========================================
 document.addEventListener("DOMContentLoaded", async () => {
-
-    // 1. Lấy các phần tử HTML
-    const movieTitle = document.getElementById("movieTitle");
-    const bookingMovieTitle =
-        document.getElementById("bookingMovieTitle");
-
-    const movieRating = document.getElementById("movieRating");
-    const movieYear = document.getElementById("movieYear");
-    const movieRuntime = document.getElementById("movieRuntime");
-    const movieOverview = document.getElementById("movieOverview");
-    const moviePoster = document.getElementById("moviePoster");
-
-    const watchTrailer = document.getElementById("watchTrailer");
-    const bookingDate = document.getElementById("bookingDate");
-    const roomType = document.getElementById("roomType");
-    const findRoom = document.getElementById("findRoom");
-
-    const movieCast = document.getElementById("movieCast");
-    const similarMovies = document.getElementById("similarMovies");
-    const movieHero = document.querySelector(".movie-hero");
-
-    // 2. Lấy ID phim từ URL
     const params = new URLSearchParams(window.location.search);
-    const movieId = params.get("id") || "693134";
+    const movieId = params.get("id") || params.get("movieId") || "693134";
 
-    // 3. Thiết lập ngày chiếu mặc định
-    const today = new Date();
-
-    const todayString = [
-        today.getFullYear(),
-        String(today.getMonth() + 1).padStart(2, "0"),
-        String(today.getDate()).padStart(2, "0")
-    ].join("-");
-
-    bookingDate.min = todayString;
-    bookingDate.value = todayString;
-
-    findRoom.disabled = true;
+    // Khởi tạo Dark/Light mode và menu
+    initHeaderEvents();
 
     try {
-        // 4. Lấy dữ liệu phim
+        // A. Tải thông tin chi tiết phim
         const movie = await getMovieDetails(movieId);
+        renderMovieDetails(movie);
 
-        // 5. Hiển thị thông tin
-        movieTitle.textContent =
-            movie.title || "Chưa có tên phim";
+        // B. Tải Diễn viên & Đội ngũ sản xuất (Gọi 1 lần duy nhất)
+        const credits = await getMovieCredits(movieId);
+        const castList = (credits.cast && credits.cast.length > 0) ? credits.cast : MOCK_CAST;
+        const crewList = credits.crew || [];
 
-        bookingMovieTitle.textContent =
-            movie.title || "Chưa có tên phim";
+        renderCast(castList);
+        renderCrewSpecs(crewList);
 
-        movieRating.textContent =
-            "★ " +
-            Number(movie.vote_average || 0).toFixed(1) +
-            "/10";
+        // C. Tải phim tương tự đề xuất
+        const similar = await getSimilarMovies(movieId);
+        renderSimilar(similar);
 
-        movieYear.textContent = movie.release_date
-            ? movie.release_date.substring(0, 4)
-            : "Chưa rõ năm";
-
-        movieRuntime.textContent = movie.runtime
-            ? movie.runtime + " phút"
-            : "Đang cập nhật";
-
-        movieOverview.textContent =
-            movie.overview ||
-            "Chưa có nội dung giới thiệu phim.";
-
-        // 6. Hiển thị poster
-        if (movie.poster_path) {
-            moviePoster.src = getTMDBImage(
-                movie.poster_path,
-                "w500"
-            );
-        } else {
-            moviePoster.removeAttribute("src");
-        }
-
-        moviePoster.alt = "Poster phim " + movie.title;
-
-        // 7. Hiển thị backdrop
-        if (movieHero && movie.backdrop_path) {
-            const backdropUrl = getTMDBImage(
-                movie.backdrop_path,
-                "original"
-            );
-
-            movieHero.style.backgroundImage = `
-                linear-gradient(
-                    90deg,
-                    rgba(16, 13, 22, 0.92) 0%,
-                    rgba(16, 13, 22, 0.78) 45%,
-                    rgba(16, 13, 22, 0.50) 100%
-                ),
-                linear-gradient(
-                    0deg,
-                    rgba(16, 13, 22, 1) 0%,
-                    rgba(16, 13, 22, 0) 45%
-                ),
-                url("${backdropUrl}")
-            `;
-        }
-
-     
-        // 8. Xử lý nút xem trailer
-        watchTrailer.disabled = true;
-        watchTrailer.textContent = "Đang tìm trailer...";
-
-        // Lấy trailer mà không làm chậm chức năng đặt phòng
-        getMovieTrailer(movie.id)
-            .then(trailerUrl => {
-                if (trailerUrl) {
-                    watchTrailer.disabled = false;
-                    watchTrailer.textContent = "▶ Xem trailer";
-
-                    watchTrailer.addEventListener("click", () => {
-                        window.open(
-                            trailerUrl,
-                            "_blank",
-                            "noopener,noreferrer"
-                        );
-                    });
-                } else {
-                    watchTrailer.textContent = "Trailer đang cập nhật";
-                }
-            })
-            .catch(error => {
-                console.error("Lỗi trailer:", error);
-                watchTrailer.textContent = "Trailer đang cập nhật";
-            });
-
-
-        // 9. Chuyển sang trang đặt phòng
-        findRoom.disabled = false;
-
-        findRoom.addEventListener("click", () => {
-            if (!bookingDate.value) {
-                alert("Vui lòng chọn ngày chiếu!");
-                return;
-            }
-
-            const bookingParams = new URLSearchParams({
-                movieId: String(movie.id),
-                date: bookingDate.value,
-                roomType: roomType.value
-            });
-
-            window.location.href =
-                "booking.html?" + bookingParams.toString();
-        });
-
-        // 10. Lấy danh sách diễn viên
-        let cast = await getMovieCredits(movie.id);
-
-        // Nếu API chưa có dữ liệu, dùng dữ liệu mẫu
-        if (!cast.length) {
-            cast = MOCK_CAST[movie.id] || [];
-        }
-
-        renderCast(movieCast, cast);
-
-        // 11. Lấy phim tương tự
-        const recommendations =
-            await getSimilarMovies(movie.id);
-
-        const filteredMovies = recommendations.filter(
-            item => Number(item.id) !== Number(movie.id)
-        );
-
-        renderSimilarMovies(
-            similarMovies,
-            filteredMovies
-        );
+        // D. Khởi tạo nút Trailer & Khối đặt phòng tinh gọn
+        setupTrailer(movie.id);
+        setupMiniBookingWidget(movie);
 
     } catch (error) {
-        console.error("Lỗi tải trang chi tiết phim:", error);
-
-        movieTitle.textContent = "Không tải được phim";
-        bookingMovieTitle.textContent = "Chưa xác định";
-        movieOverview.textContent = error.message;
-
-        movieCast.textContent = "";
-        similarMovies.textContent = "";
-
-        watchTrailer.disabled = true;
-        findRoom.disabled = true;
+        console.error("Lỗi khi tải chi tiết phim:", error);
     }
 });
+
+// ==========================================
+// 3. RENDER THÔNG TIN PHIM & QUỐC GIA/ĐỘ TUỔI
+// ==========================================
+function renderMovieDetails(movie) {
+    document.title = `${movie.title || "Chi Tiết Phim"} | ChillFlix`;
+
+    document.getElementById("movieTitle").textContent = movie.title || "Chưa có tên";
+    document.getElementById("movieOriginalTitle").textContent = movie.original_title ? `${movie.original_title} (${(movie.release_date || '2024').slice(0, 4)})` : "";
+    document.getElementById("movieYear").textContent = (movie.release_date || "2024").slice(0, 4);
+    
+    const runtime = movie.runtime || 120;
+    const hours = Math.floor(runtime / 60);
+    const mins = runtime % 60;
+    const runtimeText = `${runtime} phút (${hours}h ${mins}m)`;
+    document.getElementById("movieRuntime").textContent = runtimeText;
+
+    document.getElementById("movieRating").textContent = movie.vote_average ? movie.vote_average.toFixed(1) : "8.5";
+    if (movie.vote_count) {
+        document.getElementById("movieVoteCount").textContent = `/ 10 · ${new Intl.NumberFormat('vi-VN').format(movie.vote_count)} đánh giá TMDB`;
+    }
+
+    document.getElementById("movieOverview").textContent = movie.overview || "Đang cập nhật nội dung tóm tắt.";
+
+    // Poster & Backdrop
+    const posterUrl = movie.poster_path ? `${CONFIG.TMDB_IMAGE_BASE}${movie.poster_path}` : 'https://picsum.photos/300/450';
+    document.getElementById("moviePoster").src = posterUrl;
+
+    if (movie.backdrop_path) {
+        document.getElementById("detailBackdrop").style.backgroundImage = `url('${CONFIG.TMDB_BACKDROP_BASE}${movie.backdrop_path}')`;
+    }
+
+    // Danh sách thể loại
+    const genresContainer = document.getElementById("movieGenres");
+    if (movie.genres && movie.genres.length > 0) {
+        genresContainer.innerHTML = movie.genres.map(g => `<span class="genre-chip">${g.name || g}</span>`).join('');
+    }
+
+    // Bảng thông số kỹ thuật thật từ TMDB
+    document.getElementById("specReleaseDate").textContent = movie.release_date || "Đang cập nhật";
+    document.getElementById("specRuntime").textContent = runtimeText;
+
+    // Quốc gia sản xuất thật
+    if (movie.production_countries && movie.production_countries.length > 0) {
+        document.getElementById("specCountries").textContent = movie.production_countries.map(c => c.name).join(', ');
+    } else {
+        document.getElementById("specCountries").textContent = "Hoa Kỳ, Quốc tế";
+    }
+
+    // Ngôn ngữ gốc thật
+    if (movie.spoken_languages && movie.spoken_languages.length > 0) {
+        document.getElementById("specLanguage").textContent = movie.spoken_languages.map(l => l.name || l.english_name).join(', ') + " · Phụ đề Tiếng Việt";
+    }
+
+    // Đánh giá độ tuổi tự động
+    let ageRating = "T16 - Khán giả từ 16 tuổi trở lên";
+    const genreNames = (movie.genres || []).map(g => (g.name || "").toLowerCase());
+    if (movie.adult || genreNames.some(g => g.includes("kinh dị") || g.includes("horror"))) {
+        ageRating = "T18 - Phim cấm khán giả dưới 18 tuổi";
+    } else if (genreNames.some(g => g.includes("hoạt hình") || g.includes("gia đình"))) {
+        ageRating = "P - Phim phổ biến rộng rãi mọi lứa tuổi";
+    }
+    document.getElementById("specAgeLimit").textContent = ageRating;
+    document.getElementById("movieAgeLimit").textContent = ageRating.split(" ")[0];
+
+    // Cột Đặc Quyền: Đổi văn phong theo đúng tên phim đang xem
+    document.getElementById("miniBookingMovieName").textContent = movie.title || "Phim đã chọn";
+    document.getElementById("perksMovieTitle").textContent = `Trải nghiệm xem ${movie.title} tại ChillFlix`;
+    document.getElementById("perksMovieDesc").textContent = `Thưởng thức trọn vẹn từng khung hình sắc nét và âm thanh sống động của siêu phẩm "${movie.title}" trong không gian rạp riêng tư cách âm tuyệt đối, sofa da chỉnh điện ngả 180° cùng hệ thống điều hòa kháng khuẩn mát lạnh.`;
+    document.getElementById("perksSoundDesc").textContent = `Tái hiện sống động từng chi tiết âm thanh chân thực nhất của bộ phim ${movie.title}`;
+}
+
+// ==========================================
+// 4. RENDER ĐẠO DIỄN & BIÊN KỊCH THẬT TỪ CREW
+// ==========================================
+function renderCrewSpecs(crewList) {
+    const director = crewList.find(p => p.job === "Director");
+    if (director) {
+        document.getElementById("specDirector").textContent = director.name;
+        document.getElementById("movieDirector").textContent = `Đạo diễn: ${director.name}`;
+    } else {
+        document.getElementById("specDirector").textContent = "Đang cập nhật";
+    }
+
+    const writers = crewList.filter(p => p.job === "Screenplay" || p.job === "Writer");
+    if (writers.length > 0) {
+        document.getElementById("specWriter").textContent = writers.slice(0, 2).map(w => w.name).join(", ");
+    } else {
+        document.getElementById("specWriter").textContent = director ? director.name : "Đang cập nhật";
+    }
+}
+
+// ==========================================
+// 5. RENDER DIỄN VIÊN CHÍNH
+// ==========================================
+function renderCast(castList) {
+    const container = document.getElementById("movieCast");
+    const displayList = castList.slice(0, 8);
+
+    container.innerHTML = displayList.map(actor => {
+        const photo = actor.profile_path ? `https://image.tmdb.org/t/p/w185${actor.profile_path}` : 'https://picsum.photos/100/100';
+        return `
+        <div class="cast-item">
+            <img src="${photo}" alt="${actor.name}" class="cast-avatar" loading="lazy" />
+            <div class="cast-name" title="${actor.name}">${actor.name}</div>
+            <div class="cast-role" title="${actor.character || 'Diễn viên'}">${actor.character || 'Diễn viên'}</div>
+        </div>
+        `;
+    }).join('');
+}
+
+// ==========================================
+// 6. RENDER PHIM TƯƠNG TỰ (6 PHIM)
+// ==========================================
+function renderSimilar(movieList) {
+    const container = document.getElementById("similarMovies");
+    const displayList = (movieList || []).slice(0, 6);
+
+    if (displayList.length === 0) {
+        container.innerHTML = `<p style="color: var(--text-muted);">Đang cập nhật danh sách phim gợi ý.</p>`;
+        return;
+    }
+
+    container.innerHTML = displayList.map(movie => {
+        const posterUrl = movie.poster_path ? `${CONFIG.TMDB_IMAGE_BASE}${movie.poster_path}` : 'https://picsum.photos/200/300';
+        const rating = movie.vote_average ? movie.vote_average.toFixed(1) : '8.0';
+        const year = (movie.release_date || '2024').slice(0, 4);
+
+        return `
+        <div class="similar-card" data-id="${movie.id}">
+            <img src="${posterUrl}" alt="${movie.title}" class="similar-poster" loading="lazy" />
+            <div class="similar-body">
+                <div class="similar-title" title="${movie.title}">${movie.title}</div>
+                <div class="similar-meta">★ ${rating} · ${year}</div>
+                <div class="similar-btn">Đặt phòng</div>
+            </div>
+        </div>
+        `;
+    }).join('');
+
+    container.querySelectorAll('.similar-card').forEach(card => {
+        card.addEventListener('click', () => {
+            window.location.href = `movie-detail.html?id=${card.dataset.id}`;
+        });
+    });
+}
+
+// ==========================================
+// 7. XỬ LÝ NÚT XEM TRAILER
+// ==========================================
+function setupTrailer(movieId) {
+    const btn = document.getElementById("watchTrailer");
+    btn.addEventListener("click", async () => {
+        btn.textContent = "Đang tìm trailer...";
+        const trailerUrl = await getMovieTrailer(movieId);
+        btn.innerHTML = `<span>▶</span> Xem Trailer Chính Thức`;
+
+        if (trailerUrl) {
+            window.open(trailerUrl, "_blank", "noopener,noreferrer");
+        } else {
+            alert("Rất tiếc, trailer chính thức của phim này đang được cập nhật!");
+        }
+    });
+}
+
+// ==========================================
+// 8. KHỐI ĐẶT PHÒNG NHANH TINH GỌN (CHỌN LỊCH & GIỜ TỰ DO)
+// ==========================================
+function setupMiniBookingWidget(movie) {
+    const dateInput = document.getElementById("detailBookingDate");
+    const timeSelect = document.getElementById("detailBookingTime");
+    const roomSelect = document.getElementById("detailBookingRoom");
+    const btnSearch = document.getElementById("btnMiniSearch");
+    const btnBookThis = document.getElementById("btnBookThisMovie");
+
+    // 1. Cài đặt ngày chiếu mặc định là hôm nay
+    const today = new Date();
+    const todayISO = [
+        today.getFullYear(),
+        String(today.getMonth() + 1).padStart(2, '0'),
+        String(today.getDate()).padStart(2, '0')
+    ].join('-');
+
+    if (dateInput) {
+        dateInput.value = todayISO;
+        dateInput.min = todayISO; // Không cho chọn ngày trong quá khứ
+    }
+
+    // 2. Tự động sinh danh sách giờ nhận phòng (09:00 - 22:30)
+    function populateTimes() {
+        if (!timeSelect) return;
+        timeSelect.innerHTML = "";
+
+        const selectedDate = dateInput ? dateInput.value : todayISO;
+        const isToday = selectedDate === todayISO;
+        const currentHour = today.getHours();
+        const currentMin = today.getMinutes();
+
+        for (let h = 9; h <= 22; h++) {
+            for (let m = 0; m < 60; m += 30) {
+                const timeStr = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+                
+                // Nếu chọn ngày hôm nay, chỉ hiện các giờ trong tương lai
+                if (isToday && (h < currentHour || (h === currentHour && m <= currentMin))) {
+                    continue; 
+                }
+
+                const opt = document.createElement("option");
+                opt.value = timeStr;
+                opt.textContent = `${timeStr} (${h >= 18 ? 'Buổi tối' : (h >= 12 ? 'Buổi chiều' : 'Buổi sáng')})`;
+                timeSelect.appendChild(opt);
+            }
+        }
+
+        if (timeSelect.children.length === 0) {
+            const opt = document.createElement("option");
+            opt.value = "";
+            opt.textContent = "Hôm nay đã hết khung giờ (Vui lòng chọn ngày mai)";
+            timeSelect.appendChild(opt);
+            if (btnSearch) btnSearch.disabled = true;
+        } else {
+            if (btnSearch) btnSearch.disabled = false;
+        }
+    }
+
+    populateTimes();
+
+    // Khi khách bấm chọn ngày khác trên lịch -> Cập nhật lại danh sách giờ
+    if (dateInput) {
+        dateInput.addEventListener("change", populateTimes);
+    }
+
+    // 3. Chuyển sang booking.html với đúng ngày giờ đã chọn
+    const handleBookingRedirect = () => {
+        const chosenDate = dateInput ? dateInput.value : todayISO;
+        const chosenTime = timeSelect ? timeSelect.value : "19:00";
+        const chosenRoom = roomSelect ? roomSelect.value : "couple";
+        const durationHours = Math.ceil((movie.runtime || 120) / 60);
+
+        if (!chosenTime) {
+            alert("Vui lòng chọn khung giờ nhận phòng hợp lệ!");
+            return;
+        }
+
+        const queryParams = new URLSearchParams({
+            movieId: String(movie.id),
+            date: chosenDate,
+            time: chosenTime,
+            roomType: chosenRoom,
+            duration: String(durationHours)
+        });
+
+        window.location.href = `booking.html?${queryParams.toString()}`;
+    };
+
+    if (btnSearch) btnSearch.addEventListener("click", handleBookingRedirect);
+    if (btnBookThis) btnBookThis.addEventListener("click", handleBookingRedirect);
+}
+
+// ==========================================
+// 9. SỰ KIỆN GIAO DIỆN CHUNG HEADER
+// ==========================================
+function initHeaderEvents() {
+    const themeBtn = document.getElementById("themeToggle");
+    const themeIcon = document.getElementById("themeIcon");
+    if (themeBtn) {
+        themeBtn.addEventListener("click", () => {
+            const current = document.documentElement.getAttribute("data-theme");
+            const next = current === "light" ? "dark" : "light";
+            document.documentElement.setAttribute("data-theme", next);
+            if (themeIcon) themeIcon.textContent = next === "light" ? "☀️" : "🌙";
+            localStorage.setItem("chillflix-theme", next);
+        });
+    }
+
+    const userBtn = document.getElementById("userMenuBtn");
+    const userDropdown = document.getElementById("userDropdown");
+    if (userBtn && userDropdown) {
+        userBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            userDropdown.classList.toggle("show");
+        });
+        document.addEventListener("click", () => userDropdown.classList.remove("show"));
+    }
+
+    const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+    const drawerCloseBtn = document.getElementById("drawerCloseBtn");
+    const mobileDrawer = document.getElementById("mobileDrawer");
+    const drawerOverlay = document.getElementById("drawerOverlay");
+
+    if (mobileMenuBtn && mobileDrawer) {
+        mobileMenuBtn.addEventListener("click", () => {
+            mobileDrawer.classList.add("open");
+            drawerOverlay.classList.add("open");
+        });
+        const close = () => {
+            mobileDrawer.classList.remove("open");
+            drawerOverlay.classList.remove("open");
+        };
+        if (drawerCloseBtn) drawerCloseBtn.addEventListener("click", close);
+        if (drawerOverlay) drawerOverlay.addEventListener("click", close);
+    }
+}
