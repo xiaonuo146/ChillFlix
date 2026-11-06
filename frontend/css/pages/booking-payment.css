@@ -1,151 +1,152 @@
+/* ==========================================================================
+   CHILLFLIX - TRANG THANH TOÁN BƯỚC 3 (ĐỒNG BỘ MOCKUP 5 - ĐÃ BỎ MOMO/VNPAY)
+   ========================================================================== */
+/* ==========================================================================
+   ĐỊNH DẠNG Ô NHẬP LIỆU CHUẨN DARK CINEMA (FIX LỖI Ô TRẮNG)
+   ========================================================================== */
 
-/* CHILLFLIX - TRANG THANH TOÁN */
-
-.payment-layout {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 340px;
-    gap: 20px;
-    align-items: start;
-    margin-top: 24px;
+/* Nhãn chữ phía trên ô nhập */
+.compact-label {
+    display: block !important;
+    font-size: 12.5px !important;
+    font-weight: 600 !important;
+    color: var(--text-muted) !important;
+    margin-bottom: 6px !important;
+    text-align: left !important;
 }
 
-.payment-main {
+/* Ô nhập liệu: Nền tím đen sang trọng, bo góc, chữ sáng, cao 46px */
+.compact-input {
+    display: block !important;
+    width: 100% !important;
+    height: 46px !important;
+    box-sizing: border-box !important;
+    background: var(--surface-2) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius-sm) !important;
+    padding: 0 16px !important;
+    color: var(--text) !important;
+    font-family: inherit !important;
+    font-size: 13.5px !important;
+    outline: none !important;
+    transition: border-color 150ms ease, box-shadow 150ms ease !important;
+}
+
+/* Khi click vào ô nhập liệu: Viền sáng vàng gold nổi bật */
+.compact-input:focus {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 2px rgba(245, 181, 68, 0.2) !important;
+}
+
+.compact-input::placeholder {
+    color: rgba(255, 255, 255, 0.25) !important;
+}
+
+/* Chia 2 cột cho Họ tên và Số điện thoại */
+.form-row-2col {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 16px !important;
+    margin-bottom: 14px !important;
+}
+
+/* Ô nhập Voucher */
+.voucher-input-group {
+    display: flex !important;
+    gap: 10px !important;
+    align-items: center !important;
+}
+
+.voucher-input-group .compact-input {
+    flex: 1 !important;
+}
+
+.btn-apply-voucher {
+    height: 46px !important;
+    padding: 0 24px !important;
+    border-radius: var(--radius-sm) !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+}
+
+@media (max-width: 600px) {
+    .form-row-2col {
+        grid-template-columns: 1fr !important;
+    }
+}
+/* THANH ĐẾM NGƯỢC GIỮ PHÒNG 10 PHÚT */
+.hold-timer-banner {
+    background: rgba(245, 181, 68, 0.08);
+    border: 1px solid rgba(245, 181, 68, 0.35);
+    border-radius: var(--radius-md);
+    padding: 14px 22px;
     display: flex;
-    flex-direction: column;
-    gap: 18px;
-    min-width: 0;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
 }
 
-.payment-panel,
-.payment-summary {
-    background: #241a30;
-    border: 1px solid #493654;
-    border-radius: 12px;
-    padding: 22px;
-    color: #fff;
-}
-
-.payment-panel h2,
-.payment-summary h2 {
-    font-size: 20px;
-    margin: 0 0 18px;
-}
-
-.payment-panel label {
-    display: block;
-    font-size: 14px;
-    margin: 14px 0 7px;
-    color: #e8deed;
-}
-
-.payment-panel input[type="text"],
-.payment-panel input[type="tel"],
-.payment-panel input[type="email"] {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 12px;
-    background: #17111f;
-    color: #fff;
-    border: 1px solid #53415f;
-    border-radius: 7px;
-    outline: none;
-}
-
-.payment-panel input:focus {
-    border-color: #f7bf52;
-}
-
-.payment-method {
+.hold-timer__left {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 13px;
-    margin-bottom: 10px;
-    background: #1a1324;
-    border: 1px solid #493654;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-.payment-method input {
-    accent-color: #f7bf52;
-}
-
-.payment-summary {
-    position: sticky;
-    top: 20px;
-}
-
-.payment-summary-row,
-.payment-food-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
     gap: 12px;
-    padding: 10px 0;
+}
+
+.hold-icon {
+    font-size: 24px;
+    color: var(--primary);
+}
+
+.hold-timer__left strong {
     font-size: 14px;
+    color: var(--text);
 }
 
-.payment-summary-row span,
-.payment-food-item span {
-    color: #c9bad4;
+.hold-timer__left small {
+    color: var(--text-muted);
+    font-size: 12px;
+    margin-top: 2px;
 }
 
-.payment-summary-row strong,
-.payment-food-item strong {
-    text-align: right;
-    overflow-wrap: anywhere;
-}
-
-.payment-divider {
-    border: 0;
-    border-top: 1px solid #493654;
-    margin: 14px 0;
-}
-
-.payment-total {
+.hold-timer__countdown {
     display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    margin: 18px 0;
-    font-size: 18px;
+    flex-direction: column;
+    align-items: flex-end;
 }
 
-.payment-total strong {
-    color: #f7bf52;
+.hold-timer__countdown span {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--text-muted);
 }
 
-.payment-confirm {
-    width: 100%;
-    padding: 14px;
-    background: #f7bf52;
-    border: none;
-    border-radius: 8px;
-    color: #211526;
-    font-weight: bold;
-    cursor: pointer;
+.hold-timer__countdown strong {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--primary);
+    font-family: monospace;
 }
 
-.payment-confirm:hover {
-    background: #ffd27c;
+.security-chip {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--success);
+    background: rgba(63, 185, 80, 0.12);
+    border: 1px solid rgba(63, 185, 80, 0.3);
+    padding: 3px 8px;
+    border-radius: 4px;
 }
 
-.payment-note,
-#promoMessage {
-    color: #c9bad4;
-    font-size: 13px;
-    margin-top: 10px;
+/* FORM NHẬP THÔNG TIN */
+.form-row-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
 }
 
-@media (max-width: 850px) {
-    .payment-layout {
-        grid-template-columns: 1fr;
-    }
-
-    .payment-summary {
-        position: static;
-    }
-}
+/* Ô NHẬP VOUCHER */
 .voucher-input-group {
     display: flex;
     gap: 10px;
@@ -154,30 +155,232 @@
 
 .voucher-input-group input {
     flex: 1;
-    min-width: 0;
 }
 
-#applyPromo {
-    background: #f7bf52;
-    color: #211526;
-    border: none;
-    border-radius: 7px;
-    padding: 12px 18px;
-    font-weight: bold;
-    cursor: pointer;
+.btn-apply-voucher {
+    height: 44px;
+    padding: 0 22px;
     white-space: nowrap;
 }
 
-#applyPromo:hover {
-    background: #ffd27c;
+.voucher-applied-pill {
+    margin-top: 10px;
+    padding: 8px 14px;
+    border-radius: var(--radius-sm);
+    background: rgba(63, 185, 80, 0.12);
+    border: 1px solid rgba(63, 185, 80, 0.3);
+    color: var(--success);
+    font-size: 12.5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.payment-method span {
+.btn-remove-voucher {
+    background: transparent;
+    border: none;
+    color: var(--danger);
+    font-size: 14px;
+    cursor: pointer;
+    padding: 0 4px;
+}
+
+.recommend-tag {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--primary);
+    background: rgba(245, 181, 68, 0.15);
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+/* KHUNG MÃ QR THANH TOÁN VIETQR */
+.payment-qr-interactive-card {
+    background: var(--surface-2);
+    border: 1px solid rgba(245, 181, 68, 0.35);
+    border-radius: var(--radius-md);
+    padding: 22px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.qr-payment-body {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 24px;
+    align-items: center;
+}
+
+.qr-visual-box {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
 }
 
-.payment-method small {
-    color: #c9bad4;
+.qr-image-render {
+    width: 170px;
+    height: 170px;
+    border-radius: var(--radius-sm);
+    background: #ffffff;
+    padding: 6px;
+    box-sizing: border-box;
+    display: block;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+}
+
+.qr-visual-box small {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.qr-transfer-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.transfer-info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+}
+
+.transfer-info-row span {
+    color: var(--text-muted);
+}
+
+.transfer-info-row strong {
+    color: var(--text);
+}
+
+.transfer-info-row.highlight-amount strong {
+    color: var(--primary);
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.copy-val-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-copy-chip {
+    padding: 2px 8px;
+    background: rgba(245, 181, 68, 0.12);
+    border: 1px solid rgba(245, 181, 68, 0.3);
+    color: var(--primary);
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 150ms;
+}
+
+.btn-copy-chip:hover {
+    background: var(--primary);
+    color: var(--on-primary);
+}
+
+.qr-instruction-note {
+    font-size: 11.5px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin: 6px 0 0;
+    padding-top: 8px;
+    border-top: 1px dashed var(--border);
+}
+
+/* Checkbox điều khoản */
+.terms-agreement-box {
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    cursor: pointer;
+}
+
+.checkbox-label input {
+    margin-top: 2px;
+    accent-color: var(--primary);
+}
+
+/* CỘT PHẢI: CHI TIẾT TÓM TẮT */
+.booking-temp-code {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--primary);
+    background: rgba(245, 181, 68, 0.12);
+    padding: 3px 8px;
+    border-radius: 4px;
+}
+
+.payment-food-scroll-box {
+    max-height: 130px;
+    overflow-y: auto;
+    margin-bottom: 6px;
+}
+
+.payment-food-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12.5px;
+    padding: 4px 0;
+    color: var(--text-muted);
+}
+
+.payment-food-item strong {
+    color: var(--text);
+}
+
+.cinepoint-reward-pill {
+    background: rgba(245, 181, 68, 0.08);
+    border: 1px solid rgba(245, 181, 68, 0.25);
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    color: var(--text);
+    margin-bottom: 16px;
+}
+
+.cinepoint-reward-pill strong {
+    color: var(--primary);
+}
+
+.payment-security-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    margin-top: 16px;
+    font-size: 11.5px;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+.payment-note {
+    color: var(--text-muted);
+    font-size: 12px;
+    margin-top: 8px;
+    line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+    .qr-payment-body {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    .form-row-2col {
+        grid-template-columns: 1fr;
+    }
 }

@@ -1,532 +1,319 @@
+/* ==========================================================================
+   CHILLFLIX - BƯỚC 3: XÁC NHẬN & THANH TOÁN VIETQR (ĐÃ FIX CHUẨN)
+   ========================================================================== */
 
-/* =========================================
-   CHILLFLIX - BƯỚC 3: THANH TOÁN
-   ========================================= */
-
-// =========================================
-// 1. ĐỌC THÔNG TIN ĐẶT PHÒNG
-// =========================================
-
+// 1. ĐỌC DỮ LIỆU ĐẶT PHÒNG TỪ SESSIONSTORAGE
 let bookingData = null;
-
 try {
-    const savedBooking = sessionStorage.getItem(
-        "chillflixBooking"
-    );
-
-    if (savedBooking) {
-        bookingData = JSON.parse(savedBooking);
-    }
+    const saved = sessionStorage.getItem("chillflixBooking");
+    if (saved) bookingData = JSON.parse(saved);
 } catch (error) {
     console.error("Lỗi đọc dữ liệu đặt phòng:", error);
 }
 
-// =========================================
-// 2. CÁC HÀM DÙNG CHUNG
-// =========================================
-
+// 2. CÁC HÀM TIỆN ÍCH DÙNG CHUNG
 function formatMoney(amount) {
-    return new Intl.NumberFormat("vi-VN").format(
-        Number(amount) || 0
-    ) + "đ";
+    return new Intl.NumberFormat("vi-VN").format(Number(amount) || 0) + "đ";
 }
 
 function formatDuration(hours) {
-    const totalMinutes = Math.round(
-        Number(hours) * 60
-    );
-
+    const totalMinutes = Math.round(Number(hours) * 60);
     const h = Math.floor(totalMinutes / 60);
     const m = totalMinutes % 60;
-
-    if (m === 0) {
-        return `${h} giờ`;
-    }
-
-    return `${h} giờ ${m} phút`;
+    return m === 0 ? `${h}.0 giờ` : `${h} giờ ${m} phút`;
 }
 
 function setText(id, value) {
-    const element = document.getElementById(id);
-
-    if (element) {
-        element.textContent = value;
-    }
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
 }
 
-// =========================================
-// 3. LẤY CÁC PHẦN TỬ HTML
-// =========================================
-
-const paymentForm = document.getElementById(
-    "paymentForm"
-);
-
-const customerNameInput = document.getElementById(
-    "customerName"
-);
-
-const customerPhoneInput = document.getElementById(
-    "customerPhone"
-);
-
-const customerEmailInput = document.getElementById(
-    "customerEmail"
-);
-
-// Mã giảm giá
-const voucherInput = document.getElementById(
-    "voucherCode"
-);
-
-const applyVoucherButton = document.getElementById(
-    "applyVoucher"
-);
-
-const voucherMessage = document.getElementById(
-    "voucherMessage"
-);
-
-// Nút xác nhận
-const confirmButton = document.getElementById(
-    "confirmPayment"
-);
-
-// =========================================
-// 4. TÍNH TIỀN ĐẶT PHÒNG
-// =========================================
-
-const roomTotal = Number(
-    bookingData?.roomTotal
-) || 0;
-
-const foods = Array.isArray(bookingData?.foods)
-    ? bookingData.foods
-    : [];
-
-const foodTotal = foods.reduce((sum, item) => {
-    const price = Number(item.price) || 0;
-    const quantity = Number(item.quantity) || 0;
-
-    return sum + price * quantity;
-}, 0);
-
+// 3. KHỞI TẠO TIỀN BẠC
+const roomTotal = Number(bookingData?.roomTotal) || 0;
+const foods = Array.isArray(bookingData?.foods) ? bookingData.foods : [];
+const foodTotal = foods.reduce((sum, item) => sum + (Number(item.price) || 0) * (Number(item.quantity) || 0), 0);
 const originalTotal = roomTotal + foodTotal;
 
-// Giảm giá ban đầu
 let discount = 0;
-
-// Mã đang được áp dụng
 let appliedVoucher = "";
 
-// Phương thức thanh toán
-let paymentMethod = "momo";
-
-// =========================================
-// 5. HIỂN THỊ THÔNG TIN ĐƠN HÀNG
-// =========================================
-
+// 4. HIỂN THỊ DỮ LIỆU TÓM TẮT ĐƠN HÀNG
 function renderBooking() {
-
-    if (!bookingData) {
-        alert(
-            "Chưa có thông tin đặt phòng.\n" +
-            "Vui lòng quay lại bước chọn phòng."
-        );
-
+    if (!bookingData || !bookingData.date || !bookingData.startTime) {
+        alert("Chưa có thông tin đặt phòng hợp lệ.\nVui lòng quay lại Bước 1 chọn phòng chiếu.");
         window.location.href = "booking.html";
         return;
     }
 
-    const roomNames = {
-        couple: "Couple A / B",
-        group4: "Nhóm 4 Sao Hỏa",
-        vip: "Nhóm 10 Hành Tinh"
-    };
+    // Hiển thị mã đơn tạm thời
+    const tempCode = bookingData.ticketCode || "CF" + Date.now().toString().slice(-6);
+    bookingData.ticketCode = tempCode;
+    setText("summaryBookingCode", "#" + tempCode);
 
-    // Thông tin phim
-    setText(
-        "paymentMovie",
-        bookingData.movieTitle || "Chưa xác định"
-    );
+    // Thông tin phòng chiếu
+    setText("paymentMovie", bookingData.movieTitle || "Phim chiếu rạp");
+    setText("paymentDate", bookingData.date || "--");
+    setText("paymentRoom", bookingData.roomName || "Phòng riêng");
+    setText("paymentTime", `${bookingData.startTime} (${formatDuration(bookingData.duration || 2)})`);
+    setText("paymentDuration", formatDuration(bookingData.duration || 2));
 
-    // Ngày chiếu
-    setText(
-        "paymentDate",
-        bookingData.date || "--"
-    );
+    // Tiền phòng & đồ ăn
+    setText("paymentRoomTotal", formatMoney(roomTotal));
+    setText("paymentFoodTotal", formatMoney(foodTotal));
+    setText("paymentFoodCount", `${foods.reduce((sum, i) => sum + i.quantity, 0)} món`);
 
-    // Loại phòng
-    setText(
-        "paymentRoom",
-        roomNames[bookingData.roomType] ||
-        bookingData.roomType ||
-        "--"
-    );
-
-    // Giờ bắt đầu
-    setText(
-        "paymentTime",
-        bookingData.startTime || "--"
-    );
-
-    // Thời lượng
-    setText(
-        "paymentDuration",
-        formatDuration(bookingData.duration || 2)
-    );
-
-    // Tiền phòng
-    setText(
-        "paymentRoomTotal",
-        formatMoney(roomTotal)
-    );
-
-    // Tiền đồ ăn
-    setText(
-        "paymentFoodTotal",
-        formatMoney(foodTotal)
-    );
-
-    // Hiển thị danh sách đồ ăn
+    // Danh sách đồ ăn F&B
     renderFoodList();
 
-    // Cập nhật tổng thanh toán
+    // Cập nhật tổng tiền & điểm thưởng & Mã QR VietQR
     updateTotal();
+    updatePaymentQrDisplay();
 }
 
-// =========================================
-// 6. HIỂN THỊ DANH SÁCH ĐỒ ĂN
-// =========================================
-
 function renderFoodList() {
-
-    const foodContainer = document.getElementById(
-        "paymentFoodList"
-    );
-
-    if (!foodContainer) {
-        console.error(
-            "Không tìm thấy phần tử paymentFoodList"
-        );
-        return;
-    }
-
+    const foodContainer = document.getElementById("paymentFoodList");
+    if (!foodContainer) return;
     foodContainer.replaceChildren();
 
     if (foods.length === 0) {
-        const message = document.createElement("p");
-
-        message.className = "booking-hint";
-        message.textContent = "Không chọn đồ ăn.";
-
-        foodContainer.appendChild(message);
+        foodContainer.innerHTML = `<p class="payment-note" style="margin: 4px 0;">Không gọi đồ ăn (Có thể gọi thêm tại quầy rạp).</p>`;
         return;
     }
 
     foods.forEach(item => {
-
         const row = document.createElement("div");
         row.className = "payment-food-item";
-
-        const name = document.createElement("span");
-
-        name.textContent =
-            `${item.name} x${item.quantity}`;
-
-        const price = document.createElement("strong");
-
-        price.textContent = formatMoney(
-            Number(item.price) *
-            Number(item.quantity)
-        );
-
-        row.append(name, price);
-
+        row.innerHTML = `
+            <span>${item.name} × ${item.quantity}</span>
+            <strong>${formatMoney(Number(item.price) * Number(item.quantity))}</strong>
+        `;
         foodContainer.appendChild(row);
     });
 }
 
-// =========================================
-// 7. CẬP NHẬT TỔNG THANH TOÁN
-// =========================================
-
 function updateTotal() {
+    const finalTotal = Math.max(0, originalTotal - discount);
 
-    const finalTotal = Math.max(
-        0,
-        originalTotal - discount
-    );
+    setText("paymentDiscount", `-${formatMoney(discount)}`);
+    setText("paymentGrandTotal", formatMoney(finalTotal));
 
-    setText(
-        "paymentDiscount",
-        formatMoney(discount)
-    );
-
-    setText(
-        "paymentGrandTotal",
-        formatMoney(finalTotal)
-    );
+    // Tích lũy điểm CinePoint: 10.000đ = 1 điểm CinePoint
+    const earnedPoints = Math.floor(finalTotal / 10000);
+    setText("rewardPoints", `+${earnedPoints} điểm`);
 
     return finalTotal;
 }
 
-// =========================================
-// 8. ÁP DỤNG MÃ GIẢM GIÁ
-// =========================================
+// 5. CẬP NHẬT MÃ VIETQR NGÂN HÀNG THẬT VỚI ĐÚNG SỐ TIỀN
+function updatePaymentQrDisplay() {
+    const finalAmount = updateTotal();
+    const qrImg = document.getElementById("dynamicPaymentQrImg");
+    const amountEl = document.getElementById("qrPaymentAmount");
+    const contentEl = document.getElementById("qrTransferContent");
 
-if (applyVoucherButton && voucherInput) {
+    const orderCode = (bookingData?.ticketCode || "CF" + Date.now().toString().slice(-6)).replace(/[^a-zA-Z0-9]/g, "");
 
-    applyVoucherButton.addEventListener(
-        "click",
-        () => {
+    if (amountEl) amountEl.textContent = formatMoney(finalAmount);
+    if (contentEl) contentEl.textContent = orderCode;
 
-            const code = voucherInput.value
-                .trim()
-                .toUpperCase();
+    if (qrImg) {
+        // Sinh link VietQR NAPAS thật của ngân hàng MB Bank
+        const vietQrUrl = `https://img.vietqr.io/image/MB-0988234567-compact2.png?amount=${finalAmount}&addInfo=${encodeURIComponent(orderCode)}&accountName=CHILLFLIX%20CINEMA%20LOUNGE`;
+        qrImg.src = vietQrUrl;
 
-            if (code === "PHIM20") {
+        // Cơ chế dự phòng nếu mất kết nối
+        qrImg.onerror = () => {
+            qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(`VIETQR|MB|0988234567|${finalAmount}|${orderCode}`)}`;
+        };
+    }
+}
 
-                // Giảm 20% tổng tiền
-                discount = Math.round(
-                    originalTotal * 0.2
-                );
+// 6. BỘ ĐẾM NGƯỢC GIỮ PHÒNG 10 PHÚT (COUNTDOWN TIMER)
+function startHoldCountdown() {
+    const timerDisplay = document.getElementById("holdCountdownText");
+    if (!timerDisplay) return;
 
-                appliedVoucher = "PHIM20";
+    let timeLeft = 10 * 60;
 
-                if (voucherMessage) {
-                    voucherMessage.textContent =
-                        "Áp dụng thành công! Giảm 20%.";
-                }
+    const timer = setInterval(() => {
+        const mins = Math.floor(timeLeft / 60);
+        const secs = timeLeft % 60;
+        timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
 
-            } else {
-
-                discount = 0;
-                appliedVoucher = "";
-
-                if (voucherMessage) {
-                    voucherMessage.textContent = code
-                        ? "Mã giảm giá không hợp lệ."
-                        : "Vui lòng nhập mã giảm giá.";
-                }
-            }
-
-            updateTotal();
+        if (timeLeft <= 0) {
+            clearInterval(timer);
+            alert("⏰ Hết thời gian giữ chỗ 10 phút! Khung giờ này đã được nhả cho khách khác.\nVui lòng chọn lại suất chiếu.");
+            sessionStorage.removeItem("chillflixBooking");
+            window.location.href = "booking.html";
         }
-    );
+        timeLeft--;
+    }, 1000);
+}
 
-    // Nếu sửa mã sau khi áp dụng,
-    // phải bấm Áp dụng lại
-    voucherInput.addEventListener("input", () => {
+// 7. XỬ LÝ MÃ GIẢM GIÁ VOUCHER (GIẢM 20% TIỀN PHÒNG)
+function initVoucherEvents() {
+    const voucherInput = document.getElementById("voucherCode");
+    const applyBtn = document.getElementById("applyVoucher");
+    const voucherMsg = document.getElementById("voucherMessage");
+    const tagBox = document.getElementById("appliedVoucherTag");
+    const removeBtn = document.getElementById("removeVoucherBtn");
+    const discountRow = document.getElementById("discountSummaryRow");
 
-        if (appliedVoucher) {
+    applyBtn?.addEventListener("click", () => {
+        const code = (voucherInput.value || "").trim().toUpperCase();
+
+        if (code === "PHIM20") {
+            discount = Math.round(roomTotal * 0.2);
+            appliedVoucher = "PHIM20";
+
+            if (tagBox) {
+                tagBox.style.display = "flex";
+                setText("appliedCodeText", "PHIM20");
+                setText("appliedDiscountAmount", formatMoney(discount));
+            }
+            if (discountRow) {
+                discountRow.style.display = "flex";
+                setText("discountCodeName", "PHIM20");
+            }
+            if (voucherMsg) {
+                voucherMsg.textContent = "Áp dụng thành công mã PHIM20: Giảm 20% tiền phòng!";
+                voucherMsg.style.color = "var(--success)";
+            }
+            voucherInput.disabled = true;
+            applyBtn.disabled = true;
+
+            // Cập nhật lại số tiền trên mã QR ngay lập tức
+            updatePaymentQrDisplay();
+        } else {
             discount = 0;
             appliedVoucher = "";
-
-            if (voucherMessage) {
-                voucherMessage.textContent =
-                    "Mã đã thay đổi. Hãy áp dụng lại.";
+            if (voucherMsg) {
+                voucherMsg.textContent = code ? "Mã giảm giá không hợp lệ hoặc đã hết lượt dùng." : "Vui lòng nhập mã giảm giá.";
+                voucherMsg.style.color = "var(--danger)";
             }
-
-            updateTotal();
         }
+        updateTotal();
+    });
+
+    removeBtn?.addEventListener("click", () => {
+        discount = 0;
+        appliedVoucher = "";
+        voucherInput.disabled = false;
+        applyBtn.disabled = false;
+        voucherInput.value = "";
+        if (tagBox) tagBox.style.display = "none";
+        if (discountRow) discountRow.style.display = "none";
+        if (voucherMsg) {
+            voucherMsg.textContent = "Đã hủy áp dụng mã giảm giá.";
+            voucherMsg.style.color = "var(--text-muted)";
+        }
+        updateTotal();
+        updatePaymentQrDisplay();
     });
 }
 
-// =========================================
-// 9. CHỌN PHƯƠNG THỨC THANH TOÁN
-// =========================================
+// 8. SỰ KIỆN SAO CHÉP STK & NỘI DUNG CHUYỂN KHOẢN
+function initCopyEvents() {
+    document.querySelectorAll(".btn-copy-chip").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const textToCopy = btn.dataset.copy || document.getElementById("qrTransferContent")?.textContent;
+            if (textToCopy) {
+                navigator.clipboard.writeText(textToCopy);
+                const originalText = btn.textContent;
+                btn.textContent = "✓ Đã copy";
+                setTimeout(() => { btn.textContent = originalText; }, 2000);
+            }
+        });
+    });
+}
 
-const paymentOptions = document.querySelectorAll(
-    'input[name="paymentMethod"]'
-);
+// 9. XÁC NHẬN VÀ LƯU DỮ LIỆU ĐỂ CHUYỂN SANG BƯỚC 4
+function initPaymentSubmit() {
+    const form = document.getElementById("paymentForm");
 
-paymentOptions.forEach(option => {
+    form?.addEventListener("submit", (e) => {
+        e.preventDefault();
 
-    option.addEventListener("change", () => {
+        const name = document.getElementById("customerName")?.value.trim();
+        const phone = document.getElementById("customerPhone")?.value.trim();
+        const email = document.getElementById("customerEmail")?.value.trim();
+        const roomNote = document.getElementById("customerRoomNote")?.value.trim() || "";
 
-        if (option.checked) {
-            paymentMethod = option.value;
+        const agreeCheck = document.getElementById("termsAgreeCheckbox");
+        if (agreeCheck && !agreeCheck.checked) {
+            alert("Vui lòng đồng ý với Quy định & Chính sách hủy phòng trước khi thanh toán!");
+            return;
         }
+
+        const finalTotal = updateTotal();
+        const smartPin = String(Math.floor(1000 + Math.random() * 9000));
+
+        const finalBooking = {
+            ...bookingData,
+            customer: {
+                name: name,
+                phone: phone,
+                email: email,
+                roomNote: roomNote
+            },
+            smartPin: smartPin,
+            paymentMethod: "vietqr",
+            voucherCode: appliedVoucher,
+            discount: discount,
+            finalTotal: finalTotal,
+            earnedPoints: Math.floor(finalTotal / 10000),
+            createdAt: new Date().toISOString()
+        };
+
+        sessionStorage.setItem("chillflixBooking", JSON.stringify(finalBooking));
+        window.location.href = "booking-success.html";
+    });
+}
+
+// 10. SỰ KIỆN HEADER CHUNG
+function initHeaderControls() {
+    const savedTheme = localStorage.getItem("chillflix-theme") || "dark";
+    document.documentElement.setAttribute("data-theme", savedTheme);
+    const themeIcon = document.getElementById("themeIcon");
+    if (themeIcon) themeIcon.textContent = savedTheme === "light" ? "☀️" : "🌙";
+
+    document.getElementById("themeToggle")?.addEventListener("click", () => {
+        const cur = document.documentElement.getAttribute("data-theme");
+        const next = cur === "light" ? "dark" : "light";
+        document.documentElement.setAttribute("data-theme", next);
+        if (themeIcon) themeIcon.textContent = next === "light" ? "☀️" : "🌙";
+        localStorage.setItem("chillflix-theme", next);
     });
 
-    if (option.checked) {
-        paymentMethod = option.value;
-    }
-});
+    const userBtn = document.getElementById("userMenuBtn");
+    const userDropdown = document.getElementById("userDropdown");
+    userBtn?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        userDropdown?.classList.toggle("show");
+    });
+    document.addEventListener("click", () => userDropdown?.classList.remove("show"));
 
-// =========================================
-// 10. KIỂM TRA THÔNG TIN KHÁCH HÀNG
-// =========================================
+    const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+    const drawerCloseBtn = document.getElementById("drawerCloseBtn");
+    const mobileDrawer = document.getElementById("mobileDrawer");
+    const drawerOverlay = document.getElementById("drawerOverlay");
 
-function validateCustomer() {
-
-    const customerName =
-        customerNameInput?.value.trim() || "";
-
-    const customerPhone =
-        customerPhoneInput?.value.trim() || "";
-
-    const customerEmail =
-        customerEmailInput?.value.trim() || "";
-
-    if (
-        !customerName ||
-        !customerPhone ||
-        !customerEmail
-    ) {
-        alert(
-            "Vui lòng nhập đầy đủ thông tin khách hàng!"
-        );
-
-        return null;
-    }
-
-    // Kiểm tra số điện thoại Việt Nam
-    const phoneRegex = /^0\d{9}$/;
-
-    if (!phoneRegex.test(customerPhone)) {
-        alert(
-            "Số điện thoại phải gồm 10 chữ số " +
-            "và bắt đầu bằng số 0."
-        );
-
-        return null;
-    }
-
-    // Kiểm tra email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!emailRegex.test(customerEmail)) {
-        alert("Email không hợp lệ.");
-        return null;
-    }
-
-    return {
-        name: customerName,
-        phone: customerPhone,
-        email: customerEmail
+    mobileMenuBtn?.addEventListener("click", () => {
+        mobileDrawer?.classList.add("open");
+        drawerOverlay?.classList.add("open");
+    });
+    const closeDrawer = () => {
+        mobileDrawer?.classList.remove("open");
+        drawerOverlay?.classList.remove("open");
     };
+    drawerCloseBtn?.addEventListener("click", closeDrawer);
+    drawerOverlay?.addEventListener("click", closeDrawer);
 }
 
-// =========================================
-// 11. XÁC NHẬN ĐẶT PHÒNG
-// =========================================
-
-function confirmBooking() {
-
-    if (!bookingData) {
-        alert("Chưa có thông tin đặt phòng!");
-        return;
-    }
-
-    // Kiểm tra thông tin khách hàng
-    const customer = validateCustomer();
-
-    if (!customer) {
-        return;
-    }
-
-    // Tính tiền sau giảm giá
-    const finalTotal = updateTotal();
-
-    // Tạo mã vé mô phỏng
-    const ticketCode =
-        "CF-DEMO-" + Date.now().toString().slice(-8);
-
-    // Lưu toàn bộ thông tin
-    const finalBooking = {
-
-        ...bookingData,
-
-        // Thông tin phòng
-        roomTotal: roomTotal,
-
-        // Thông tin đồ ăn
-        foods: foods,
-        foodTotal: foodTotal,
-
-        // Thông tin giảm giá
-        voucherCode: appliedVoucher,
-        discount: discount,
-
-        // Tổng tiền
-        grandTotal: finalTotal,
-        finalTotal: finalTotal,
-
-        // Khách hàng
-        customer: customer,
-
-        // Phương thức thanh toán
-        paymentMethod: paymentMethod,
-
-        // Trạng thái mô phỏng
-        paymentStatus: "demo",
-        bookingStatus: "demo",
-
-        // Mã vé mẫu
-        ticketCode: ticketCode
-    };
-
-    try {
-
-        // Lưu dữ liệu cho Bước 4
-        sessionStorage.setItem(
-            "chillflixBooking",
-            JSON.stringify(finalBooking)
-        );
-
-        // Chuyển sang trang nhận vé
-        window.location.href =
-            "booking-success.html";
-
-    } catch (error) {
-
-        console.error(
-            "Không thể lưu thông tin đặt phòng:",
-            error
-        );
-
-        alert(
-            "Không thể lưu thông tin đặt phòng. " +
-            "Vui lòng thử lại."
-        );
-    }
-}
-
-// =========================================
-// 12. XỬ LÝ FORM THANH TOÁN
-// =========================================
-
-if (paymentForm) {
-
-    paymentForm.addEventListener(
-        "submit",
-        event => {
-
-            // Ngăn tải lại trang
-            event.preventDefault();
-
-            confirmBooking();
-        }
-    );
-
-} else if (confirmButton) {
-
-    // Trường hợp HTML không có form
-    confirmButton.addEventListener(
-        "click",
-        event => {
-
-            event.preventDefault();
-
-            confirmBooking();
-        }
-    );
-}
-
-// =========================================
-// 13. KHỞI TẠO TRANG
-// =========================================
-
+// KHỞI CHẠY TẤT CẢ
+initHeaderControls();
 renderBooking();
+startHoldCountdown();
+initVoucherEvents();
+initCopyEvents();
+initPaymentSubmit();

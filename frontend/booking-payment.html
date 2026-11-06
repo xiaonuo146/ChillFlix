@@ -1,337 +1,459 @@
-
 <!DOCTYPE html>
 <html lang="vi" data-theme="dark">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bước 3: Xác Nhận & Thanh Toán | ChillFlix</title>
 
-    <title>Thanh toán | ChillFlix</title>
-
-    <!-- CSS dùng chung -->
+    <!-- CSS dùng chung Design System -->
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/components.css">
-
-    <!-- CSS đặt phòng -->
     <link rel="stylesheet" href="css/pages/booking.css">
-
-    <!-- CSS trang thanh toán -->
     <link rel="stylesheet" href="css/pages/booking-payment.css">
 </head>
 
 <body>
 
-    <!-- HEADER -->
-    <header class="booking-header">
+    <!-- ==================== 1. HEADER DÙNG CHUNG ĐỒNG BỘ 100% ==================== -->
+    <header class="header">
+        <div class="container header__container">
+            <button id="mobileMenuBtn" class="hamburger-btn" aria-label="Mở menu">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
 
-        <a href="../index.html" class="booking-logo">
-            ChillFlix
-        </a>
+            <a href="index.html" class="header__logo">
+                <span class="logo__icon">🎬</span>
+                <div class="logo__text-group">
+                    <span class="logo__brand">ChillFlix</span>
+                    <span class="logo__sub">CINEMA LOUNGE</span>
+                </div>
+            </a>
 
-        <a href="booking-food.html" class="booking-back">
-            ← Quay lại chọn món
-        </a>
+            <nav class="header__nav">
+                <a href="index.html" class="nav__link">Trang chủ</a>
+                <a href="explore.html" class="nav__link">Khám phá phim</a>
+                <a href="booking-food.html" class="nav__link">Đồ ăn & Uống</a>
+                <a href="booking.html" class="btn-booking-pill">Đặt phòng</a>
+            </nav>
 
+            <div class="header__actions">
+                <button id="themeToggle" class="action-btn" title="Chuyển chế độ Sáng / Tối">
+                    <span id="themeIcon">🌙</span>
+                </button>
+                <button id="langToggle" class="action-btn lang-btn">
+                    <span class="lang-text"><strong>VI</strong> / EN</span>
+                </button>
+                <a href="booking-food.html" class="action-btn cart-btn">
+                    <span class="cart__icon">🍿</span>
+                    <span class="cart__badge" id="cartBadgeCount">0</span>
+                </a>
+                <div class="user-dropdown-wrapper">
+                    <button id="userMenuBtn" class="avatar-btn" aria-expanded="false">
+                        <span class="avatar-circle">👤</span>
+                        <span class="avatar-arrow">▾</span>
+                    </button>
+                    <div id="userDropdown" class="user-dropdown-menu">
+                        <div class="dropdown__header">
+                            <p class="dropdown__name">Nguyễn Hoàng Nam</p>
+                            <p class="dropdown__rank">Hạng Bạc · 1.240 CinePoint</p>
+                        </div>
+                        <hr class="dropdown__divider" />
+                        <a href="profile.html" class="dropdown__item">Hồ sơ cá nhân</a>
+                        <a href="profile.html#history" class="dropdown__item">Lịch sử xem</a>
+                        <a href="admin/dashboard.html" class="dropdown__item" style="color: var(--primary);">⚙️ Quản trị rạp</a>
+                        <hr class="dropdown__divider" />
+                        <a href="index.html" class="dropdown__item dropdown__item--danger">Đăng xuất</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </header>
 
-    <main class="booking-container">
-
-        <!-- TIÊU ĐỀ -->
-        <div class="booking-heading">
-
-            <p class="booking-eyebrow">
-                CHILLFLIX PRIVATE CINEMA
-            </p>
-
-            <h1>Thanh toán đặt phòng</h1>
-
-            <p>
-                Kiểm tra thông tin và hoàn tất đặt phòng của bạn.
-            </p>
-
+    <!-- MOBILE DRAWER -->
+    <div id="drawerOverlay" class="drawer-overlay"></div>
+    <aside id="mobileDrawer" class="mobile-drawer">
+        <div class="drawer__header">
+            <div class="header__logo"><span class="logo__icon">🎬</span><span class="logo__brand">ChillFlix</span></div>
+            <button id="drawerCloseBtn" class="drawer-close-btn">✕</button>
         </div>
-
-        <!-- THANH TIẾN TRÌNH -->
-        <nav class="booking-steps" aria-label="Các bước đặt phòng">
-
-            <span class="booking-step">
-                1. Chọn phòng
-            </span>
-
-            <span class="booking-step">
-                2. Đồ ăn & nước
-            </span>
-
-            <span class="booking-step active">
-                3. Thanh toán
-            </span>
-
-            <span class="booking-step">
-                4. Nhận vé
-            </span>
-
+        <nav class="drawer__nav">
+            <a href="index.html" class="drawer__link"><span>🏠</span> Trang chủ</a>
+            <a href="explore.html" class="drawer__link"><span>🎞️</span> Khám phá phim</a>
+            <a href="booking-food.html" class="drawer__link"><span>🍿</span> Đồ ăn & Thức uống</a>
+            <a href="booking.html" class="drawer__link drawer__link--highlight"><span>✨</span> Đặt phòng chiếu ngay</a>
         </nav>
+    </aside>
 
-        <!-- BỐ CỤC THANH TOÁN -->
-        <div class="payment-layout">
+    <!-- ==================== 2. THANH TIẾN TRÌNH STEPPER (BƯỚC 3 ACTIVE) ==================== -->
+    <div class="stepper-nav-bar">
+        <div class="container stepper-nav-container">
+            <a href="booking.html" class="step-badge completed" style="text-decoration: none;">
+                <span class="step-circle">✓</span>
+                <div class="step-labels">
+                    <small>BƯỚC 1</small>
+                    <span>Phim & Phòng</span>
+                </div>
+            </a>
+            <div class="step-separator"></div>
+            <a href="booking-food.html" class="step-badge completed" style="text-decoration: none;">
+                <span class="step-circle">✓</span>
+                <div class="step-labels">
+                    <small>BƯỚC 2</small>
+                    <span>Đồ Ăn & Uống</span>
+                </div>
+            </a>
+            <div class="step-separator"></div>
+            <div class="step-badge active">
+                <span class="step-circle">3</span>
+                <div class="step-labels">
+                    <small>BƯỚC 3 · XÁC NHẬN</small>
+                    <strong>Thanh Toán & Giữ Chỗ</strong>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            <!-- CỘT TRÁI -->
-            <section class="payment-main">
+    <!-- ==================== 3. THANH CẢNH BÁO GIỮ CHỖ 10:00 PHÚT ==================== -->
+    <div class="container" style="margin-top: 20px;">
+        <div class="hold-timer-banner">
+            <div class="hold-timer__left">
+                <span class="hold-icon">⏱</span>
+                <div>
+                    <strong>Phòng đang được giữ riêng cho bạn (Tự động hủy khi hết giờ)</strong>
+                    <small style="display: block; opacity: 0.85;">Vui lòng chuyển khoản đúng số tiền để hệ thống tự động xuất vé và cấp mã PIN phòng.</small>
+                </div>
+            </div>
+            <div class="hold-timer__countdown">
+                <span>THỜI GIAN CÒN LẠI</span>
+                <strong id="holdCountdownText">10:00</strong>
+            </div>
+        </div>
+    </div>
 
-                <!-- THÔNG TIN KHÁCH HÀNG -->
-                <div class="payment-panel">
+    <!-- ==================== 4. BỐ CỤC 2 CỘT CHUẨN (ÁP DỤNG CẤU TRÚC BƯỚC 1 ĐỂ KHÔNG BỊ RỚT CỘT) ==================== -->
+    <main class="container booking-main-layout" style="padding-top: 24px;">
 
-                    <h2>Thông tin khách hàng</h2>
+        <!-- CỘT TRÁI (CHIẾM 65%): BẮT ĐẦU TỪ TRÊN XUỐNG DƯỚI -->
+        <section class="booking-config-col">
 
-                    <form id="paymentForm">
+            <!-- 1. THÔNG TIN KHÁCH HÀNG NHẬN VÉ -->
+            <div class="booking-card-panel">
+                <div class="panel-head-flex">
+                    <span class="panel-section-title">👤 1. THÔNG TIN KHÁCH HÀNG NHẬN VÉ</span>
+                    <span class="security-chip">Bảo mật SSL 256-bit</span>
+                </div>
 
-                        <label for="customerName">
-                            Họ và tên *
-                        </label>
+                <form id="paymentForm">
+                    <div class="form-row-2col">
+                        <div>
+                            <label class="compact-label" for="customerName">Họ và tên người nhận vé *</label>
+                            <input
+                                type="text"
+                                id="customerName"
+                                class="compact-input"
+                                placeholder="Nhập họ và tên đầy đủ"
+                                autocomplete="name"
+                                required
+                            >
+                        </div>
+                        <div>
+                            <label class="compact-label" for="customerPhone">Số điện thoại nhận mã PIN phòng *</label>
+                            <input
+                                type="tel"
+                                id="customerPhone"
+                                class="compact-input"
+                                placeholder="Ví dụ: 0988234567"
+                                autocomplete="tel"
+                                pattern="0[0-9]{9}"
+                                title="Nhập 10 chữ số, bắt đầu bằng số 0"
+                                required
+                            >
+                        </div>
+                    </div>
 
-                        <input
-                            type="text"
-                            id="customerName"
-                            name="customerName"
-                            placeholder="Nhập họ và tên"
-                            autocomplete="name"
-                            required
-                        >
-
-                        <label for="customerPhone">
-                            Số điện thoại *
-                        </label>
-
-                        <input
-                            type="tel"
-                            id="customerPhone"
-                            name="customerPhone"
-                            placeholder="Nhập số điện thoại"
-                            autocomplete="tel"
-                            pattern="0[0-9]{9}"
-                            title="Nhập 10 chữ số, bắt đầu bằng số 0"
-                            required
-                        >
-
-                        <label for="customerEmail">
-                            Email *
-                        </label>
-
+                    <div style="margin-top: 14px;">
+                        <label class="compact-label" for="customerEmail">Địa chỉ Email nhận vé điện tử &amp; hóa đơn *</label>
                         <input
                             type="email"
                             id="customerEmail"
-                            name="customerEmail"
-                            placeholder="Nhập email nhận vé"
+                            class="compact-input"
+                            placeholder="name@example.com"
                             autocomplete="email"
                             required
                         >
+                    </div>
 
-                    </form>
-
-                </div>
-
-                <!-- MÃ GIẢM GIÁ -->
-                <div class="payment-panel">
-
-                    <h2>Mã giảm giá</h2>
-
-                    <div class="voucher-input-group">
-
+                    <div style="margin-top: 14px;">
+                        <label class="compact-label" for="customerRoomNote">Ghi chú hỗ trợ riêng (Setup phòng, kỷ niệm, điều hòa...)</label>
                         <input
                             type="text"
-                            id="voucherCode"
-                            placeholder="Nhập mã giảm giá"
-                            autocomplete="off"
+                            id="customerRoomNote"
+                            class="compact-input"
+                            placeholder="Ví dụ: Set điều hòa 24 độ, chuẩn bị thêm 1 ly nước ấm..."
                         >
-
-                        <button
-                            type="button"
-                            id="applyVoucher"
-                        >
-                            Áp dụng
-                        </button>
-
                     </div>
+                </form>
+            </div>
 
-                    <p
-                        id="voucherMessage"
-                        class="payment-note"
-                        aria-live="polite"
+            <!-- 2. MÃ GIẢM GIÁ & ƯU ĐÃI VIP -->
+            <div class="booking-card-panel">
+                <div class="panel-head-flex">
+                    <span class="panel-section-title">🏷 2. MÃ GIẢM GIÁ &amp; ƯU ĐÃI VIP</span>
+                </div>
+
+                <div class="voucher-input-group">
+                    <input
+                        type="text"
+                        id="voucherCode"
+                        class="compact-input"
+                        placeholder="Nhập mã voucher (VD: PHIM20)"
+                        autocomplete="off"
                     >
-                        Nhập mã khuyến mãi nếu bạn có.
-                    </p>
-
-                    <p class="payment-note">
-                        Mã thử nghiệm: PHIM20 – Giảm 20%.
-                    </p>
-
+                    <button
+                        type="button"
+                        id="applyVoucher"
+                        class="btn btn--primary btn-apply-voucher"
+                    >
+                        Áp dụng
+                    </button>
                 </div>
 
-                <!-- PHƯƠNG THỨC THANH TOÁN -->
-                <div class="payment-panel">
+                <!-- Thẻ hiển thị mã đã áp dụng thành công -->
+                <div id="appliedVoucherTag" class="voucher-applied-pill" style="display: none;">
+                    <span>✓ <strong id="appliedCodeText">PHIM20</strong> · Giảm 20% tiền phòng (-<span id="appliedDiscountAmount">0đ</span>)</span>
+                    <button type="button" id="removeVoucherBtn" class="btn-remove-voucher" title="Hủy mã">✕</button>
+                </div>
 
-                    <h2>Phương thức thanh toán</h2>
+                <p id="voucherMessage" class="payment-note" aria-live="polite">
+                    Mã ưu đãi rạp: Nhập <strong>PHIM20</strong> giảm ngay 20% tiền phòng cho thành viên.
+                </p>
+            </div>
 
-                    <div class="payment-methods">
+            <!-- 3. THANH TOÁN VIETQR 24/7 DUY NHẤT (ĐÃ BỎ MOMO VÀ VNPAY) -->
+            <div class="booking-card-panel">
+                <div class="panel-head-flex">
+                    <span class="panel-section-title">💳 3. THANH TOÁN CHUYỂN KHOẢN VIETQR 24/7</span>
+                    <span class="recommend-tag">Tự động duyệt 30s</span>
+                </div>
 
-                        <label class="payment-method">
+                <!-- KHUNG MÃ QR NGÂN HÀNG THẬT 100% -->
+                <div class="payment-qr-interactive-card">
+                    <div class="qr-payment-body">
+                        <!-- Ảnh mã QR ngân hàng thật -->
+                        <div class="qr-visual-box">
+                            <img id="dynamicPaymentQrImg" src="" alt="Mã QR thanh toán ngân hàng" class="qr-image-render" />
+                            <small>Mở App Ngân hàng bất kỳ để quét</small>
+                        </div>
 
-                            <input
-                                type="radio"
-                                name="paymentMethod"
-                                value="momo"
-                                checked
-                            >
+                        <!-- Thông tin chuyển khoản chi tiết kèm nút Copy -->
+                        <div class="qr-transfer-details">
+                            <div class="transfer-info-row">
+                                <span>Ngân hàng thụ hưởng:</span>
+                                <strong>MB Bank (Ngân hàng Quân Đội)</strong>
+                            </div>
 
-                            <span>
-                                <strong>MoMo</strong>
-                                <small>Ví điện tử MoMo</small>
-                            </span>
+                            <div class="transfer-info-row">
+                                <span>Số tài khoản:</span>
+                                <div class="copy-val-group">
+                                    <strong id="qrAccountNumber">0988234567</strong>
+                                    <button type="button" class="btn-copy-chip" data-copy="0988234567">📋 Copy</button>
+                                </div>
+                            </div>
 
-                        </label>
+                            <div class="transfer-info-row">
+                                <span>Chủ tài khoản:</span>
+                                <strong>CHILLFLIX CINEMA LOUNGE</strong>
+                            </div>
 
-                        <label class="payment-method">
+                            <div class="transfer-info-row highlight-amount">
+                                <span>Số tiền chuyển khoản:</span>
+                                <strong id="qrPaymentAmount">0đ</strong>
+                            </div>
 
-                            <input
-                                type="radio"
-                                name="paymentMethod"
-                                value="vnpay"
-                            >
+                            <div class="transfer-info-row">
+                                <span>Nội dung chuyển khoản:</span>
+                                <div class="copy-val-group">
+                                    <strong id="qrTransferContent" style="color: var(--primary);">CF8K2M4Q</strong>
+                                    <button type="button" class="btn-copy-chip" id="btnCopyTransferContent">📋 Copy</button>
+                                </div>
+                            </div>
 
-                            <span>
-                                <strong>VNPay</strong>
-                                <small>Thanh toán qua VNPay</small>
-                            </span>
-
-                        </label>
-
-                        <label class="payment-method">
-
-                            <input
-                                type="radio"
-                                name="paymentMethod"
-                                value="vietqr"
-                            >
-
-                            <span>
-                                <strong>VietQR</strong>
-                                <small>Chuyển khoản ngân hàng bằng QR</small>
-                            </span>
-
-                        </label>
-
+                            <p class="qr-instruction-note">
+                                ⚠️ Vui lòng giữ nguyên <strong>Nội dung chuyển khoản</strong> để hệ thống tự động xuất vé và gửi mã PIN mở phòng ngay lập tức.
+                            </p>
+                        </div>
                     </div>
-
-                    <p class="payment-note">
-                        Đây là giao diện thanh toán mẫu.
-                        Chưa kết nối cổng thanh toán thực tế.
-                    </p>
-
                 </div>
 
-            </section>
+                <!-- Checkbox điều khoản -->
+                <div class="terms-agreement-box" style="margin-top: 18px;">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="termsAgreeCheckbox" checked required />
+                        <span>Tôi xác nhận thông tin đặt phòng là chính xác và đồng ý với <a href="privacy-policy.html" target="_blank" style="color: var(--primary);">Quy định &amp; Chính sách hủy phòng</a> của rạp ChillFlix.</span>
+                    </label>
+                </div>
+            </div>
 
-            <!-- CỘT PHẢI: CHI TIẾT ĐƠN HÀNG -->
-            <aside class="payment-summary">
+        </section>
 
-                <h2>Chi tiết đơn đặt phòng</h2>
-
-                <!-- PHIM -->
-                <div class="payment-summary-row">
-                    <span>Phim</span>
-                    <strong id="paymentMovie">--</strong>
+        <!-- CỘT PHẢI (CHIẾM 35%): TÓM TẮT ĐẶT PHÒNG BẮT ĐẦU NGAY TỪ TRÊN CÙNG -->
+        <aside class="booking-summary-col">
+            <div class="summary-floating-card">
+                <div class="summary-card-header">
+                    <h3>Tóm Tắt Đơn Đặt Phòng</h3>
+                    <span id="summaryBookingCode" class="booking-temp-code">#CN-8892</span>
                 </div>
 
-                <!-- NGÀY CHIẾU -->
-                <div class="payment-summary-row">
-                    <span>Ngày chiếu</span>
-                    <strong id="paymentDate">--</strong>
+                <div class="summary-row-item">
+                    <span class="row-label">Phim:</span>
+                    <strong class="row-val" id="paymentMovie">--</strong>
                 </div>
 
-                <!-- LOẠI PHÒNG -->
-                <div class="payment-summary-row">
-                    <span>Loại phòng</span>
-                    <strong id="paymentRoom">--</strong>
+                <div class="summary-row-item">
+                    <span class="row-label">Ngày chiếu:</span>
+                    <strong class="row-val" id="paymentDate">--</strong>
                 </div>
 
-                <!-- GIỜ BẮT ĐẦU -->
-                <div class="payment-summary-row">
-                    <span>Giờ bắt đầu</span>
-                    <strong id="paymentTime">--</strong>
+                <div class="summary-row-item">
+                    <span class="row-label">Phòng chiếu:</span>
+                    <strong class="row-val" id="paymentRoom">--</strong>
                 </div>
 
-                <!-- THỜI LƯỢNG -->
-                <div class="payment-summary-row">
-                    <span>Thời lượng</span>
-                    <strong id="paymentDuration">--</strong>
+                <div class="summary-row-item">
+                    <span class="row-label">Khung giờ xem:</span>
+                    <strong class="row-val" id="paymentTime">--</strong>
                 </div>
 
-                <hr class="payment-divider">
-
-                <!-- DANH SÁCH ĐỒ ĂN -->
-                <h3>Đồ ăn & nước uống</h3>
-
-                <div id="paymentFoodList">
-                    <p class="payment-note">
-                        Chưa có món nào.
-                    </p>
+                <div class="summary-row-item">
+                    <span class="row-label">Thời lượng:</span>
+                    <strong class="row-val" id="paymentDuration">--</strong>
                 </div>
 
-                <hr class="payment-divider">
+                <div class="summary-line-divider"></div>
 
-                <!-- TIỀN PHÒNG -->
-                <div class="payment-summary-row">
-                    <span>Tiền phòng</span>
-                    <strong id="paymentRoomTotal">0đ</strong>
+                <!-- DANH SÁCH ĐỒ ĂN F&B -->
+                <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px;">
+                    <h4 style="font-size: 14px; color: var(--text); margin: 0;">Ẩm thực phục vụ tại phòng</h4>
+                    <span id="paymentFoodCount" style="font-size: 12px; color: var(--text-muted);">0 món</span>
                 </div>
 
-                <!-- TIỀN ĐỒ ĂN -->
-                <div class="payment-summary-row">
-                    <span>Tiền đồ ăn</span>
-                    <strong id="paymentFoodTotal">0đ</strong>
+                <div id="paymentFoodList" class="payment-food-scroll-box">
+                    <p class="payment-note">Không gọi đồ ăn.</p>
                 </div>
 
-                <!-- GIẢM GIÁ -->
-                <div class="payment-summary-row">
-                    <span>Giảm giá</span>
-                    <strong id="paymentDiscount">0đ</strong>
+                <div class="summary-line-divider"></div>
+
+                <!-- BẢNG TÍNH TIỀN -->
+                <div class="summary-row-item">
+                    <span class="row-label">Tiền phòng:</span>
+                    <strong class="row-val" id="paymentRoomTotal">0đ</strong>
                 </div>
 
-                <hr class="payment-divider">
-
-                <!-- TỔNG TIỀN -->
-                <div class="payment-total">
-                    <span>Tổng thanh toán</span>
-                    <strong id="paymentGrandTotal">0đ</strong>
+                <div class="summary-row-item">
+                    <span class="row-label">Ẩm thực &amp; Đồ uống:</span>
+                    <strong class="row-val" id="paymentFoodTotal">0đ</strong>
                 </div>
 
-                <!-- XÁC NHẬN -->
+                <div class="summary-row-item">
+                    <span class="row-label">Phí dịch vụ phòng riêng:</span>
+                    <strong class="row-val" style="color: var(--success);">Miễn phí (0đ)</strong>
+                </div>
+
+                <div class="summary-row-item saving-line" id="discountSummaryRow" style="display: none;">
+                    <span class="row-label">Ưu đãi voucher (<span id="discountCodeName">PHIM20</span>):</span>
+                    <strong class="row-val" id="paymentDiscount" style="color: var(--success);">-0đ</strong>
+                </div>
+
+                <div class="summary-grand-total-block">
+                    <div class="grand-label">TỔNG THANH TOÁN:</div>
+                    <div class="grand-amount" id="paymentGrandTotal">0đ</div>
+                    <small class="fnb-notice">Đã bao gồm 8% VAT</small>
+                </div>
+
+                <!-- Thông báo tích điểm CinePoint -->
+                <div class="cinepoint-reward-pill">
+                    <span>🎁 Bạn sẽ tích lũy <strong id="rewardPoints">+0 điểm</strong> CinePoint sau khi xem xong.</span>
+                </div>
+
+                <!-- NÚT XÁC NHẬN THANH TOÁN -->
                 <button
                     type="submit"
                     form="paymentForm"
                     id="confirmPayment"
-                    class="payment-confirm"
+                    class="btn btn--primary btn-submit-step"
                 >
-                    Xác nhận đặt phòng →
+                    Xác Nhận &amp; Nhận Vé ➔
                 </button>
 
-                <p class="payment-note">
-                    Đây là thao tác xác nhận mẫu.
-                    Chưa giữ phòng hoặc thanh toán thực tế.
-                </p>
-
-            </aside>
-
-        </div>
+                <div class="payment-security-footer">
+                    <span>🔒 Bảo mật chuẩn PCI-DSS &amp; mã hóa 256-bit</span>
+                    <small>Cần hỗ trợ gấp? Hotline: <strong>1900 6828</strong></small>
+                </div>
+            </div>
+        </aside>
 
     </main>
 
-    <!-- JAVASCRIPT TRANG THANH TOÁN -->
-    <script
-        type="module"
-        src="js/pages/bookingPayment.js">
-    </script>
+    <!-- ==================== 5. FOOTER 4 CỘT ĐỒNG BỘ 100% ==================== -->
+    <footer style="background: var(--surface); border-top: 1px solid var(--border); padding: 48px 0 24px; margin-top: 60px;">
+        <div class="container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 36px; margin-bottom: 36px;">
+            <div>
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 14px;">
+                    <span style="font-size: 26px;">🎬</span>
+                    <div style="display: flex; align-items: baseline; gap: 6px;">
+                        <span style="font-family: var(--font-serif); font-size: 22px; font-weight: 700; color: var(--primary);">ChillFlix</span>
+                        <span style="font-size: 11px; font-weight: 600; letter-spacing: 1px; color: var(--text-muted);">CINEMA LOUNGE</span>
+                    </div>
+                </div>
+                <p style="font-size: 13.5px; color: var(--text-muted); line-height: 1.6; margin-bottom: 12px;">
+                    Không gian thưởng thức điện ảnh tư nhân kết hợp cafe lãng mạn cao cấp chuẩn rạp 4K Dolby Atmos.
+                </p>
+                <p style="font-size: 12.5px; color: var(--text-muted); display: flex; align-items: center; gap: 6px;">
+                    <span>🕒</span> Mở cửa: <strong>09:00 – 23:00</strong> (Hàng ngày)
+                </p>
+            </div>
 
+            <div>
+                <h4 style="font-size: 14.5px; font-weight: 700; color: var(--text); margin-bottom: 14px; text-transform: uppercase;">Liên hệ & Địa chỉ</h4>
+                <p style="font-size: 13px; color: var(--text-muted); line-height: 1.9; margin: 0;">
+                    📍 124 Hoàng Cầu, Q. Đống Đa, Hà Nội<br>
+                    📞 Hotline: <a href="tel:19006828" style="color: var(--text); text-decoration: none;"><strong>1900 6828</strong></a> - 0988 234 567<br>
+                    ✉️ <a href="mailto:booking@chillflix.vn" style="color: var(--primary); text-decoration: none;">booking@chillflix.vn</a>
+                </p>
+            </div>
+
+            <div>
+                <h4 style="font-size: 14.5px; font-weight: 700; color: var(--text); margin-bottom: 14px; text-transform: uppercase;">Chính sách & Hỗ trợ</h4>
+                <ul style="list-style: none; padding: 0; margin: 0; font-size: 13px; line-height: 2.1;">
+                    <li><a href="privacy-policy.html" style="color: var(--text-muted); text-decoration: none;">Chính sách bảo mật thông tin</a></li>
+                    <li><a href="privacy-policy.html#cancel" style="color: var(--text-muted); text-decoration: none;">Quy định & Hủy đổi phòng</a></li>
+                    <li><a href="profile.html#vouchers" style="color: var(--text-muted); text-decoration: none;">Hướng dẫn thanh toán & Voucher</a></li>
+                    <li><a href="admin/dashboard.html" style="color: var(--primary); font-weight: 600; text-decoration: none;">⚙️ Cổng Quản trị viên (Admin)</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 style="font-size: 14.5px; font-weight: 700; color: var(--text); margin-bottom: 14px; text-transform: uppercase;">Chứng nhận Điện ảnh</h4>
+                <div style="background: var(--surface-2); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+                    <div style="display: inline-block; background: var(--primary); color: var(--on-primary); font-size: 10.5px; font-weight: 800; padding: 2px 6px; border-radius: 4px; margin-bottom: 6px;">TMDB API</div>
+                    <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5; margin: 0;">
+                        This product uses the TMDB API but is not endorsed or certified by TMDB.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="container" style="border-top: 1px solid var(--border); padding-top: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 12.5px; color: var(--text-muted);">
+            <div>© 2026 ChillFlix Private Cinema Lounge. All rights reserved.</div>
+            <div>Hệ thống phòng chiếu phim cafe riêng tư chuẩn 5 sao</div>
+        </div>
+    </footer>
+
+    <script type="module" src="js/pages/bookingPayment.js"></script>
 </body>
+
 </html>
