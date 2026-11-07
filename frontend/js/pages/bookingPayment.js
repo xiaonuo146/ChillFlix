@@ -1,8 +1,7 @@
 /* ==========================================================================
-   CHILLFLIX - BƯỚC 3: XÁC NHẬN & THANH TOÁN VIETQR (ĐÃ FIX CHUẨN)
+   CHILLFLIX - BƯỚC 3: THANH TOÁN (ĐẦY ĐỦ 3 VOUCHER + GIẢM GIÁ HẠNG VIP)
    ========================================================================== */
 
-// 1. ĐỌC DỮ LIỆU ĐẶT PHÒNG TỪ SESSIONSTORAGE
 let bookingData = null;
 try {
     const saved = sessionStorage.getItem("chillflixBooking");
@@ -11,9 +10,8 @@ try {
     console.error("Lỗi đọc dữ liệu đặt phòng:", error);
 }
 
-// 2. CÁC HÀM TIỆN ÍCH DÙNG CHUNG
 function formatMoney(amount) {
-    return new Intl.NumberFormat("vi-VN").format(Number(amount) || 0) + "đ";
+    return new Intl.NumberFormat("vi-VN").format(Math.max(0, Math.round(Number(amount) || 0))) + "đ";
 }
 
 function formatDuration(hours) {
@@ -28,16 +26,55 @@ function setText(id, value) {
     if (el) el.textContent = value;
 }
 
-// 3. KHỞI TẠO TIỀN BẠC
+// 1. TÍNH TIỀN GỐC
 const roomTotal = Number(bookingData?.roomTotal) || 0;
 const foods = Array.isArray(bookingData?.foods) ? bookingData.foods : [];
 const foodTotal = foods.reduce((sum, item) => sum + (Number(item.price) || 0) * (Number(item.quantity) || 0), 0);
 const originalTotal = roomTotal + foodTotal;
 
-let discount = 0;
+let voucherDiscount = 0;
 let appliedVoucher = "";
+let tierDiscount = 0;
+let userTierName = "";
 
-// 4. HIỂN THỊ DỮ LIỆU TÓM TẮT ĐƠN HÀNG
+// 2. TÍNH ƯU ĐÃI TỰ ĐỘNG THEO HẠNG THÀNH VIÊN (SILVER / GOLD / DIAMOND)
+function calculateTierDiscount() {
+    let userPoints = 1240; // Mặc định demo Hạng Bạc
+    try {
+        const rawUser = localStorage.getItem("chillflix_user");
+        if (rawUser) {
+            const u = JSON.parse(rawUser);
+            userPoints = Number(u.points) ?? 1240;
+        }
+    } catch (e) {}
+
+    if (userPoints >= 3000) {
+        userTierName = "Hạng Kim Cương (-20% Phòng)";
+        tierDiscount = Math.round(roomTotal * 0.20);
+    } else if (userPoints >= 1500) {
+        userTierName = "Hạng Vàng (-10% Phòng)";
+        tierDiscount = Math.round(roomTotal * 0.10);
+    } else if (userPoints >= 500) {
+        userTierName = "Hạng Bạc (-5% F&B)";
+        tierDiscount = Math.round(foodTotal * 0.05);
+    } else {
+        userTierName = "";
+        tierDiscount = 0;
+    }
+
+    const tierRow = document.getElementById("tierDiscountRow");
+    if (tierRow) {
+        if (tierDiscount > 0) {
+            tierRow.style.display = "flex";
+            setText("tierNameLabel", userTierName);
+            setText("tierDiscountAmount", `-${formatMoney(tierDiscount)}`);
+        } else {
+            tierRow.style.display = "none";
+        }
+    }
+}
+
+// 3. HIỂN THỊ DỮ LIỆU ĐƠN HÀNG
 function renderBooking() {
     if (!bookingData || !bookingData.date || !bookingData.startTime) {
         alert("Chưa có thông tin đặt phòng hợp lệ.\nVui lòng quay lại Bước 1 chọn phòng chiếu.");
@@ -45,27 +82,22 @@ function renderBooking() {
         return;
     }
 
-    // Hiển thị mã đơn tạm thời
     const tempCode = bookingData.ticketCode || "CF" + Date.now().toString().slice(-6);
     bookingData.ticketCode = tempCode;
     setText("summaryBookingCode", "#" + tempCode);
 
-    // Thông tin phòng chiếu
     setText("paymentMovie", bookingData.movieTitle || "Phim chiếu rạp");
     setText("paymentDate", bookingData.date || "--");
     setText("paymentRoom", bookingData.roomName || "Phòng riêng");
     setText("paymentTime", `${bookingData.startTime} (${formatDuration(bookingData.duration || 2)})`);
     setText("paymentDuration", formatDuration(bookingData.duration || 2));
 
-    // Tiền phòng & đồ ăn
     setText("paymentRoomTotal", formatMoney(roomTotal));
     setText("paymentFoodTotal", formatMoney(foodTotal));
     setText("paymentFoodCount", `${foods.reduce((sum, i) => sum + i.quantity, 0)} món`);
 
-    // Danh sách đồ ăn F&B
     renderFoodList();
-
-    // Cập nhật tổng tiền & điểm thưởng & Mã QR VietQR
+    calculateTierDiscount();
     updateTotal();
     updatePaymentQrDisplay();
 }
@@ -92,19 +124,18 @@ function renderFoodList() {
 }
 
 function updateTotal() {
-    const finalTotal = Math.max(0, originalTotal - discount);
+    const finalTotal = Math.max(0, originalTotal - tierDiscount - voucherDiscount);
 
-    setText("paymentDiscount", `-${formatMoney(discount)}`);
+    setText("paymentDiscount", `-${formatMoney(voucherDiscount)}`);
     setText("paymentGrandTotal", formatMoney(finalTotal));
 
-    // Tích lũy điểm CinePoint: 10.000đ = 1 điểm CinePoint
     const earnedPoints = Math.floor(finalTotal / 10000);
     setText("rewardPoints", `+${earnedPoints} điểm`);
 
     return finalTotal;
 }
 
-// 5. CẬP NHẬT MÃ VIETQR NGÂN HÀNG THẬT VỚI ĐÚNG SỐ TIỀN
+// 4. CẬP NHẬT MÃ VIETQR NGÂN HÀNG THẬT
 function updatePaymentQrDisplay() {
     const finalAmount = updateTotal();
     const qrImg = document.getElementById("dynamicPaymentQrImg");
@@ -117,40 +148,15 @@ function updatePaymentQrDisplay() {
     if (contentEl) contentEl.textContent = orderCode;
 
     if (qrImg) {
-        // Sinh link VietQR NAPAS thật của ngân hàng MB Bank
         const vietQrUrl = `https://img.vietqr.io/image/MB-0988234567-compact2.png?amount=${finalAmount}&addInfo=${encodeURIComponent(orderCode)}&accountName=CHILLFLIX%20CINEMA%20LOUNGE`;
         qrImg.src = vietQrUrl;
-
-        // Cơ chế dự phòng nếu mất kết nối
         qrImg.onerror = () => {
             qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(`VIETQR|MB|0988234567|${finalAmount}|${orderCode}`)}`;
         };
     }
 }
 
-// 6. BỘ ĐẾM NGƯỢC GIỮ PHÒNG 10 PHÚT (COUNTDOWN TIMER)
-function startHoldCountdown() {
-    const timerDisplay = document.getElementById("holdCountdownText");
-    if (!timerDisplay) return;
-
-    let timeLeft = 10 * 60;
-
-    const timer = setInterval(() => {
-        const mins = Math.floor(timeLeft / 60);
-        const secs = timeLeft % 60;
-        timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-
-        if (timeLeft <= 0) {
-            clearInterval(timer);
-            alert("⏰ Hết thời gian giữ chỗ 10 phút! Khung giờ này đã được nhả cho khách khác.\nVui lòng chọn lại suất chiếu.");
-            sessionStorage.removeItem("chillflixBooking");
-            window.location.href = "booking.html";
-        }
-        timeLeft--;
-    }, 1000);
-}
-
-// 7. XỬ LÝ MÃ GIẢM GIÁ VOUCHER (GIẢM 20% TIỀN PHÒNG)
+// 5. XỬ LÝ CẢ 3 MÃ VOUCHER (PHIM20, CHILL10, FNBCOUPLE) CÓ KIỂM TRA ĐIỀU KIỆN THẬT
 function initVoucherEvents() {
     const voucherInput = document.getElementById("voucherCode");
     const applyBtn = document.getElementById("applyVoucher");
@@ -161,34 +167,63 @@ function initVoucherEvents() {
 
     applyBtn?.addEventListener("click", () => {
         const code = (voucherInput.value || "").trim().toUpperCase();
+        let successMsg = "";
+        let errorMsg = "";
 
         if (code === "PHIM20") {
-            discount = Math.round(roomTotal * 0.2);
+            // Mã 1: Giảm 20% tiền phòng
+            voucherDiscount = Math.round(roomTotal * 0.20);
             appliedVoucher = "PHIM20";
+            successMsg = "Áp dụng thành công PHIM20: Giảm 20% tiền phòng!";
+        } 
+        else if (code === "CHILL10") {
+            // Mã 2: Kiểm tra giờ chiếu sau 21:00
+            const startHour = parseInt((bookingData.startTime || "18:00").split(":")[0], 10);
+            if (startHour >= 21) {
+                voucherDiscount = Math.round(originalTotal * 0.10);
+                appliedVoucher = "CHILL10";
+                successMsg = "Áp dụng thành công CHILL10: Giảm 10% tổng đơn suất đêm!";
+            } else {
+                errorMsg = "❌ Mã CHILL10 chỉ áp dụng cho suất chiếu đêm từ 21:00 trở đi!";
+            }
+        } 
+        else if (code === "FNBCOUPLE") {
+            // Mã 3: Kiểm tra phòng Couple
+            const isCouple = (bookingData.roomType || "").includes("couple");
+            if (isCouple) {
+                voucherDiscount = 45000;
+                appliedVoucher = "FNBCOUPLE";
+                successMsg = "Áp dụng thành công FNBCOUPLE: Giảm ngay 45.000đ (Tặng bắp caramel)!";
+            } else {
+                errorMsg = "❌ Mã FNBCOUPLE chỉ áp dụng khi đặt Phòng Couple!";
+            }
+        } 
+        else {
+            errorMsg = code ? "❌ Mã giảm giá không tồn tại hoặc đã hết hạn." : "Vui lòng nhập mã giảm giá.";
+        }
 
+        if (appliedVoucher && !errorMsg) {
             if (tagBox) {
                 tagBox.style.display = "flex";
-                setText("appliedCodeText", "PHIM20");
-                setText("appliedDiscountAmount", formatMoney(discount));
+                setText("appliedCodeText", appliedVoucher);
+                setText("appliedDiscountAmount", formatMoney(voucherDiscount));
             }
             if (discountRow) {
                 discountRow.style.display = "flex";
-                setText("discountCodeName", "PHIM20");
+                setText("discountCodeName", appliedVoucher);
             }
             if (voucherMsg) {
-                voucherMsg.textContent = "Áp dụng thành công mã PHIM20: Giảm 20% tiền phòng!";
+                voucherMsg.textContent = successMsg;
                 voucherMsg.style.color = "var(--success)";
             }
             voucherInput.disabled = true;
             applyBtn.disabled = true;
-
-            // Cập nhật lại số tiền trên mã QR ngay lập tức
             updatePaymentQrDisplay();
         } else {
-            discount = 0;
+            voucherDiscount = 0;
             appliedVoucher = "";
             if (voucherMsg) {
-                voucherMsg.textContent = code ? "Mã giảm giá không hợp lệ hoặc đã hết lượt dùng." : "Vui lòng nhập mã giảm giá.";
+                voucherMsg.textContent = errorMsg;
                 voucherMsg.style.color = "var(--danger)";
             }
         }
@@ -196,7 +231,7 @@ function initVoucherEvents() {
     });
 
     removeBtn?.addEventListener("click", () => {
-        discount = 0;
+        voucherDiscount = 0;
         appliedVoucher = "";
         voucherInput.disabled = false;
         applyBtn.disabled = false;
@@ -212,22 +247,40 @@ function initVoucherEvents() {
     });
 }
 
-// 8. SỰ KIỆN SAO CHÉP STK & NỘI DUNG CHUYỂN KHOẢN
+// 6. ĐẾM NGƯỢC 10 PHÚT
+function startHoldCountdown() {
+    const timerDisplay = document.getElementById("holdCountdownText");
+    if (!timerDisplay) return;
+    let timeLeft = 10 * 60;
+    const timer = setInterval(() => {
+        const mins = Math.floor(timeLeft / 60);
+        const secs = timeLeft % 60;
+        timerDisplay.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        if (timeLeft <= 0) {
+            clearInterval(timer);
+            alert("⏰ Hết thời gian giữ chỗ 10 phút! Vui lòng đặt lại.");
+            window.location.href = "booking.html";
+        }
+        timeLeft--;
+    }, 1000);
+}
+
+// 7. SAO CHÉP STK & NỘI DUNG
 function initCopyEvents() {
     document.querySelectorAll(".btn-copy-chip").forEach(btn => {
         btn.addEventListener("click", () => {
             const textToCopy = btn.dataset.copy || document.getElementById("qrTransferContent")?.textContent;
             if (textToCopy) {
                 navigator.clipboard.writeText(textToCopy);
-                const originalText = btn.textContent;
+                const orig = btn.textContent;
                 btn.textContent = "✓ Đã copy";
-                setTimeout(() => { btn.textContent = originalText; }, 2000);
+                setTimeout(() => { btn.textContent = orig; }, 2000);
             }
         });
     });
 }
 
-// 9. XÁC NHẬN VÀ LƯU DỮ LIỆU ĐỂ CHUYỂN SANG BƯỚC 4
+// 8. XÁC NHẬN THANH TOÁN -> LƯU VÀO MẢNG LỊCH SỬ LOCALSTORAGE (KHÔNG BỊ GHI ĐÈ)
 function initPaymentSubmit() {
     const form = document.getElementById("paymentForm");
 
@@ -241,36 +294,45 @@ function initPaymentSubmit() {
 
         const agreeCheck = document.getElementById("termsAgreeCheckbox");
         if (agreeCheck && !agreeCheck.checked) {
-            alert("Vui lòng đồng ý với Quy định & Chính sách hủy phòng trước khi thanh toán!");
+            alert("Vui lòng đồng ý với Quy định & Chính sách hủy phòng!");
             return;
         }
 
         const finalTotal = updateTotal();
         const smartPin = String(Math.floor(1000 + Math.random() * 9000));
 
+        // Trạng thái ban đầu: "pending" (Chờ kiểm tra đã nhận tiền chuyển khoản chưa)
         const finalBooking = {
             ...bookingData,
-            customer: {
-                name: name,
-                phone: phone,
-                email: email,
-                roomNote: roomNote
-            },
+            customer: { name, phone, email, roomNote },
             smartPin: smartPin,
             paymentMethod: "vietqr",
+            paymentStatus: "pending", // <--- CHƯA DUYỆT TIỀN
             voucherCode: appliedVoucher,
-            discount: discount,
+            voucherDiscount: voucherDiscount,
+            tierDiscount: tierDiscount,
             finalTotal: finalTotal,
             earnedPoints: Math.floor(finalTotal / 10000),
             createdAt: new Date().toISOString()
         };
 
+        // 1. Lưu đơn hiện tại để hiển thị ở Bước 4
         sessionStorage.setItem("chillflixBooking", JSON.stringify(finalBooking));
+
+        // 2. Lưu nối tiếp vào MẢNG Lịch Sử trong localStorage (Đặt 3 đơn hiện đủ 3 đơn, 10 đơn hiện đủ 10 đơn!)
+        try {
+            const historyRaw = localStorage.getItem("chillflix_booking_history");
+            const historyList = historyRaw ? JSON.parse(historyRaw) : [];
+            historyList.unshift(finalBooking); // Thêm đơn mới lên đầu
+            localStorage.setItem("chillflix_booking_history", JSON.stringify(historyList));
+        } catch (err) {
+            console.error("Lỗi lưu lịch sử:", err);
+        }
+
         window.location.href = "booking-success.html";
     });
 }
 
-// 10. SỰ KIỆN HEADER CHUNG
 function initHeaderControls() {
     const savedTheme = localStorage.getItem("chillflix-theme") || "dark";
     document.documentElement.setAttribute("data-theme", savedTheme);
@@ -292,25 +354,8 @@ function initHeaderControls() {
         userDropdown?.classList.toggle("show");
     });
     document.addEventListener("click", () => userDropdown?.classList.remove("show"));
-
-    const mobileMenuBtn = document.getElementById("mobileMenuBtn");
-    const drawerCloseBtn = document.getElementById("drawerCloseBtn");
-    const mobileDrawer = document.getElementById("mobileDrawer");
-    const drawerOverlay = document.getElementById("drawerOverlay");
-
-    mobileMenuBtn?.addEventListener("click", () => {
-        mobileDrawer?.classList.add("open");
-        drawerOverlay?.classList.add("open");
-    });
-    const closeDrawer = () => {
-        mobileDrawer?.classList.remove("open");
-        drawerOverlay?.classList.remove("open");
-    };
-    drawerCloseBtn?.addEventListener("click", closeDrawer);
-    drawerOverlay?.addEventListener("click", closeDrawer);
 }
 
-// KHỞI CHẠY TẤT CẢ
 initHeaderControls();
 renderBooking();
 startHoldCountdown();

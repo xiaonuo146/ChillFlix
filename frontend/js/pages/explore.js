@@ -12,10 +12,24 @@ async function initExplorePage() {
   try {
     allMovies = await getTrendingMovies();
     filteredMovies = [...allMovies];
-    renderMovies(filteredMovies);
 
+    // ĐỌC TỪ KHÓA TÌM KIẾM TỪ HEADER TRUYỀN SANG (NẾU CÓ)
+    const urlParams = new URLSearchParams(window.location.search);
+    const query = urlParams.get("q") || "";
+
+    const searchInput = document.getElementById("exploreSearchInput");
+    const clearBtn = document.getElementById("clearSearchBtn");
+
+    if (query && searchInput) {
+        searchInput.value = query;
+        if (clearBtn) clearBtn.style.display = "block";
+    }
+
+    // Lọc phim ngay khi vừa vào trang
     setupSearchEvent();
     setupFilterEvents();
+    applyFilters(); 
+
   } catch (err) {
     console.error("Lỗi khi tải danh sách phim khám phá:", err);
   }

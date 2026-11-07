@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bước 4: Vé Điện Tử & Mã PIN | ChillFlix</title>
 
-    <!-- CSS dùng chung Design System -->
+    <!-- Nạp toàn bộ CSS Design System -->
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/components.css">
@@ -19,7 +19,7 @@
 
 <body>
 
-    <!-- ==================== 1. HEADER DÙNG CHUNG ĐỒNG BỘ ==================== -->
+    <!-- ==================== 1. HEADER DÙNG CHUNG ĐỒNG BỘ 100% ==================== -->
     <header class="header">
         <div class="container header__container">
             <button id="mobileMenuBtn" class="hamburger-btn" aria-label="Mở menu">
@@ -44,16 +44,15 @@
             </nav>
 
             <div class="header__actions">
+                <div class="header__search">
+                    <span class="search__icon">🔍</span>
+                    <input type="text" class="search__input" placeholder="Tìm phim, phòng chiếu..." aria-label="Tìm kiếm phim" />
+                </div>
+
                 <button id="themeToggle" class="action-btn" title="Chuyển chế độ Sáng / Tối">
                     <span id="themeIcon">🌙</span>
                 </button>
-                <button id="langToggle" class="action-btn lang-btn">
-                    <span class="lang-text"><strong>VI</strong> / EN</span>
-                </button>
-                <a href="booking-food.html" class="action-btn cart-btn">
-                    <span class="cart__icon">🍿</span>
-                    <span class="cart__badge" id="cartBadgeCount">0</span>
-                </a>
+
                 <div class="user-dropdown-wrapper">
                     <button id="userMenuBtn" class="avatar-btn" aria-expanded="false">
                         <span class="avatar-circle">👤</span>
@@ -62,14 +61,15 @@
                     <div id="userDropdown" class="user-dropdown-menu">
                         <div class="dropdown__header">
                             <p class="dropdown__name">Nguyễn Hoàng Nam</p>
-                            <p class="dropdown__rank">Hạng Bạc · 1.240 CinePoint</p>
+                            <p class="dropdown__rank">Hạng Bạc · 1.379 CinePoint</p>
                         </div>
                         <hr class="dropdown__divider" />
                         <a href="profile.html" class="dropdown__item">Hồ sơ cá nhân</a>
-                        <a href="profile.html#history" class="dropdown__item">Lịch sử xem</a>
+                        <a href="profile.html#history" class="dropdown__item">Lịch sử xem phim</a>
+                        <a href="profile.html#vouchers" class="dropdown__item">Ví Voucher của tôi (3)</a>
                         <a href="admin/dashboard.html" class="dropdown__item" style="color: var(--primary);">⚙️ Quản trị rạp</a>
                         <hr class="dropdown__divider" />
-                        <a href="index.html" class="dropdown__item dropdown__item--danger">Đăng xuất</a>
+                        <a href="index.html" id="btnLogout" class="dropdown__item dropdown__item--danger">Đăng xuất</a>
                     </div>
                 </div>
             </div>
@@ -128,51 +128,38 @@
         </div>
     </div>
 
-  <!-- ==================== 3. NỘI DUNG VÉ LIỀN KHỐI (MÃ ĐƠN NẰM TRONG VÉ) ==================== -->
+    <!-- ==================== 3. NỘI DUNG TẤM VÉ LIỀN KHỐI ==================== -->
     <main class="container success-main-layout">
         
-        <!-- TIÊU ĐỀ THÀNH CÔNG GỌN GÀNG BÊN NGOÀI -->
+        <!-- TIÊU ĐỀ THÀNH CÔNG -->
         <div class="success-top-hero">
-            <div class="success-check-badge">✓</div>
-            <h1 class="success-title">Đặt Phòng Thành Công!</h1>
-            <p class="success-subtitle">
-                Cảm ơn bạn đã lựa chọn ChillFlix Cinema Lounge. Suất chiếu của bạn đã được xác nhận trên hệ thống.
+            <div class="success-check-badge" id="heroStatusBadge">✓</div>
+            <h1 class="success-title" id="heroStatusTitle">Đặt Phòng Thành Công!</h1>
+            <p class="success-subtitle" id="heroStatusSub">
+                Cảm ơn bạn đã lựa chọn ChillFlix Cinema Lounge. Suất chiếu của bạn đã được xác nhận.
             </p>
+
+            <div class="order-code-badge-top">
+                <span>MÃ ĐƠN: <strong id="ticketCodeDisplay">CP-8K2M4Q</strong></span>
+                <button type="button" id="btnCopyCode" class="btn-copy-chip">📋 Sao chép</button>
+                <span class="status-confirmed-tag" id="ticketStatusTag">• ĐÃ XÁC NHẬN</span>
+            </div>
+
+            <div class="arrival-time-strip" id="ticketArrivalStrip">
+                <span>⏳ THỜI GIAN ĐÓN KHÁCH: <strong id="ticketArrivalCountdown">Sẵn sàng đón khách</strong></span>
+                <span class="early-door-hint">🚪 Phòng mở sớm 10p</span>
+            </div>
         </div>
 
-        <!-- =========================================================================
-             TẤM VÉ ĐIỆN TỬ LIỀN KHỐI (CHỨA ĐẦY ĐỦ MÃ ĐƠN & THÔNG TIN BÊN TRONG)
-             ========================================================================= -->
+        <!-- TẤM VÉ ĐIỆN TỬ LIỀN KHỐI (CHỈ IN KHỐI NÀY RA GIẤY) -->
         <div class="unified-ticket-card" id="printableTicket">
             
-            <!-- ĐẦU VÉ DÒNG 1: MÃ ĐƠN NẰM NGAY TRONG VÉ + TRẠNG THÁI XÁC NHẬN -->
-            <div class="ticket-header-top-bar">
-                <div class="ticket-code-inside-badge">
-                    <span class="label">MÃ ĐƠN:</span>
-                    <strong id="ticketCodeDisplay">CF813951</strong>
-                    <button type="button" id="btnCopyCode" class="btn-copy-chip">📋 Sao chép</button>
-                </div>
-
-                <div class="ticket-status-pill">
-                    <span class="status-pulse-dot"></span>
-                    <strong>ĐÃ XÁC NHẬN</strong>
-                </div>
+            <!-- CON DẤU NỔI "ĐÃ HỦY VÉ" KHI VÉ BỊ HỦY (MẶC ĐỊNH ẨN) -->
+            <div id="cancelledWatermarkStamp" class="cancelled-watermark-stamp" style="display: none;">
+                ĐÃ HỦY VÉ
             </div>
 
-            <!-- ĐẦU VÉ DÒNG 2: THỜI GIAN ĐÓN KHÁCH (NẰM TRONG VÉ) -->
-            <div class="ticket-countdown-banner">
-                <div class="countdown-item">
-                    <span>⏳ THỜI GIAN ĐÓN KHÁCH:</span>
-                    <strong id="ticketArrivalCountdown">Sẵn sàng đón khách</strong>
-                </div>
-                <div class="early-hint-item">
-                    🚪 Phòng mở sớm 10p
-                </div>
-            </div>
-
-            <div class="ticket-dash-line"></div>
-
-            <!-- THÔNG TIN PHÒNG CHIẾU -->
+            <!-- ĐẦU VÉ: TÊN PHÒNG & SỨC CHỨA -->
             <div class="ticket-header-row">
                 <div>
                     <span class="ticket-brand-eyebrow">CHILLFLIX CINEMA LOUNGE</span>
@@ -184,7 +171,7 @@
                 </div>
             </div>
 
-            <!-- PHIM CHIẾU: BÌA POSTER + TÊN PHIM -->
+            <!-- PHIM CHIẾU: BÌA POSTER GỌN GÀNG BÊN TRÁI + TÊN PHIM BÊN PHẢI -->
             <div class="ticket-movie-strip">
                 <img id="ticketMoviePoster" src="https://picsum.photos/100/150" alt="Poster phim" class="ticket-poster-img" />
                 
@@ -221,7 +208,7 @@
 
             <div class="ticket-dash-line"></div>
 
-            <!-- KHU VỰC CHECK-IN: MÃ QR TRUNG TÂM + MÃ PIN PHÒNG THÔNG MINH -->
+            <!-- KHU VỰC CHECK-IN: MÃ QR TRUNG TÂM + MÃ PIN MỞ CỬA -->
             <div class="ticket-checkin-center">
                 <div class="ticket-qr-container">
                     <div id="ticketQrCanvas" class="qr-canvas-box"></div>
@@ -288,7 +275,7 @@
             </div>
         </div>
 
-        <!-- NÚT HỦY ĐƠN ĐẶT PHÒNG (TRƯỚC 2 TIẾNG - TỰ ĐỘNG ẨN KHI IN) -->
+        <!-- NÚT HỦY ĐƠN ĐẶT PHÒNG (TRƯỚC 2 TIẾNG - SẼ BỊ ẨN KHI IN RA GIẤY) -->
         <div class="cancel-booking-box">
             <button type="button" id="btnCancelBooking" class="btn-cancel-link">
                 ✕ Hủy đơn đặt phòng này
@@ -296,6 +283,7 @@
         </div>
 
     </main>
+
     <!-- ==================== 4. FOOTER 4 CỘT ĐỒNG BỘ 100% ==================== -->
     <footer style="background: var(--surface); border-top: 1px solid var(--border); padding: 48px 0 24px; margin-top: 60px;">
         <div class="container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 36px; margin-bottom: 36px;">

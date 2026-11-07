@@ -40,47 +40,40 @@
                 <a href="booking.html" class="btn-booking-pill">Đặt phòng</a>
             </nav>
 
+            <!-- CỤM CÔNG CỤ BÊN PHẢI (ĐÃ BỎ NÚT VI/EN VÀ ICON GIỎ HÀNG) -->
             <div class="header__actions">
+                <!-- Ô tìm kiếm phim nhanh -->
                 <div class="header__search">
                     <span class="search__icon">🔍</span>
                     <input type="text" class="search__input" placeholder="Tìm phim, phòng chiếu..." aria-label="Tìm kiếm phim" />
                 </div>
 
-                <button id="themeToggle" class="action-btn" title="Chuyển chế độ Sáng / Tối">
+                <!-- Nút bật/tắt Tối - Sáng (Giữ lại tính năng ăn điểm) -->
+                <button id="themeToggle" class="action-btn" title="Chuyển chế độ Sáng / Tối" aria-label="Đổi giao diện">
                     <span id="themeIcon">🌙</span>
                 </button>
 
-                <button id="langToggle" class="action-btn lang-btn" title="Đổi ngôn ngữ">
-                    <span class="lang-text"><strong>VI</strong> / EN</span>
-                </button>
-
-                <a href="booking-food.html" class="action-btn cart-btn">
-                    <span class="cart__icon">🍿</span>
-                    <span class="cart__badge">2</span>
-                </a>
-
+                <!-- Avatar Người dùng & Menu thả xuống -->
                 <div class="user-dropdown-wrapper">
-                    <button id="userMenuBtn" class="avatar-btn" aria-expanded="false">
+                    <button id="userMenuBtn" class="avatar-btn" aria-expanded="false" aria-label="Menu tài khoản">
                         <span class="avatar-circle">👤</span>
                         <span class="avatar-arrow">▾</span>
                     </button>
                     <div id="userDropdown" class="user-dropdown-menu">
                         <div class="dropdown__header">
                             <p class="dropdown__name">Nguyễn Hoàng Nam</p>
-                            <p class="dropdown__rank">Hạng Bạc · 1.240 CinePoint</p>
+                            <p class="dropdown__rank">Hạng Bạc · 1.379 CinePoint</p>
                         </div>
                         <hr class="dropdown__divider" />
                         <a href="profile.html" class="dropdown__item">Hồ sơ cá nhân</a>
-                        <a href="profile.html#history" class="dropdown__item">Lịch sử xem phim</a>
-                        <a href="profile.html#vouchers" class="dropdown__item">Voucher của tôi (3)</a>
+                        <a href="profile.html#history" class="dropdown__item" id="menuLinkHistory">Lịch sử xem phim</a>
+                        <a href="profile.html#vouchers" class="dropdown__item" id="menuLinkVouchers">Ví Voucher của tôi (3)</a>
+                        <a href="admin/dashboard.html" class="dropdown__item" id="menuLinkAdmin" style="display: none; color: var(--primary);">⚙️ Quản trị rạp</a>
                         <hr class="dropdown__divider" />
-                        <a href="admin/dashboard.html" class="dropdown__item" style="color: var(--primary);">⚙️ Cổng Quản Trị (Admin)</a>
-                        <hr class="dropdown__divider" />
-                        <a href="index.html" class="dropdown__item dropdown__item--danger">Đăng xuất</a>
+                        <a href="index.html" id="btnLogout" class="dropdown__item dropdown__item--danger">Đăng xuất</a>
                     </div>
                 </div>
             </div>
-        </div>
     </header>
 
     <!-- MOBILE DRAWER -->
@@ -377,5 +370,6 @@
 
     <!-- SCRIPT CHÍNH CHO TRANG CHI TIẾT -->
     <script type="module" src="js/pages/movieDetail.js"></script>
+    <script type="module" src="js/components/authModal.js"></script>
 </body>
 </html>

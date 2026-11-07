@@ -543,6 +543,76 @@
     font-size: 11.5px;
     color: var(--text-muted);
 }
+/* ==========================================================================
+   GIAO DIỆN TẤM VÉ ĐÃ HỦY (CANCELLED TICKET STATE)
+   ========================================================================== */
+
+/* Trạng thái lỗi màu đỏ của icon trên đầu */
+.success-check-badge.cancelled {
+    background: rgba(229, 72, 77, 0.15) !important;
+    border-color: var(--danger) !important;
+    color: var(--danger) !important;
+}
+
+/* Con dấu đóng dấu đỏ chéo qua tấm vé */
+.cancelled-watermark-stamp {
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-18deg);
+    border: 4px solid var(--danger);
+    color: var(--danger);
+    font-size: 44px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 6px;
+    padding: 10px 32px;
+    border-radius: var(--radius-sm);
+    background: rgba(14, 11, 16, 0.88);
+    backdrop-filter: blur(4px);
+    pointer-events: none;
+    z-index: 10;
+    box-shadow: 0 0 24px rgba(229, 72, 77, 0.4);
+    opacity: 0.95;
+}
+
+/* Khối thông báo vé đã hủy thay thế cho mã QR và mã PIN */
+.cancelled-notice-box {
+    background: rgba(229, 72, 77, 0.08);
+    border: 1px dashed var(--danger);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    text-align: center;
+    width: 100%;
+}
+
+.cancelled-notice-box h4 {
+    color: var(--danger);
+    font-size: 17px;
+    margin: 0 0 8px;
+}
+
+.cancelled-notice-box p {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* Khi vé đã hủy thì làm mờ các chi tiết và gạch ngang giá tiền */
+.unified-ticket-card.is-cancelled {
+    border-color: rgba(229, 72, 77, 0.4);
+}
+
+.unified-ticket-card.is-cancelled .ticket-poster-img {
+    filter: grayscale(1);
+    opacity: 0.7;
+}
+
+.unified-ticket-card.is-cancelled .cost-line.grand-paid strong {
+    text-decoration: line-through;
+    color: var(--text-muted) !important;
+}
 @media (max-width: 600px) {
     .ticket-schedule-matrix {
         grid-template-columns: 1fr;

@@ -420,6 +420,7 @@ function saveAndNavigate(targetUrl) {
     const payload = {
         movieId: currentMovie ? currentMovie.id : 693134,
         movieTitle: currentMovie ? currentMovie.title : "Phim chiếu rạp",
+        posterPath: currentMovie ? currentMovie.poster_path : "",
         date: chosenDate,
         roomType: chosenRoomId,
         roomName: room.name,
