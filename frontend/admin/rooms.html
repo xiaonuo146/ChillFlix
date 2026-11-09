@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Phòng Chiếu · Admin | ChillFlix</title>
+
+    <!-- CSS Design System dùng chung -->
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/pages/admin.css">
+</head>
+
+<body class="admin-body">
+
+    <div class="admin-layout-wrapper">
+
+        <!-- ==================== SIDEBAR TRÁI (ĐỒNG BỘ) ==================== -->
+        <aside class="admin-sidebar">
+            <div class="admin-brand-box">
+                <a href="../index.html" class="admin-logo">
+                    <span class="logo__icon">🎬</span>
+                    <div class="logo__text-group">
+                        <span class="logo__brand">ChillFlix</span>
+                        <span class="admin-badge-tag">ADMIN</span>
+                    </div>
+                </a>
+                <span class="os-version-sub">Cinema Lounge OS v3.1</span>
+            </div>
+
+            <nav class="admin-nav-menu">
+                <span class="nav-section-label">KHU VỰC QUẢN TRỊ</span>
+                
+                <a href="dashboard.html" class="admin-nav-item">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-text">Tổng quan</span>
+                </a>
+                
+                <a href="bookings.html" class="admin-nav-item">
+                    <span class="nav-icon">📋</span>
+                    <span class="nav-text">Đơn đặt phòng</span>
+                    <span class="nav-counter-badge" id="roomsSidebarBadge">0</span>
+                </a>
+                
+                <a href="rooms.html" class="admin-nav-item active">
+                    <span class="nav-icon">🚪</span>
+                    <span class="nav-text">Phòng chiếu</span>
+                </a>
+                
+                <a href="fnb-voucher.html" class="admin-nav-item">
+                    <span class="nav-icon">🍿</span>
+                    <span class="nav-text">Thực đơn F&amp;B</span>
+                </a>
+                
+                <a href="fnb-voucher.html#vouchers" class="admin-nav-item">
+                    <span class="nav-icon">🏷</span>
+                    <span class="nav-text">Voucher &amp; Khuyến mãi</span>
+                </a>
+                
+                <a href="analytics.html" class="admin-nav-item">
+                    <span class="nav-icon">📈</span>
+                    <span class="nav-text">Thống kê &amp; Báo cáo</span>
+                </a>
+            </nav>
+
+            <div class="admin-sidebar-footer">
+                <a href="../index.html" class="btn-back-client">
+                    <span>🏠</span> Về trang khách
+                </a>
+                <a href="../login.html" id="btnAdminLogout" class="btn-admin-logout">
+                    <span>🚪</span> Đăng xuất
+                </a>
+            </div>
+        </aside>
+
+        <!-- ==================== MAIN KHU VỰC NỘI DUNG ==================== -->
+        <div class="admin-main-area">
+
+            <!-- THANH TOPBAR -->
+            <header class="admin-topbar">
+                <div class="topbar-search-box">
+                    <span class="topbar-search-icon">🔍</span>
+                    <input type="text" placeholder="Tìm kiếm nhanh mã đơn hoặc thiết bị phòng..." />
+                </div>
+
+                <div class="topbar-tools-right">
+                    <div class="realtime-status-pill">
+                        <span class="realtime-pulse-dot"></span>
+                        <span>Realtime kết nối</span>
+                    </div>
+
+                    <div class="admin-clock" id="adminLiveClock">
+                        🕒 Đang tải đồng hồ...
+                    </div>
+
+                    <div class="admin-profile-pill">
+                        <span class="admin-avatar">👤</span>
+                        <div class="admin-info-mini">
+                            <strong>Trần Minh Đạt</strong>
+                            <small>Quản lý trưởng</small>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- VÙNG NỘI DUNG QUẢN LÝ PHÒNG CHIẾU -->
+            <main class="admin-content-scroll">
+                
+                <!-- TIÊU ĐỀ TRANG -->
+                <div class="dashboard-header-row">
+                    <div>
+                        <span class="dash-subtitle">ADMIN &gt; QUẢN LÝ KHÔNG GIAN / HỆ THỐNG PHÒNG CHIẾU</span>
+                        <h1 class="dash-title">Quản Lý Phòng Chiếu</h1>
+                        <p style="font-size: 13.5px; color: var(--text-muted); margin: 4px 0 0;">
+                            Theo dõi trạng thái phòng thời gian thực, điều phối lịch chiếu, cấu hình giá và trang thiết bị chuẩn Cinematic Lounge.
+                        </p>
+                    </div>
+
+                    <div class="dash-actions-right">
+                        <select id="selectRoomFilter" class="filter-dropdown" style="height: 42px;">
+                            <option value="all">Loại phòng: Tất cả (4)</option>
+                            <option value="couple">Phòng Couple (2)</option>
+                            <option value="group">Phòng Nhóm &amp; VIP (2)</option>
+                        </select>
+                        <a href="../booking.html" class="btn btn--primary" style="height: 42px; font-size: 13px; display: inline-flex; align-items: center; text-decoration: none;">
+                            <span>+</span> Đặt phòng mới tại quầy
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 4 CHỈ SỐ NHANH TRẠNG THÁI PHÒNG (KHỞI TẠO TỰ NHẢY SỐ THẬT) -->
+                <section class="room-status-summary-bar">
+                    <div class="room-stat-item">
+                        <span class="r-stat-icon">🚪</span>
+                        <div>
+                            <span>Tổng số phòng:</span>
+                            <strong id="statTotalRooms">04 / 4 đang mở</strong>
+                        </div>
+                    </div>
+                    <div class="room-stat-item">
+                        <span class="r-stat-icon" style="color: var(--primary);">🎬</span>
+                        <div>
+                            <span>Đang có đơn chiếu:</span>
+                            <strong id="statOccupiedRooms" style="color: var(--primary);">00 phòng (0%)</strong>
+                        </div>
+                    </div>
+                    <div class="room-stat-item">
+                        <span class="r-stat-icon" style="color: var(--warning);">🧹</span>
+                        <div>
+                            <span>Đang dọn khử trùng:</span>
+                            <strong id="statCleaningRooms" style="color: var(--warning);">00 phòng</strong>
+                        </div>
+                    </div>
+                    <div class="room-stat-item">
+                        <span class="r-stat-icon" style="color: var(--success);">✨</span>
+                        <div>
+                            <span>Sẵn sàng đón khách:</span>
+                            <strong id="statReadyRooms" style="color: var(--success);">04 phòng sẵn sàng</strong>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- LƯỚI 4 THẺ PHÒNG CHIẾU (DỮ LIỆU ĐỘNG 100%) -->
+                <section class="admin-rooms-grid" id="adminRoomsDynamicGrid">
+                    <!-- Javascript sẽ tự động đổ dữ liệu trạng thái phòng thật vào đây -->
+                </section>
+
+            </main>
+        </div>
+
+        <!-- ==================== DRAWER LỊCH PHÒNG THEO TUẦN ==================== -->
+        <div id="roomDrawerOverlay" class="admin-drawer-overlay"></div>
+        <aside id="roomScheduleDrawer" class="admin-order-drawer" style="width: 500px;">
+            <div class="drawer-top-header">
+                <div>
+                    <span class="drawer-pre-title">BẢNG LỊCH PHÒNG CHIẾU THEO TUẦN</span>
+                    <h3 id="scheduleDrawerRoomTitle">Phòng chiếu</h3>
+                </div>
+                <button type="button" id="btnCloseScheduleDrawer" class="btn-close-drawer">✕</button>
+            </div>
+
+            <!-- Thống kê tuần thật -->
+            <div class="drawer-status-bar" style="background: rgba(245, 181, 68, 0.08);">
+                <div>Suất đã đặt: <strong id="weekTotalSlots" style="color: var(--primary);">0 suất</strong></div>
+                <div>Doanh thu: <strong id="weekRevenueDisplay">0đ</strong></div>
+            </div>
+
+            <div class="drawer-content-scroll">
+                <div class="schedule-week-picker">
+                    <strong id="weekRangeDisplay">Lịch chiếu tuần này</strong>
+                </div>
+
+                <!-- Danh sách lịch thật -->
+                <div class="week-days-schedule-list" id="drawerWeekSlotsList">
+                    <!-- JS sẽ tự động đổ các đơn thật của phòng này vào đây -->
+                </div>
+            </div>
+
+            <div class="drawer-footer-actions">
+                <button type="button" class="btn btn--primary btn-drawer-main" onclick="window.print()">
+                    📥 Xuất Lịch Phòng (PDF / In)
+                </button>
+            </div>
+        </aside>
+
+    </div>
+
+    <!-- SCRIPT CHÍNH CHO TRANG PHÒNG CHIẾU -->
+    <script type="module" src="../js/pages/admin/rooms.js"></script>
+</body>
+
+</html>

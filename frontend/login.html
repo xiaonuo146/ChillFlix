@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Nhập & Đăng Ký | ChillFlix Cinema Lounge</title>
+
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/pages/login.css">
+</head>
+
+<body>
+
+    <div class="auth-page-wrapper">
+        <!-- Nút quay lại trang chủ góc trên -->
+        <div class="auth-top-nav">
+            <a href="index.html" class="auth-back-link">← Về trang chủ ChillFlix</a>
+        </div>
+
+        <div class="auth-card-container">
+            <!-- CỘT TRÁI: BANNER ĐIỆN ẢNH & CHÂM NGÔN (MOCKUP 7) -->
+            <div class="auth-banner-left">
+                <div class="banner-top-badge">
+                    <span>✦ KHÔNG GIAN RẠP CHIẾU ĐỘC BẢN & RIÊNG TƯ</span>
+                </div>
+
+                <div class="banner-quote-content">
+                    <h2 class="banner-quote-text">“Mỗi buổi tối là một bộ phim.”</h2>
+                    <p class="banner-quote-sub">
+                        Trải nghiệm phòng chiếu đôi riêng tư 4K Laser, hệ thống âm thanh vòm Dolby Atmos chuẩn rạp và dịch vụ ẩm thực cafe cao cấp phục vụ tận ghế sofa.
+                    </p>
+                </div>
+
+                <div class="banner-perks-list">
+                    <span class="b-perk">100% Riêng Tư</span>
+                    <span class="b-perk">Dolby Atmos</span>
+                    <span class="b-perk">Menu F&amp;B Nóng</span>
+                </div>
+            </div>
+
+            <!-- CỘT PHẢI: FORM ĐĂNG NHẬP / ĐĂNG KÝ & NÚT 1 CHẠM DEMO -->
+            <div class="auth-form-right">
+                
+                <!-- CỤM NÚT ĐIỀN MẪU TỰ ĐỘNG CHO GIẢNG VIÊN & TESTER -->
+                <div class="demo-accounts-box">
+                    <span class="demo-box-label">⚡ CHỌN TÀI KHOẢN TEST NHANH (1 CHẠM):</span>
+                    <div class="demo-btn-row">
+                        <button type="button" id="btnFillNewCustomer" class="btn-demo-chip customer" title="Tài khoản mới tinh: 0 điểm, 0 voucher">
+                            👤 Khách Mới (0đ · 0 voucher)
+                        </button>
+                        <button type="button" id="btnFillAdmin" class="btn-demo-chip admin" title="Tài khoản Quản trị viên: Có quyền Admin">
+                            ⚙️ Quản Trị Viên (Admin)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- THANH TABS CHUYỂN ĐỔI -->
+                <div class="auth-tabs-bar">
+                    <button type="button" class="auth-tab-btn active" data-tab="login">Đăng nhập</button>
+                    <button type="button" class="auth-tab-btn" data-tab="register">Đăng ký thành viên</button>
+                </div>
+
+                <!-- FORM NHẬP LIỆU -->
+                <form id="loginMainForm">
+                    <!-- Họ tên (chỉ hiện khi Đăng ký) -->
+                    <div class="auth-group" id="groupRegisterName" style="display: none;">
+                        <label for="inpFullName">Họ và tên của bạn</label>
+                        <div class="auth-input-wrapper">
+                            <span class="inp-icon">👤</span>
+                            <input type="text" id="inpFullName" class="auth-field" placeholder="Ví dụ: Trần Văn An" />
+                        </div>
+                    </div>
+
+                    <!-- Email hoặc SĐT -->
+                    <div class="auth-group">
+                        <label for="inpAccount">Email hoặc Số điện thoại</label>
+                        <div class="auth-input-wrapper">
+                            <span class="inp-icon">✉️</span>
+                            <input type="text" id="inpAccount" class="auth-field" placeholder="name@example.com hoặc SĐT" required />
+                        </div>
+                    </div>
+
+                    <!-- Mật khẩu -->
+                    <div class="auth-group">
+                        <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                            <label for="inpPassword">Mật khẩu</label>
+                            <a href="#" id="linkForgotPass" style="font-size: 11.5px; color: var(--text-muted); text-decoration: none;">Quên mật khẩu?</a>
+                        </div>
+                        <div class="auth-input-wrapper">
+                            <span class="inp-icon">🔒</span>
+                            <input type="password" id="inpPassword" class="auth-field" placeholder="Nhập mật khẩu" required />
+                            <button type="button" id="btnTogglePassEye" class="btn-eye-pass" title="Ẩn/Hiện mật khẩu">👁</button>
+                        </div>
+                    </div>
+
+                    <div id="authAlertMessage" class="auth-alert-box" style="display: none;"></div>
+
+                    <div class="remember-row">
+                        <label><input type="checkbox" id="chkRemember" checked> Ghi nhớ đăng nhập</label>
+                        <span id="roleIndicator" style="font-size: 11px; font-weight: 700; color: var(--primary);">Khách hàng</span>
+                    </div>
+
+                    <button type="submit" id="btnSubmitAuth" class="btn btn--primary btn-auth-submit">
+                        Đăng Nhập Ngay ➔
+                    </button>
+                </form>
+
+                <div class="auth-divider"><span>HOẶC</span></div>
+
+                <button type="button" id="btnSocialGoogle" class="btn-google-auth">
+                    <span>🇬</span> Tiếp tục với tài khoản Google
+                </button>
+
+                <p class="auth-security-foot">
+                    🔒 Dữ liệu được mã hóa bảo mật theo tiêu chuẩn SSL 256-bit
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="js/pages/login.js"></script>
+</body>
+
+</html> 

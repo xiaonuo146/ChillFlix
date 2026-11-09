@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bước 2: Đồ Ăn & Thức Uống | ChillFlix</title>
+
+    <!-- CSS dùng chung Design System -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <!-- Kế thừa thanh Stepper từ booking.css và CSS riêng của trang đồ ăn -->
+    <link rel="stylesheet" href="css/pages/booking.css">
+    <link rel="stylesheet" href="css/pages/booking-food.css">
+</head>
+
+<body>
+
+    <!-- ==================== 1. HEADER DÙNG CHUNG ĐỒNG BỘ 100% ==================== -->
+    <header class="header">
+        <div class="container header__container">
+            <button id="mobileMenuBtn" class="hamburger-btn" aria-label="Mở menu">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+
+            <a href="index.html" class="header__logo">
+                <span class="logo__icon">🎬</span>
+                <div class="logo__text-group">
+                    <span class="logo__brand">ChillFlix</span>
+                    <span class="logo__sub">CINEMA LOUNGE</span>
+                </div>
+            </a>
+
+            <nav class="header__nav">
+                <a href="index.html" class="nav__link">Trang chủ</a>
+                <a href="explore.html" class="nav__link">Khám phá phim</a>
+                <a href="booking-food.html" class="nav__link active">Đồ ăn & Uống</a>
+                <a href="booking.html" class="btn-booking-pill">Đặt phòng</a>
+            </nav>
+<!-- CỤM CÔNG CỤ BÊN PHẢI (CHUẨN DÙNG CHUNG CHO MỌI TRANG) -->
+            <div class="header__actions">
+                <!-- Ô tìm kiếm phim nhanh (Bấm Enter là tìm) -->
+                <div class="header__search">
+                    <span class="search__icon">🔍</span>
+                    <input type="text" class="search__input" placeholder="Tìm phim, phòng chiếu..." aria-label="Tìm kiếm phim" />
+                </div>
+
+                <!-- Nút bật/tắt Tối - Sáng -->
+                <button id="themeToggle" class="action-btn" title="Chuyển chế độ Sáng / Tối" aria-label="Đổi giao diện">
+                    <span id="themeIcon">🌙</span>
+                </button>
+
+                <!-- Avatar Người dùng & Menu thả xuống (JS TỰ ĐỘNG ĐIỀN THÔNG TIN) -->
+                <div class="user-dropdown-wrapper">
+                    <button id="userMenuBtn" class="avatar-btn" aria-expanded="false" aria-label="Menu tài khoản">
+                        <span class="avatar-circle">👤</span>
+                        <span class="avatar-arrow">▾</span>
+                    </button>
+                    <div id="userDropdown" class="user-dropdown-menu">
+                        <div class="dropdown__header">
+                            <p class="dropdown__name">Đang tải...</p>
+                            <p class="dropdown__rank">--</p>
+                        </div>
+                        <hr class="dropdown__divider" />
+                        <a href="profile.html" class="dropdown__item">Hồ sơ cá nhân</a>
+                        <a href="profile.html#history" class="dropdown__item" id="menuLinkHistory">Lịch sử xem phim</a>
+                        <a href="profile.html#vouchers" class="dropdown__item" id="menuLinkVouchers">Ví Voucher của tôi (0)</a>
+                        <a href="admin/dashboard.html" class="dropdown__item" id="menuLinkAdmin" style="display: none; color: var(--primary);">⚙️ Quản trị rạp</a>
+                        <hr class="dropdown__divider" />
+                        <a href="login.html" id="btnLogout" class="dropdown__item dropdown__item--danger">Đăng xuất</a>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- ĐÃ SỬA: Đóng đủ thẻ container header__container -->
+    </header>
+    <!-- MOBILE DRAWER -->
+    <div id="drawerOverlay" class="drawer-overlay"></div>
+    <aside id="mobileDrawer" class="mobile-drawer">
+        <div class="drawer__header">
+            <div class="header__logo"><span class="logo__icon">🎬</span><span class="logo__brand">ChillFlix</span></div>
+            <button id="drawerCloseBtn" class="drawer-close-btn">✕</button>
+        </div>
+        <nav class="drawer__nav">
+            <a href="index.html" class="drawer__link"><span>🏠</span> Trang chủ</a>
+            <a href="explore.html" class="drawer__link"><span>🎞️</span> Khám phá phim</a>
+            <a href="booking-food.html" class="drawer__link active"><span>🍿</span> Đồ ăn & Thức uống</a>
+            <a href="booking.html" class="drawer__link drawer__link--highlight"><span>✨</span> Đặt phòng chiếu ngay</a>
+        </nav>
+    </aside>
+
+    <!-- ==================== 2. THANH TIẾN TRÌNH STEPPER (ĐỒNG BỘ BƯỚC 1) ==================== -->
+    <div class="stepper-nav-bar">
+        <div class="container stepper-nav-container">
+            <a href="booking.html" class="step-badge completed" style="text-decoration: none;">
+                <span class="step-circle">✓</span>
+                <div class="step-labels">
+                    <small>BƯỚC 1 · ĐÃ CHỌN</small>
+                    <span>Phim & Phòng Chiếu</span>
+                </div>
+            </a>
+            <div class="step-separator"></div>
+            <div class="step-badge active">
+                <span class="step-circle">2</span>
+                <div class="step-labels">
+                    <small>BƯỚC 2 · ĐANG CHỌN MÓN</small>
+                    <strong>Đồ Ăn & Thức Uống</strong>
+                </div>
+            </div>
+            <div class="step-separator"></div>
+            <div class="step-badge">
+                <span class="step-circle">3</span>
+                <div class="step-labels">
+                    <small>BƯỚC 3</small>
+                    <span>Xác Nhận & Thanh Toán</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DẢI TÓM TẮT PHÒNG ĐÃ CHỌN (CHUẨN MOCKUP 4) -->
+    <div class="container">
+        <div class="booking-context-strip" id="bookingContextStrip">
+            <div class="context-strip__info">
+                <span>🎬 <strong id="stripMovie">Đang tải...</strong></span>
+                <span class="strip-dot">•</span>
+                <span>🛋 <span id="stripRoom">--</span></span>
+                <span class="strip-dot">•</span>
+                <span>📅 <span id="stripDate">--</span></span>
+                <span class="strip-dot">•</span>
+                <span>⏰ <span id="stripTime">--</span></span>
+            </div>
+            <div class="context-strip__right">
+                <span>Tiền phòng tạm tính: <strong id="stripRoomPrice" style="color: var(--primary);">0đ</strong></span>
+                <a href="booking.html" class="strip-change-btn">⇄ Đổi phòng</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 3. NỘI DUNG CHÍNH CHỌN ĐỒ ĂN & THỨC UỐNG ==================== -->
+    <main class="container booking-food-section">
+        <div class="food-heading">
+            <p class="food-eyebrow">✦ CHILLFLIX CULINARY EXPERIENCE</p>
+            <h1>Đồ Ăn &amp; Thức Uống</h1>
+            <p>
+                Gọi trước món để bếp chuẩn bị nóng hổi và nước ủ mát lạnh mang tới tận sofa đúng giờ chiếu, trọn vẹn từng khoảnh khắc điện ảnh.
+            </p>
+        </div>
+
+        <div class="food-layout">
+            <!-- CỘT TRÁI: DANH SÁCH THỰC ĐƠN -->
+            <div class="food-main">
+
+                <!-- Banner Combo Ưu đãi -->
+                <div class="food-promo-banner">
+                    <div>
+                        <span class="food-promo-label">🔥 TIẾT KIỆM ĐẾN 20%</span>
+                        <h3>Gợi ý hoàn hảo cho buổi xem phim riêng tư!</h3>
+                        <p>
+                            Kết hợp bắp rang giòn nóng, nachos phô mai và đồ uống pha chế thủ công với mức giá ưu đãi hơn mua lẻ.
+                        </p>
+                        <button type="button" class="btn-claim-voucher-global" data-code="FNBCOUPLE">
+                             Nhận voucher FNBCOUPLE (Tặng bắp 45k)
+                        </button>
+                    </div>
+                    <button type="button" id="viewCombos" class="food-promo-button">
+                        Xem Combo Ưu Đãi
+                    </button>
+                </div>
+
+                <!-- Thanh tìm kiếm & Bộ lọc nhóm món -->
+                <div class="food-toolbar">
+                    <div class="food-filters">
+                        <button type="button" class="food-filter active" data-category="all">Tất cả món</button>
+                        <button type="button" class="food-filter" data-category="combo">🍿 Combo Siêu Ưu Đãi</button>
+                        <button type="button" class="food-filter" data-category="drink">🍹 Đồ Uống Pha Chế</button>
+                        <button type="button" class="food-filter" data-category="food">🧀 Bắp Rang &amp; Snack</button>
+                    </div>
+
+                    <div class="food-search-box">
+                        <span class="food-search-icon">🔍</span>
+                        <input
+                            type="search"
+                            id="foodSearch"
+                            class="food-search"
+                            placeholder="Tìm bắp phô mai, trà đào, cà phê muối, nachos..."
+                            aria-label="Tìm kiếm món ăn hoặc nước uống">
+                    </div>
+                </div>
+
+                <div class="food-results-heading">
+                    <h3 id="foodCategoryTitle">Tất cả món</h3>
+                    <span id="foodResultCount">0 món</span>
+                </div>
+
+                <!-- Lưới hiển thị các thẻ món ăn -->
+                <div id="foodGrid" class="food-grid" aria-live="polite"></div>
+            </div>
+
+            <!-- CỘT PHẢI: GIỎ MÓN ĐÃ CHỌN VÀO PHÒNG (STICKY CART) -->
+            <aside class="food-cart" id="foodCartPanel">
+                <div class="food-cart-heading">
+                    <div>
+                        <p class="food-cart-eyebrow">PHỤC VỤ TẬN PHÒNG</p>
+                        <h3>Món Đã Chọn Vào Phòng</h3>
+                    </div>
+                    <span id="foodCartCount" class="food-cart-count-badge">0 món</span>
+                </div>
+
+                <!-- Danh sách món trong giỏ -->
+                <div id="foodCartItems" class="food-cart-list">
+                    <p class="booking-hint">Bạn chưa chọn món nào (Có thể bỏ qua nếu không gọi món).</p>
+                </div>
+
+                <!-- Ô ghi chú cho nhân viên phục vụ (Chuẩn Mockup 4) -->
+                <div class="food-note-box">
+                    <label for="fnbServiceNote">📝 Ghi chú cho bếp &amp; phục vụ phòng:</label>
+                    <input
+                        type="text"
+                        id="fnbServiceNote"
+                        placeholder="VD: Trà đào ít đá 50% đường, mang vào lúc bắt đầu chiếu..."
+                    />
+                </div>
+
+                <hr class="food-divider">
+
+                <!-- Bảng tính tiền chi tiết -->
+                <div class="food-booking-info">
+                    <div class="summary-row">
+                        <span>Tiền phòng (<span id="foodRoom">--</span>):</span>
+                        <strong id="foodRoomPrice">0đ</strong>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Đồ ăn &amp; thức uống:</span>
+                        <strong id="foodTotal">0đ</strong>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Phí phục vụ &amp; khăn phòng:</span>
+                        <strong style="color: var(--success);">Miễn phí</strong>
+                    </div>
+
+                    <div class="summary-row food-saving-row" id="foodSavingRow" style="display: none;">
+                        <span>🎉 Tiết kiệm nhờ Combo:</span>
+                        <strong id="foodSavings">0đ</strong>
+                    </div>
+                </div>
+
+                <div class="summary-total">
+                    <span>Tạm tính tổng cộng:</span>
+                    <strong id="foodGrandTotal">0đ</strong>
+                </div>
+
+                <button type="button" id="continueToPayment" class="btn btn--primary booking-continue">
+                    Tiếp Tục Thanh Toán ➔
+                </button>
+
+                <button type="button" id="backToRoom" class="food-back-button">
+                    ← Quay lại chỉnh phòng / giờ chiếu
+                </button>
+
+                <p class="booking-hint" style="text-align: center; margin-top: 14px;">
+                    🛡 Bếp ChillFlix sử dụng nguyên liệu tươi mới mỗi ngày, đảm bảo vệ sinh phòng chiếu tuyệt đối.
+                </p>
+            </aside>
+        </div>
+    </main>
+
+    <!-- ==================== 4. FOOTER 4 CỘT ĐỒNG BỘ 100% ==================== -->
+    <footer style="background: var(--surface); border-top: 1px solid var(--border); padding: 48px 0 24px; margin-top: 60px;">
+        <div class="container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 36px; margin-bottom: 36px;">
+            <div>
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 14px;">
+                    <span style="font-size: 26px;">🎬</span>
+                    <div style="display: flex; align-items: baseline; gap: 6px;">
+                        <span style="font-family: var(--font-serif); font-size: 22px; font-weight: 700; color: var(--primary);">ChillFlix</span>
+                        <span style="font-size: 11px; font-weight: 600; letter-spacing: 1px; color: var(--text-muted);">CINEMA LOUNGE</span>
+                    </div>
+                </div>
+                <p style="font-size: 13.5px; color: var(--text-muted); line-height: 1.6; margin-bottom: 12px;">
+                    Không gian thưởng thức điện ảnh tư nhân kết hợp cafe lãng mạn cao cấp chuẩn rạp 4K Dolby Atmos.
+                </p>
+                <p style="font-size: 12.5px; color: var(--text-muted); display: flex; align-items: center; gap: 6px;">
+                    <span>🕒</span> Mở cửa: <strong>09:00 – 23:00</strong> (Hàng ngày)
+                </p>
+            </div>
+
+            <div>
+                <h4 style="font-size: 14.5px; font-weight: 700; color: var(--text); margin-bottom: 14px; text-transform: uppercase;">Liên hệ & Địa chỉ</h4>
+                <p style="font-size: 13px; color: var(--text-muted); line-height: 1.9; margin: 0;">
+                    📍 124 Hoàng Cầu, Q. Đống Đa, Hà Nội<br>
+                    📞 Hotline: <a href="tel:19006828" style="color: var(--text); text-decoration: none;"><strong>1900 6828</strong></a> - 0988 234 567<br>
+                    ✉️ <a href="mailto:booking@chillflix.vn" style="color: var(--primary); text-decoration: none;">booking@chillflix.vn</a>
+                </p>
+            </div>
+
+            <div>
+                <h4 style="font-size: 14.5px; font-weight: 700; color: var(--text); margin-bottom: 14px; text-transform: uppercase;">Chính sách & Hỗ trợ</h4>
+                <ul style="list-style: none; padding: 0; margin: 0; font-size: 13px; line-height: 2.1;">
+                    <li><a href="privacy-policy.html" style="color: var(--text-muted); text-decoration: none;">Chính sách bảo mật thông tin</a></li>
+                    <li><a href="privacy-policy.html#cancel" style="color: var(--text-muted); text-decoration: none;">Quy định & Hủy đổi phòng</a></li>
+                    <li><a href="profile.html#vouchers" style="color: var(--text-muted); text-decoration: none;">Hướng dẫn thanh toán & Voucher</a></li>
+                    <li><a href="admin/dashboard.html" style="color: var(--primary); font-weight: 600; text-decoration: none;">⚙️ Cổng Quản trị viên (Admin)</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 style="font-size: 14.5px; font-weight: 700; color: var(--text); margin-bottom: 14px; text-transform: uppercase;">Chứng nhận Điện ảnh</h4>
+                <div style="background: var(--surface-2); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+                    <div style="display: inline-block; background: var(--primary); color: var(--on-primary); font-size: 10.5px; font-weight: 800; padding: 2px 6px; border-radius: 4px; margin-bottom: 6px;">TMDB API</div>
+                    <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5; margin: 0;">
+                        This product uses the TMDB API but is not endorsed or certified by TMDB.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="container" style="border-top: 1px solid var(--border); padding-top: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 12.5px; color: var(--text-muted);">
+            <div>© 2026 ChillFlix Private Cinema Lounge. All rights reserved.</div>
+            <div>Hệ thống phòng chiếu phim cafe riêng tư chuẩn 5 sao</div>
+        </div>
+    </footer>
+
+    <script type="module" src="js/pages/bookingFood.js"></script>
+    <script type="module" src="js/components/header.js"></script>
+</body>
+
+</html>

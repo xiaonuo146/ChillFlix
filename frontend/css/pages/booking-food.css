@@ -1,0 +1,619 @@
+/* ==========================================================================
+   CHILLFLIX - BƯỚC 2: ĐỒ ĂN & THỨC UỐNG (CHUẨN MOCKUP 4)
+   ========================================================================== */
+
+/* Bước đã hoàn thành trên thanh Stepper */
+.step-badge.completed {
+    opacity: 0.85;
+}
+
+.step-badge.completed .step-circle {
+    background: rgba(63, 185, 80, 0.2);
+    border-color: var(--success);
+    color: var(--success);
+}
+
+/* Dải tóm tắt phòng ngang (Context Strip) */
+.booking-context-strip {
+    margin-top: 24px;
+    padding: 14px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 13px;
+}
+
+.context-strip__info {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    color: var(--text);
+}
+
+.strip-dot {
+    opacity: 0.35;
+}
+
+.context-strip__right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--text-muted);
+}
+
+.strip-change-btn {
+    padding: 5px 12px;
+    border-radius: var(--radius-sm);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 12px;
+    text-decoration: none;
+    transition: border-color 150ms;
+}
+
+.strip-change-btn:hover {
+    border-color: var(--primary);
+}
+
+/* Khung chính */
+.booking-food-section {
+    padding-top: 28px;
+    padding-bottom: 60px;
+}
+
+.food-heading {
+    margin-bottom: 26px;
+}
+
+.food-eyebrow {
+    color: var(--primary);
+    font-size: 11.5px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    margin-bottom: 6px;
+}
+
+.food-heading h1 {
+    font-family: var(--font-serif);
+    font-size: 34px;
+    color: var(--text);
+    margin-bottom: 8px;
+}
+
+.food-heading p {
+    color: var(--text-muted);
+    font-size: 14.5px;
+    max-width: 680px;
+    line-height: 1.6;
+}
+
+/* Bố cục 2 cột */
+.food-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 360px;
+    gap: 32px;
+    align-items: start;
+}
+
+.food-main {
+    min-width: 0;
+}
+
+/* Banner Combo */
+.food-promo-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 24px 28px;
+    margin-bottom: 24px;
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(245, 181, 68, 0.35);
+    background:
+        radial-gradient(circle at 95% 10%, rgba(245, 181, 68, 0.2), transparent 50%),
+        var(--surface);
+}
+
+.food-promo-label {
+    display: inline-block;
+    margin-bottom: 8px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(245, 181, 68, 0.15);
+    color: var(--primary);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+}
+
+.food-promo-banner h3 {
+    margin: 0 0 6px;
+    color: var(--text);
+    font-size: 20px;
+}
+
+.food-promo-banner p {
+    margin: 0;
+    max-width: 480px;
+    color: var(--text-muted);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.food-promo-button {
+    flex-shrink: 0;
+    border: none;
+    border-radius: var(--radius-md);
+    padding: 12px 20px;
+    background: var(--primary);
+    color: var(--on-primary);
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: transform 150ms, background-color 150ms;
+}
+
+.food-promo-button:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+}
+
+/* Bộ lọc & Tìm kiếm */
+.food-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.food-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.food-filter {
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 9px 16px;
+    background: var(--surface);
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 150ms ease;
+}
+
+.food-filter:hover {
+    border-color: var(--primary);
+    color: var(--text);
+}
+
+.food-filter.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: var(--on-primary);
+    font-weight: 700;
+}
+
+.food-search-box {
+    position: relative;
+    flex: 1;
+    min-width: 240px;
+}
+
+.food-search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    pointer-events: none;
+}
+
+.food-search {
+    width: 100%;
+    height: 40px;
+    padding: 0 14px 0 38px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 13.5px;
+    outline: none;
+    transition: border-color 150ms;
+}
+
+.food-search:focus {
+    border-color: var(--primary);
+}
+
+.food-results-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.food-results-heading h3 {
+    font-size: 18px;
+    color: var(--text);
+}
+
+.food-results-heading span {
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+/* Lưới món ăn */
+.food-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.food-card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    transition: transform 180ms ease, border-color 180ms ease;
+}
+
+.food-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-4px);
+}
+
+.food-card-image {
+    position: relative;
+    width: 100%;
+    height: 170px;
+    overflow: hidden;
+    background: var(--surface-2);
+}
+
+.food-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 300ms ease;
+}
+
+.food-card:hover .food-card-image img {
+    transform: scale(1.06);
+}
+
+.food-card-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 2;
+    padding: 4px 9px;
+    border-radius: 6px;
+    background: var(--danger);
+    color: #fff;
+    font-size: 10.5px;
+    font-weight: 800;
+}
+
+.food-card-badge.tag-hot {
+    background: rgba(14, 11, 16, 0.82);
+    border: 1px solid rgba(245, 181, 68, 0.5);
+    color: var(--primary);
+}
+
+.food-card-content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 14px 16px;
+}
+
+.food-card h3 {
+    margin: 0 0 6px;
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.food-card p {
+    flex-grow: 1;
+    margin: 0 0 14px;
+    color: var(--text-muted);
+    font-size: 12.5px;
+    line-height: 1.5;
+}
+
+.food-card-bottom {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: auto;
+}
+
+.food-price-box {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.food-old-price {
+    color: var(--text-muted);
+    font-size: 11.5px;
+    text-decoration: line-through;
+}
+
+.food-price {
+    color: var(--primary);
+    font-size: 16.5px;
+    font-weight: 800;
+}
+
+.food-add-button {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: var(--primary);
+    color: var(--on-primary);
+    font-size: 20px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 150ms, background-color 150ms;
+}
+
+.food-add-button:hover {
+    background: var(--primary-hover);
+    transform: scale(1.08);
+}
+
+/* CỘT PHẢI: GIỎ MÓN ĂN STICKY */
+.food-cart {
+    position: sticky;
+    top: 90px;
+    padding: 24px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    box-shadow: var(--shadow-main);
+}
+
+.food-cart-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.food-cart-eyebrow {
+    margin: 0 0 4px;
+    color: var(--primary);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+}
+
+.food-cart-heading h3 {
+    margin: 0;
+    color: var(--text);
+    font-size: 17px;
+}
+
+.food-cart-count-badge {
+    background: rgba(245, 181, 68, 0.14);
+    color: var(--primary);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 999px;
+}
+
+.food-cart-list {
+    max-height: 260px;
+    overflow-y: auto;
+    margin-bottom: 14px;
+}
+
+.food-cart-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.food-cart-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+}
+
+.food-cart-item-info strong {
+    color: var(--text);
+    font-size: 13px;
+}
+
+.food-cart-item-info small {
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 12px;
+}
+
+.food-quantity {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.food-quantity button {
+    width: 26px;
+    height: 26px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface-2);
+    color: var(--text);
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.food-quantity button:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.food-quantity span {
+    min-width: 16px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+/* Ghi chú bếp */
+.food-note-box {
+    margin-top: 12px;
+}
+
+.food-note-box label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+}
+
+.food-note-box input {
+    width: 100%;
+    height: 38px;
+    padding: 0 12px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--surface-2);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 12.5px;
+    outline: none;
+}
+
+.food-note-box input:focus {
+    border-color: var(--primary);
+}
+
+.food-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 16px 0;
+}
+
+.food-cart .summary-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-size: 13px;
+}
+
+.food-cart .summary-row span {
+    color: var(--text-muted);
+}
+
+.food-saving-row span,
+.food-saving-row strong {
+    color: var(--success) !important;
+}
+
+.food-cart .summary-total {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin: 16px 0 18px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--border);
+}
+
+.food-cart .summary-total span {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.food-cart .summary-total strong {
+    color: var(--primary);
+    font-size: 24px;
+    font-weight: 800;
+}
+
+.food-cart .booking-continue {
+    width: 100%;
+    height: 48px;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.food-back-button {
+    width: 100%;
+    padding: 10px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 150ms;
+}
+
+.food-back-button:hover {
+    border-color: var(--primary);
+    color: var(--text);
+}
+
+.booking-hint {
+    color: var(--text-muted);
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+    .food-layout {
+        grid-template-columns: 1fr;
+    }
+    .food-cart {
+        position: static;
+    }
+    .food-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 540px) {
+    .food-promo-banner {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .food-grid {
+        grid-template-columns: 1fr;
+    }
+}

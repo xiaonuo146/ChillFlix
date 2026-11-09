@@ -1,0 +1,84 @@
+/* ==========================================================================
+   CineNest Design Tokens - Phong cách "Dark Cinema"
+   ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap');
+
+:root {
+    /* --- Bảng màu Chế độ Tối (Mặc định) --- */
+    --bg: #0E0B10;
+    /* Nền tối sâu như rạp chiếu */
+    --surface: #181420;
+    /* Thẻ card, thanh header */
+    --surface-2: #221C2C;
+    /* Khối nổi cấp 2, ô nhập liệu */
+    --surface-hover: #2D253B;
+    --border: #2E2639;
+    /* Viền phân cách nhẹ */
+
+    --text: #F3EEF7;
+    /* Chữ chính tương phản cao */
+    --text-muted: #A79DB4;
+    /* Chữ phụ, ngày giờ, mô tả */
+
+    /* Điểm nhấn thương hiệu */
+    --primary: #F5B544;
+    /* Vàng bơ / Marquee Popcorn */
+    --primary-hover: #FFC966;
+    --on-primary: #1A1204;
+    /* Màu chữ nổi trên nền vàng */
+
+    /* Trạng thái hệ thống */
+    --danger: #E5484D;
+    /* Cảnh báo, phòng đã đặt, hủy đơn */
+    --success: #3FB950;
+    /* Đã hoàn thành, xác nhận */
+    --warning: #F0A020;
+    /* Đang giữ chỗ, chờ thanh toán */
+    --info: #5AA9FF;
+    /* Thông tin, Đã xác nhận */
+    --purple-badge: #B79CFF;
+    /* Badge Đã nhận phòng */
+
+    /* --- Typography --- */
+    --font-serif: 'Playfair Display', Georgia, serif;
+    --font-sans: 'Be Vietnam Pro', system-ui, -apple-system, sans-serif;
+
+    /* --- Spacing 4px Grid --- */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --space-12: 48px;
+
+    /* --- Radius & Shadows --- */
+    --radius-sm: 8px;
+    /* Input, Chip */
+    --radius-md: 12px;
+    /* Nút bấm, Thẻ poster */
+    --radius-lg: 20px;
+    /* Hero card, Modal, Sheet */
+    --shadow-main: 0 8px 32px rgba(0, 0, 0, 0.45);
+
+    /* Layout */
+    --max-width: 1200px;
+    --header-height: 68px;
+}
+
+/* Chế độ Sáng (Khi bật data-theme="light") */
+[data-theme="light"] {
+    --bg: #FAF6F0;
+    --surface: #FFFFFF;
+    --surface-2: #F1EBF5;
+    --surface-hover: #E8E0EE;
+    --border: #D9D0E0;
+    --text: #1D1722;
+    --text-muted: #6B6275;
+    --primary: #C67D0A;
+    --primary-hover: #B06F08;
+    --on-primary: #FFFFFF;
+    --danger: #C9302C;
+    --success: #1E7D32;
+    --shadow-main: 0 8px 24px rgba(29, 23, 34, 0.08);
+}

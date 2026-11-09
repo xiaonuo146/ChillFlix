@@ -1,0 +1,652 @@
+/* ==========================================================================
+   CHILLFLIX - TRANG HỒ SƠ & LỊCH SỬ ĐẶT VÉ (CHUẨN MOCKUP 8)
+   ========================================================================== */
+
+.profile-page-layout {
+    padding-top: 36px;
+    padding-bottom: 72px;
+}
+
+/* 1. THẺ BANNER HỘI VIÊN */
+.profile-hero-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    padding: 32px 36px;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 36px;
+    align-items: center;
+    margin-bottom: 28px;
+}
+
+.profile-user-left {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.profile-avatar-frame {
+    position: relative;
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: var(--on-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    flex-shrink: 0;
+    box-shadow: 0 0 20px rgba(245, 181, 68, 0.35);
+}
+
+.btn-avatar-cam {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.profile-meta-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.user-name-rank-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-display-name {
+    font-family: var(--font-serif);
+    font-size: 24px;
+    color: var(--text);
+    margin: 0;
+}
+
+.rank-badge-silver {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--primary);
+    background: rgba(245, 181, 68, 0.12);
+    border: 1px solid rgba(245, 181, 68, 0.35);
+    padding: 3px 10px;
+    border-radius: 999px;
+}
+
+.user-contact-sub {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.dot-sep {
+    margin: 0 4px;
+    opacity: 0.4;
+}
+
+.user-stats-strip {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+.user-stats-strip strong {
+    color: var(--text);
+}
+
+/* THẺ ĐIỂM THƯỞNG BÊN PHẢI */
+.profile-points-right {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 22px 24px;
+}
+
+.points-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.points-label {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+}
+
+.tier-percent-tag {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.points-number-large {
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--primary);
+    font-family: monospace;
+    line-height: 1.1;
+    margin-bottom: 12px;
+}
+
+.points-number-large small {
+    font-size: 14px;
+    font-family: var(--font-sans);
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+.progress-track-bg {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), #ffd27a);
+    border-radius: 4px;
+    transition: width 400ms ease;
+}
+
+.tier-limits-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11.5px;
+    color: var(--text-muted);
+}
+
+/* 2. THANH TABS */
+.profile-tabs-nav {
+    display: flex;
+    gap: 8px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 24px;
+    overflow-x: auto;
+}
+
+.profile-tab-item {
+    padding: 12px 20px;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 150ms;
+}
+
+.profile-tab-item:hover {
+    color: var(--text);
+}
+
+.profile-tab-item.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+    font-weight: 700;
+}
+
+/* KHỐI NỘI DUNG TABS */
+.tab-pane {
+    display: none;
+    animation: fadeIn 200ms ease-out;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+.profile-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px 32px;
+    margin-bottom: 24px;
+}
+
+.panel-head-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 14px;
+    margin-bottom: 20px;
+}
+
+.panel-head-row h3 {
+    font-size: 17px;
+    color: var(--text);
+    margin: 0;
+}
+
+.panel-head-row small {
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+/* FORM CÁ NHÂN */
+.account-grid-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.form-group-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 14px;
+}
+
+.form-group-row label {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.prof-input {
+    width: 100%;
+    height: 44px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0 14px;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 13.5px;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 150ms;
+}
+
+.prof-input:focus {
+    border-color: var(--primary);
+}
+
+.input-verified-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.verified-tag {
+    position: absolute;
+    right: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--success);
+}
+
+.radio-gender-group {
+    display: flex;
+    gap: 20px;
+    padding-top: 4px;
+    font-size: 13.5px;
+    color: var(--text);
+}
+
+.radio-gender-group input {
+    accent-color: var(--primary);
+    margin-right: 4px;
+}
+
+.btn-save-profile {
+    width: 100%;
+    height: 44px;
+    font-weight: 700;
+    font-size: 14px;
+    border-radius: var(--radius-sm);
+    margin-top: 10px;
+}
+
+.security-callout-box {
+    margin-top: 18px;
+    padding: 12px 14px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+/* VÙNG NGUY HIỂM */
+.danger-zone-panel {
+    background: rgba(229, 72, 77, 0.04);
+    border: 1px solid rgba(229, 72, 77, 0.25);
+    border-radius: var(--radius-lg);
+    padding: 24px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.danger-info h4 {
+    color: var(--danger);
+    font-size: 15px;
+    margin: 0 0 4px;
+}
+
+.danger-info p {
+    color: var(--text-muted);
+    font-size: 12.5px;
+    margin: 0;
+    max-width: 600px;
+    line-height: 1.5;
+}
+
+.btn-danger-outline {
+    padding: 10px 18px;
+    background: transparent;
+    border: 1px solid var(--danger);
+    color: var(--danger);
+    border-radius: var(--radius-sm);
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 150ms;
+    white-space: nowrap;
+}
+
+.btn-danger-outline:hover {
+    background: var(--danger);
+    color: #fff;
+}
+
+/* LỊCH SỬ XEM PHIM CARDS */
+.history-cards-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.history-booking-card {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 18px 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    transition: border-color 150ms;
+}
+
+.history-booking-card:hover {
+    border-color: var(--primary);
+}
+
+.history-card-left {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.history-poster-thumb {
+    width: 60px;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+}
+
+.history-info h4 {
+    font-size: 16px;
+    color: var(--text);
+    margin: 0 0 4px;
+}
+
+.history-meta {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    display: flex;
+    gap: 8px;
+}
+
+.history-pin-badge {
+    display: inline-block;
+    background: rgba(245, 181, 68, 0.12);
+    border: 1px solid rgba(245, 181, 68, 0.35);
+    color: var(--primary);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    margin-top: 6px;
+}
+
+.history-card-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+.history-price {
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+.btn-view-ticket-again {
+    padding: 6px 14px;
+    border-radius: var(--radius-sm);
+    background: var(--primary);
+    color: var(--on-primary);
+    font-weight: 700;
+    font-size: 12px;
+    text-decoration: none;
+}
+
+/* VÍ VOUCHER */
+.vouchers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 18px;
+}
+
+.voucher-card-item {
+    background: var(--surface-2);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    display: flex;
+}
+
+.v-left {
+    width: 80px;
+    background: var(--primary);
+    color: var(--on-primary);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+}
+
+.v-percent {
+    font-size: 22px;
+}
+
+.v-left small {
+    font-size: 9px;
+    letter-spacing: 0.5px;
+}
+
+.v-right {
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+
+.v-right strong {
+    font-size: 14.5px;
+    color: var(--text);
+}
+
+.v-right p {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.4;
+}
+
+.v-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.btn-copy-voucher {
+    background: transparent;
+    border: none;
+    color: var(--primary);
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 11.5px;
+}
+
+/* ĐẶC QUYỀN HỘI VIÊN */
+.tiers-compare-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.tier-box {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.tier-box.current {
+    border-color: var(--primary);
+}
+
+.tier-tag {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+}
+
+.tier-tag.highlight {
+    color: var(--primary);
+}
+
+.tier-box h4 {
+    font-size: 16px;
+    color: var(--text);
+    margin: 0 0 4px;
+}
+
+.tier-req {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+}
+
+.tier-perks-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.8;
+}
+/* THẺ ĐƠN ĐÃ HỦY TRONG TAB LỊCH SỬ XEM PHIM */
+.history-booking-card.is-cancelled {
+    background: rgba(229, 72, 77, 0.04) !important;
+    border-color: rgba(229, 72, 77, 0.35) !important;
+    opacity: 0.8;
+}
+
+.history-booking-card.is-cancelled .history-poster-thumb {
+    filter: grayscale(1);
+}
+
+.history-booking-card.is-cancelled .btn-view-ticket-again {
+    background: var(--surface-2) !important;
+    color: var(--danger) !important;
+    border: 1px solid var(--danger) !important;
+}
+
+.history-booking-card.is-cancelled .btn-view-ticket-again:hover {
+    background: var(--danger) !important;
+    color: #ffffff !important;
+}
+/* BỘ LỌC TRẠNG THÁI VÉ TRONG TAB LỊCH SỬ */
+.history-filter-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.history-filter-chip {
+    padding: 7px 16px;
+    border-radius: 999px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 150ms ease;
+}
+
+.history-filter-chip:hover {
+    border-color: var(--primary);
+    color: var(--text);
+}
+
+.history-filter-chip.active {
+    background: var(--primary);
+    color: var(--on-primary);
+    border-color: var(--primary);
+    font-weight: 700;
+}
+@media (max-width: 900px) {
+    .profile-hero-card {
+        grid-template-columns: 1fr;
+    }
+    .account-grid-2col {
+        grid-template-columns: 1fr;
+    }
+    .tiers-compare-grid {
+        grid-template-columns: 1fr;
+    }
+}

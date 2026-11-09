@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Đơn Đặt Phòng · Admin | ChillFlix</title>
+
+    <!-- CSS dùng chung Design System -->
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/pages/admin.css">
+</head>
+
+<body class="admin-body">
+
+    <div class="admin-layout-wrapper">
+
+        <!-- ==================== SIDEBAR BÊN TRÁI (ĐỒNG BỘ) ==================== -->
+        <aside class="admin-sidebar">
+            <div class="admin-brand-box">
+                <a href="../index.html" class="admin-logo">
+                    <span class="logo__icon">🎬</span>
+                    <div class="logo__text-group">
+                        <span class="logo__brand">ChillFlix</span>
+                        <span class="admin-badge-tag">ADMIN</span>
+                    </div>
+                </a>
+                <span class="os-version-sub">Cinema Lounge OS v3.1</span>
+            </div>
+
+            <nav class="admin-nav-menu">
+                <span class="nav-section-label">KHU VỰC QUẢN TRỊ</span>
+                
+                <a href="dashboard.html" class="admin-nav-item">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-text">Tổng quan</span>
+                </a>
+                
+                <a href="bookings.html" class="admin-nav-item active">
+                    <span class="nav-icon">📋</span>
+                    <span class="nav-text">Đơn đặt phòng</span>
+                    <span class="nav-counter-badge" id="bookingsSidebarBadge">0</span>
+                </a>
+                
+                <a href="rooms.html" class="admin-nav-item">
+                    <span class="nav-icon">🚪</span>
+                    <span class="nav-text">Phòng chiếu</span>
+                </a>
+                
+                <a href="fnb-voucher.html" class="admin-nav-item">
+                    <span class="nav-icon">🍿</span>
+                    <span class="nav-text">Thực đơn F&amp;B</span>
+                </a>
+                
+                <a href="fnb-voucher.html#vouchers" class="admin-nav-item">
+                    <span class="nav-icon">🏷</span>
+                    <span class="nav-text">Voucher &amp; Khuyến mãi</span>
+                </a>
+                
+                <a href="analytics.html" class="admin-nav-item">
+                    <span class="nav-icon">📈</span>
+                    <span class="nav-text">Thống kê &amp; Báo cáo</span>
+                </a>
+            </nav>
+
+            <div class="admin-sidebar-footer">
+                <a href="../index.html" class="btn-back-client">
+                    <span>🏠</span> Về trang khách
+                </a>
+                <a href="../login.html" id="btnAdminLogout" class="btn-admin-logout">
+                    <span>🚪</span> Đăng xuất
+                </a>
+            </div>
+        </aside>
+
+        <!-- ==================== MAIN KHU VỰC NỘI DUNG ==================== -->
+        <div class="admin-main-area">
+
+            <!-- THANH TOPBAR -->
+            <header class="admin-topbar">
+                <div class="topbar-search-box">
+                    <span class="topbar-search-icon">🔍</span>
+                    <input type="text" id="adminGlobalSearch" placeholder="Tìm kiếm nhanh đơn hàng, phòng..." />
+                </div>
+
+                <div class="topbar-tools-right">
+                    <div class="realtime-status-pill">
+                        <span class="realtime-pulse-dot"></span>
+                        <span>Realtime kết nối</span>
+                    </div>
+
+                    <div class="admin-clock" id="adminLiveClock">
+                        🕒 Đang tải đồng hồ...
+                    </div>
+
+                    <div class="admin-profile-pill">
+                        <span class="admin-avatar">👤</span>
+                        <div class="admin-info-mini">
+                            <strong id="adminNameDisplay">Trần Minh Đạt</strong>
+                            <small>Quản lý trưởng</small>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- VÙNG NỘI DUNG CHÍNH (QUẢN LÝ ĐƠN HÀNG) -->
+            <main class="admin-content-scroll">
+                
+                <!-- TIÊU ĐỀ TRANG & NÚT XUẤT CSV -->
+                <div class="dashboard-header-row">
+                    <div>
+                        <span class="dash-subtitle">CINENEST OPERATIONAL SUITE · REALTIME CINEMA OS</span>
+                        <h1 class="dash-title">Quản Lý Đơn Đặt Phòng</h1>
+                        <p style="font-size: 13.5px; color: var(--text-muted); margin: 4px 0 0;">
+                            Theo dõi, duyệt đơn, check-in phòng và điều phối suất chiếu kết hợp thực đơn F&amp;B theo thời gian thực.
+                        </p>
+                    </div>
+
+                    <div class="dash-actions-right">
+                        <button type="button" id="btnExportCsv" class="btn btn--outline" style="height: 42px; font-size: 13px;">
+                            📥 Xuất file CSV
+                        </button>
+                        <a href="../booking.html" class="btn btn--primary btn-new-walkin-booking">
+                            <span>+</span> Tạo đơn đặt phòng mới
+                        </a>
+                    </div>
+                </div>
+
+                <!-- THANH TÌM KIẾM & TAB BỘ LỌC TRẠNG THÁI (MOCKUP 10) -->
+                <section class="booking-filter-wrapper">
+                    <div class="filter-top-row">
+                        <!-- Ô tìm kiếm mã đơn hoặc SĐT -->
+                        <div class="table-search-box">
+                            <span class="t-search-icon">🔍</span>
+                            <input type="text" id="tableFilterSearch" placeholder="Tìm theo mã đơn (CP-...), tên hoặc SĐT khách..." />
+                        </div>
+
+                        <!-- Các Tab lọc trạng thái -->
+                        <div class="status-filter-tabs" id="statusFilterTabs">
+                            <button type="button" class="tab-filter-chip active" data-status="all">
+                                Tất cả (<span id="countAll">0</span>)
+                            </button>
+                            <button type="button" class="tab-filter-chip" data-status="confirmed">
+                                ● Đã xác nhận (<span id="countConfirmed">0</span>)
+                            </button>
+                            <button type="button" class="tab-filter-chip" data-status="checked_in">
+                                ✓ Đã nhận phòng (<span id="countCheckedIn">0</span>)
+                            </button>
+                            <button type="button" class="tab-filter-chip" data-status="cancelled">
+                                ✕ Đã hủy (<span id="countCancelled">0</span>)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Hàng chọn lọc ngày & phòng -->
+                    <div class="filter-bottom-dropdowns">
+                        <select id="filterRoomSelect" class="filter-dropdown">
+                            <option value="all">🚪 Tất cả phòng chiếu</option>
+                            <option value="couple_a">Couple A (Tầng 2)</option>
+                            <option value="couple_b">Couple B (Tầng 2)</option>
+                            <option value="group4">Nhóm 4 Sao Hỏa (Tầng 3)</option>
+                            <option value="vip">Nhóm 10 Hành Tinh (VIP)</option>
+                        </select>
+
+                        <button type="button" id="btnResetFilters" class="btn-reset-filter">
+                            ↺ Đặt lại bộ lọc
+                        </button>
+                    </div>
+                </section>
+
+                <!-- BẢNG DATA TABLE DANH SÁCH ĐƠN ĐẶT PHÒNG -->
+                <section class="admin-table-card">
+                    <div class="table-responsive-box">
+                        <table class="chillflix-data-table">
+                            <thead>
+                                <tr>
+                                    <th>MÃ ĐƠN</th>
+                                    <th>KHÁCH HÀNG</th>
+                                    <th>SUẤT CHIẾU &amp; PHIM</th>
+                                    <th>THỜI GIAN</th>
+                                    <th>F&amp;B ĐẶT TRƯỚC</th>
+                                    <th>TỔNG TIỀN</th>
+                                    <th>TRẠNG THÁI</th>
+                                    <th>THAO TÁC</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bookingsTableBody">
+                                <!-- JS tự động đổ danh sách đơn vào đây -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Phân trang bảng -->
+                    <div class="table-pagination-footer">
+                        <span class="pagination-info" id="paginationInfoText">
+                            Hiển thị 0 đơn đặt phòng
+                        </span>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+
+        <!-- ==================== DRAWER TIẾN TRÌNH CHECK-IN (MOCKUP 10) ==================== -->
+        <div id="bookingDrawerOverlay" class="admin-drawer-overlay"></div>
+        <aside id="bookingDetailDrawer" class="admin-order-drawer">
+            <div class="drawer-top-header">
+                <div>
+                    <span class="drawer-pre-title">CHI TIẾT TIẾN TRÌNH ĐƠN HÀNG</span>
+                    <h3 id="drwOrderCode">#CP-8K2M4Q</h3>
+                </div>
+                <button type="button" id="btnCloseOrderDrawer" class="btn-close-drawer">✕</button>
+            </div>
+
+            <!-- Thanh trạng thái & Mã PIN cửa -->
+            <div class="drawer-status-bar">
+                <span id="drwStatusPill" class="badge badge--success">ĐÃ XÁC NHẬN</span>
+                <div style="font-size: 13px;">
+                    Mã PIN phòng: <strong id="drwDoorPin" style="color: var(--primary); font-size: 16px; letter-spacing: 2px;">8892</strong>
+                </div>
+            </div>
+
+            <div class="drawer-content-scroll">
+                <!-- DÒNG THỜI GIAN TIẾN TRÌNH CHECK-IN (MOCKUP 10) -->
+                <div class="timeline-steps-box">
+                    <span class="block-title">TIẾN TRÌNH XỬ LÝ ĐƠN</span>
+                    <div class="order-step-flow">
+                        <div class="flow-step done">
+                            <span class="flow-dot">✓</span>
+                            <div class="flow-info">
+                                <strong>Khách tạo đơn giữ phòng</strong>
+                                <small id="flowCreateTime">17:02</small>
+                            </div>
+                        </div>
+                        <div class="flow-step done">
+                            <span class="flow-dot">✓</span>
+                            <div class="flow-info">
+                                <strong>Thanh toán VietQR thành công</strong>
+                                <small>Đã nhận đủ 100%</small>
+                            </div>
+                        </div>
+                        <div class="flow-step done">
+                            <span class="flow-dot">✓</span>
+                            <div class="flow-info">
+                                <strong>Cấp mã PIN &amp; Gửi vé tự động</strong>
+                                <small>Mã mở cửa phòng hợp lệ</small>
+                            </div>
+                        </div>
+                        <div class="flow-step" id="flowCheckinStep">
+                            <span class="flow-dot" id="flowCheckinDot">4</span>
+                            <div class="flow-info">
+                                <strong id="flowCheckinTitle">Khách check-in nhận phòng</strong>
+                                <small id="flowCheckinStatus">Đang chờ khách tới</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thông tin khách -->
+                <div class="drawer-info-block">
+                    <span class="block-title">THÔNG TIN KHÁCH HÀNG</span>
+                    <div class="customer-row">
+                        <span class="cust-avatar">👤</span>
+                        <div>
+                            <strong id="drwCustomerName">--</strong>
+                            <p id="drwCustomerPhone">--</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thông tin phòng & Phim -->
+                <div class="drawer-info-block">
+                    <span class="block-title">SUẤT CHIẾU</span>
+                    <div class="drawer-line-item">
+                        <span>Phim:</span>
+                        <strong id="drwMovieTitle">--</strong>
+                    </div>
+                    <div class="drawer-line-item">
+                        <span>Phòng:</span>
+                        <strong id="drwRoomName">--</strong>
+                    </div>
+                    <div class="drawer-line-item">
+                        <span>Ngày &amp; Giờ:</span>
+                        <strong id="drwShowtime">--</strong>
+                    </div>
+                    <div class="drawer-line-item">
+                        <span>Thời lượng thuê:</span>
+                        <strong id="drwDuration">--</strong>
+                    </div>
+                </div>
+
+                <!-- Ghi chú phòng riêng -->
+                <div class="drawer-info-block" id="drwNoteBox" style="display: none;">
+                    <span class="block-title">GHI CHÚ HỖ TRỢ RIÊNG:</span>
+                    <p class="drawer-note-text" id="drwNoteText"></p>
+                </div>
+
+                <!-- Ẩm thực F&B -->
+                <div class="drawer-info-block">
+                    <span class="block-title">ẨM THỰC ĐÃ ĐẶT</span>
+                    <div id="drwFnbList" class="drawer-fnb-list"></div>
+                </div>
+
+                <!-- Tiền bạc -->
+                <div class="drawer-info-block">
+                    <span class="block-title">THANH TOÁN</span>
+                    <div class="drawer-line-item">
+                        <span>Tiền phòng:</span>
+                        <span id="drwRoomPrice">0đ</span>
+                    </div>
+                    <div class="drawer-line-item">
+                        <span>F&amp;B:</span>
+                        <span id="drwFnbPrice">0đ</span>
+                    </div>
+                    <div class="drawer-line-item highlight-total">
+                        <span>Tổng hóa đơn:</span>
+                        <strong id="drwTotalPrice" style="color: var(--primary);">0đ</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cụm nút thao tác -->
+            <div class="drawer-footer-actions">
+                <button type="button" id="btnActionCheckinNow" class="btn btn--primary btn-drawer-main">
+                    ✓ Xác Nhận Nhận Phòng (Check-in Ngay)
+                </button>
+                <div class="drawer-sub-buttons">
+                    <button type="button" id="btnActionPrintBill" class="btn btn--outline" style="flex: 1;">
+                        🖨 In hóa đơn
+                    </button>
+                    <button type="button" id="btnActionCancelOrder" class="btn btn--outline" style="color: var(--danger); border-color: rgba(229, 72, 77, 0.4);">
+                        ✕ Hủy đơn
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+    </div>
+
+    <script type="module" src="../js/pages/admin/bookings.js"></script>
+</body>
+
+</html>
