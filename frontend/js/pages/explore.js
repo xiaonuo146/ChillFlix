@@ -3,232 +3,181 @@ import { CONFIG } from "../config.js";
 
 let allMovies = [];
 let filteredMovies = [];
+let currentPage = 1;
+const ITEMS_PER_PAGE = 16; 
 let searchTimeout = null;
 
-// Khởi chạy trang khám phá phim
-async function initExplorePage() {
-  initGlobalHeaderEvents();
-  
-  try {
-    allMovies = await getTrendingMovies();
-    filteredMovies = [...allMovies];
+document.addEventListener("DOMContentLoaded", async () => {
+    try {
+        allMovies = await getTrendingMovies();
+        filteredMovies = [...allMovies];
+        setupSearchAndFilters();
+        applyFilters();
+    } catch (err) {
+        console.error("Lỗi khám phá phim:", err);
+    }
+});
 
-    // ĐỌC TỪ KHÓA TÌM KIẾM TỪ HEADER TRUYỀN SANG (NẾU CÓ)
-    const urlParams = new URLSearchParams(window.location.search);
-    const query = urlParams.get("q") || "";
+function renderMovies(movies) {
+    const container = document.getElementById('exploreMovieGrid');
+    const countText = document.getElementById('movieCountText');
+    const emptyState = document.getElementById('emptyState');
 
-    const searchInput = document.getElementById("exploreSearchInput");
-    const clearBtn = document.getElementById("clearSearchBtn");
+    if (!container) return;
 
-    if (query && searchInput) {
-        searchInput.value = query;
-        if (clearBtn) clearBtn.style.display = "block";
+    if (!movies || movies.length === 0) {
+        container.innerHTML = '';
+        if (emptyState) emptyState.style.display = 'block';
+        if (countText) countText.textContent = 'Đang hiển thị 0 phim';
+        renderPagination(0);
+        return;
     }
 
-    // Lọc phim ngay khi vừa vào trang
-    setupSearchEvent();
-    setupFilterEvents();
-    applyFilters(); 
+    if (emptyState) emptyState.style.display = 'none';
 
-  } catch (err) {
-    console.error("Lỗi khi tải danh sách phim khám phá:", err);
-  }
-}
+    // 🌟 TÍNH TOÁN CẮT LÁT THEO TRANG HIỆN TẠI
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+    const paginatedItems = movies.slice(startIndex, endIndex);
 
-// 1. Render danh sách thẻ phim
-function renderMovies(movies) {
-  const container = document.getElementById('exploreMovieGrid');
-  const emptyState = document.getElementById('emptyState');
-  const countText = document.getElementById('movieCountText');
+    if (countText) {
+        countText.textContent = `Đang hiển thị trang ${currentPage} (${movies.length} phim chiếu rạp)`;
+    }
 
-  if (!container) return;
+    container.innerHTML = paginatedItems.map(movie => {
+        const posterUrl = movie.poster_path 
+            ? `${CONFIG.TMDB_IMAGE_BASE}${movie.poster_path}` 
+            : 'https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=300';
+        const rating = movie.vote_average ? Number(movie.vote_average).toFixed(1) : '8.0';
+        const year = (movie.release_date || '2024').slice(0, 4);
 
-  if (movies.length === 0) {
-    container.innerHTML = '';
-    if (emptyState) emptyState.style.display = 'block';
-    if (countText) countText.textContent = 'Đang hiển thị 0 phim';
-    return;
-  }
+        return `
+          <article class="explore-movie-card" data-id="${movie.id}" style="cursor: pointer;">
+            <div class="explore-card__media">
+              <img src="${posterUrl}" onerror="this.src='https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=300'" alt="${movie.title}" class="explore-card__img" loading="lazy" />
+              <div class="explore-card__rating">★ ${rating}</div>
+              <div class="explore-card__overlay">
+                <button type="button" class="btn btn--primary explore-card__btn">Chi tiết & Đặt vé</button>
+              </div>
+            </div>
+            <div class="explore-card__body">
+              <h3 class="explore-card__title">${movie.title}</h3>
+              <div class="explore-card__meta">
+                <span>${year}</span>
+                <span>•</span>
+                <span style="color: var(--primary);">4K Dolby Atmos</span>
+              </div>
+            </div>
+          </article>
+        `;
+    }).join('');
 
-  if (emptyState) emptyState.style.display = 'none';
-  if (countText) countText.textContent = `Đang hiển thị ${movies.length} phim chiếu rạp`;
-
-  container.innerHTML = movies.map(movie => {
-    const posterUrl = movie.poster_path 
-      ? `${CONFIG.TMDB_IMAGE_BASE}${movie.poster_path}` 
-      : 'https://picsum.photos/300/450';
-    const rating = movie.vote_average ? movie.vote_average.toFixed(1) : '8.0';
-    const releaseYear = (movie.release_date || '2026').slice(0, 4);
-
-    return `
-      <article class="explore-movie-card" data-movie-id="${movie.id}" title="${movie.title}">
-        <div class="explore-card__media">
-          <img src="${posterUrl}" alt="${movie.title}" class="explore-card__img" loading="lazy" />
-          <div class="explore-card__rating">★ ${rating}</div>
-          <div class="explore-card__overlay">
-            <button type="button" class="btn btn--primary explore-card__btn">Chi tiết & Đặt vé</button>
-          </div>
-        </div>
-        <div class="explore-card__body">
-          <h3 class="explore-card__title">${movie.title}</h3>
-          <div class="explore-card__meta">
-            <span>${releaseYear}</span>
-            <span>•</span>
-            <span style="color: var(--primary);">4K Dolby Atmos</span>
-          </div>
-        </div>
-      </article>
-    `;
-  }).join('');
-
-  // ĐÃ FIX: Bấm vào thẻ phim -> Chuyển thẳng sang trang movie-detail.html kèm ID
-  container.querySelectorAll('.explore-movie-card').forEach(card => {
-    card.addEventListener('click', () => {
-      const id = card.dataset.movieId;
-      window.location.href = `movie-detail.html?id=${id}`;
+    container.querySelectorAll('.explore-movie-card').forEach(card => {
+        card.addEventListener('click', () => {
+            window.location.href = `movie-detail.html?id=${card.dataset.id}`;
+        });
     });
-  });
+
+    renderPagination(movies.length);
 }
 
-// 2. Tìm kiếm với cơ chế Debounce 400ms (Tránh lag)
-function setupSearchEvent() {
-  const searchInput = document.getElementById('exploreSearchInput');
-  const clearBtn = document.getElementById('clearSearchBtn');
+// 🌟 HÀM VẼ CÁC NÚT PHÂN TRANG [← Trước] [1] [2] [3]... [Sau →]
+function renderPagination(totalItems) {
+    const paginationBox = document.getElementById("explorePagination");
+    if (!paginationBox) return;
 
-  if (!searchInput) return;
+    const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+    if (totalPages <= 1) {
+        paginationBox.innerHTML = "";
+        return;
+    }
 
-  searchInput.addEventListener('input', (e) => {
-    const keyword = e.target.value.trim().toLowerCase();
-    if (clearBtn) clearBtn.style.display = keyword ? 'block' : 'none';
+    let html = "";
 
-    clearTimeout(searchTimeout);
-    searchTimeout = setTimeout(() => {
-      applyFilters();
-    }, 400);
-  });
+    // Nút Trang trước
+    if (currentPage > 1) {
+        html += `<button type="button" class="page-btn nav-arrow" data-page="${currentPage - 1}">← Trước</button>`;
+    }
 
-  clearBtn?.addEventListener('click', () => {
-    searchInput.value = '';
-    clearBtn.style.display = 'none';
-    applyFilters();
-  });
+    // Các nút số 1, 2, 3, 4, 5...
+    for (let i = 1; i <= totalPages; i++) {
+        html += `<button type="button" class="page-btn ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
+    }
 
-  document.getElementById('resetFilterBtn')?.addEventListener('click', () => {
-    searchInput.value = '';
-    if (clearBtn) clearBtn.style.display = 'none';
-    
-    // Reset chip và select về mặc định
-    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-    document.querySelector('.filter-chip[data-filter="trending"]')?.classList.add('active');
-    
+    // Nút Trang sau
+    if (currentPage < totalPages) {
+        html += `<button type="button" class="page-btn nav-arrow" data-page="${currentPage + 1}">Sau →</button>`;
+    }
+
+    paginationBox.innerHTML = html;
+
+    paginationBox.querySelectorAll(".page-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            currentPage = Number(btn.dataset.page);
+            renderMovies(filteredMovies);
+            // Cuộn mượt lên đầu danh sách phim
+            document.querySelector(".explore-header")?.scrollIntoView({ behavior: "smooth" });
+        });
+    });
+}
+
+function setupSearchAndFilters() {
+    const searchInput = document.getElementById('exploreSearchInput');
+    const clearBtn = document.getElementById('clearSearchBtn');
     const genreSelect = document.getElementById('genreSelect');
-    if (genreSelect) genreSelect.value = 'all';
 
-    applyFilters();
-  });
+    searchInput?.addEventListener('input', (e) => {
+        if (clearBtn) clearBtn.style.display = e.target.value ? 'block' : 'none';
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(applyFilters, 300);
+    });
+
+    clearBtn?.addEventListener('click', () => {
+        searchInput.value = '';
+        clearBtn.style.display = 'none';
+        applyFilters();
+    });
+
+    genreSelect?.addEventListener('change', applyFilters);
+
+    document.querySelectorAll('.filter-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+            document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            applyFilters();
+        });
+    });
 }
 
-// 3. Xử lý Chip lọc nhanh & Dropdown Thể loại
-function setupFilterEvents() {
-  const chips = document.querySelectorAll('.filter-chip');
-  chips.forEach(chip => {
-    chip.addEventListener('click', () => {
-      chips.forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
-      applyFilters();
-    });
-  });
-
-  // Bổ sung lắng nghe sự kiện thay đổi của Dropdown thể loại
-  const genreSelect = document.getElementById('genreSelect');
-  if (genreSelect) {
-    genreSelect.addEventListener('change', () => {
-      applyFilters();
-    });
-  }
-}
-
-// Bộ lọc kết hợp: Từ khóa + Chip + Thể loại
 function applyFilters() {
-  const searchInput = document.getElementById('exploreSearchInput');
-  const keyword = searchInput ? searchInput.value.trim().toLowerCase() : '';
-  const activeChip = document.querySelector('.filter-chip.active');
-  const filterType = activeChip ? activeChip.dataset.filter : 'trending';
-  const genreSelect = document.getElementById('genreSelect');
-  const selectedGenre = genreSelect ? genreSelect.value : 'all';
+    currentPage = 1; // Reset về trang 1 khi lọc
+    const keyword = (document.getElementById('exploreSearchInput')?.value || '').trim().toLowerCase();
+    const genreVal = document.getElementById('genreSelect')?.value || 'all';
+    const activeChip = document.querySelector('.filter-chip.active')?.dataset.filter || 'trending';
 
-  let result = [...allMovies];
+    let list = [...allMovies];
 
-  // 1. Lọc theo từ khóa
-  if (keyword) {
-    result = result.filter(m => 
-      (m.title && m.title.toLowerCase().includes(keyword)) ||
-      (m.original_title && m.original_title.toLowerCase().includes(keyword))
-    );
-  }
+    if (keyword) {
+        list = list.filter(m => (m.title || '').toLowerCase().includes(keyword));
+    }
 
-  // 2. Lọc theo thể loại
-  if (selectedGenre !== 'all') {
-    const genreId = Number(selectedGenre);
-    result = result.filter(m => {
-      if (Array.isArray(m.genre_ids)) return m.genre_ids.includes(genreId);
-      if (Array.isArray(m.genres)) return m.genres.some(g => (g.id === genreId || (g.name && g.name.includes(selectedGenre))));
-      return true;
-    });
-  }
+    if (genreVal !== 'all') {
+        const genreId = Number(genreVal);
+        list = list.filter(m => {
+            if (Array.isArray(m.genre_ids) && m.genre_ids.includes(genreId)) return true;
+            if (Array.isArray(m.genres)) {
+                return m.genres.some(g => (typeof g === 'object' ? g.id === genreId : false));
+            }
+            return false;
+        });
+    }
 
-  // 3. Sắp xếp theo chip
-  if (filterType === 'top_rated') {
-    result.sort((a, b) => (b.vote_average || 0) - (a.vote_average || 0));
-  } else if (filterType === 'now_playing') {
-    result.sort((a, b) => new Date(b.release_date || 0) - new Date(a.release_date || 0));
-  }
+    if (activeChip === 'top_rated') {
+        list.sort((a, b) => (b.vote_average || 0) - (a.vote_average || 0));
+    } else if (activeChip === 'now_playing') {
+        list.sort((a, b) => new Date(b.release_date || 0) - new Date(a.release_date || 0));
+    }
 
-  filteredMovies = result;
-  renderMovies(filteredMovies);
+    filteredMovies = list;
+    renderMovies(filteredMovies);
 }
-
-// 4. Đồng bộ sự kiện chung của Header (Sáng/Tối, Drawer, Avatar Dropdown)
-function initGlobalHeaderEvents() {
-  // Theme Toggle
-  const themeBtn = document.getElementById('themeToggle');
-  const themeIcon = document.getElementById('themeIcon');
-  themeBtn?.addEventListener('click', () => {
-    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
-    const nextTheme = isLight ? 'dark' : 'light';
-    document.documentElement.setAttribute('data-theme', nextTheme);
-    if (themeIcon) themeIcon.textContent = nextTheme === 'light' ? '☀️' : '🌙';
-    localStorage.setItem('chillflix-theme', nextTheme);
-  });
-
-  // User Dropdown Avatar Menu
-  const userBtn = document.getElementById('userMenuBtn');
-  const userDropdown = document.getElementById('userDropdown');
-  if (userBtn && userDropdown) {
-    userBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      userDropdown.classList.toggle('show');
-    });
-    document.addEventListener('click', () => userDropdown.classList.remove('show'));
-  }
-
-  // Mobile Drawer
-  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-  const drawerCloseBtn = document.getElementById('drawerCloseBtn');
-  const mobileDrawer = document.getElementById('mobileDrawer');
-  const drawerOverlay = document.getElementById('drawerOverlay');
-
-  mobileMenuBtn?.addEventListener('click', () => {
-    mobileDrawer.classList.add('open');
-    drawerOverlay.classList.add('open');
-  });
-
-  const closeDrawer = () => {
-    mobileDrawer.classList.remove('open');
-    drawerOverlay.classList.remove('open');
-  };
-  drawerCloseBtn?.addEventListener('click', closeDrawer);
-  drawerOverlay?.addEventListener('click', closeDrawer);
-}
-
-initExplorePage();

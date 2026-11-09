@@ -281,64 +281,40 @@
             </div>
         </div>
 
-        <!-- TAB 3: VÍ VOUCHER KHUYẾN MÃI (CHỈ BẤM NHẬN MỚI LƯU VÀO VÍ) -->
+        <!-- TAB 3: VÍ VOUCHER THỰC TẾ (ĐỘNG 100%) -->
         <div class="tab-pane" id="tab-vouchers">
-            <div class="profile-panel">
+            
+            <!-- 1. VÍ VOUCHER CỦA BẠN (CÁC MÃ ĐÃ NHẬN ĐƯỢC LƯU TẠI ĐÂY) -->
+            <div class="profile-panel" style="margin-bottom: 28px;">
                 <div class="panel-head-row">
-                    <h3>🏷 Kho Voucher Rạp ChillFlix</h3>
-                    <small>Bấm "Nhận vào ví" để lưu mã và áp dụng khi thanh toán</small>
+                    <div>
+                        <h3>🎟 Ví Voucher Của Tôi</h3>
+                        <small style="color: var(--primary);">Các mã bạn đang sở hữu và sẵn sàng áp dụng khi thanh toán</small>
+                    </div>
+                    <span id="myVouchersCountBadge" class="badge badge--success" style="font-size: 12px;">Đang có 0 voucher</span>
                 </div>
 
-                <div class="vouchers-grid">
-                    <!-- Voucher 1 -->
-                    <div class="voucher-card-item">
-                        <div class="v-left">
-                            <span class="v-percent">20%</span>
-                            <small>GIẢM GIÁ</small>
-                        </div>
-                        <div class="v-right">
-                            <strong>Mã: PHIM20</strong>
-                            <p>Giảm 20% tiền phòng cho thành viên mới.</p>
-                            <div class="v-bottom">
-                                <span>HSD: 31/12/2026</span>
-                                <button type="button" class="btn-copy-voucher" data-code="PHIM20">+ Nhận vào ví</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Voucher 2 -->
-                    <div class="voucher-card-item">
-                        <div class="v-left">
-                            <span class="v-percent">10%</span>
-                            <small>GIẢM GIÁ</small>
-                        </div>
-                        <div class="v-right">
-                            <strong>Mã: CHILL10</strong>
-                            <p>Giảm 10% tổng đơn cho suất chiếu đêm từ 21:00 trở đi.</p>
-                            <div class="v-bottom">
-                                <span>HSD: 31/12/2026</span>
-                                <button type="button" class="btn-copy-voucher" data-code="CHILL10">+ Nhận vào ví</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Voucher 3 -->
-                    <div class="voucher-card-item">
-                        <div class="v-left" style="background: var(--surface-hover);">
-                            <span class="v-percent">🍿</span>
-                            <small>QUÀ TẶNG</small>
-                        </div>
-                        <div class="v-right">
-                            <strong>Mã: FNBCOUPLE</strong>
-                            <p>Tặng 1 phần bắp caramel (trị giá 45k) khi đặt phòng Couple.</p>
-                            <div class="v-bottom">
-                                <span>HSD: 30/11/2026</span>
-                                <button type="button" class="btn-copy-voucher" data-code="FNBCOUPLE">+ Nhận vào ví</button>
-                            </div>
-                        </div>
-                    </div>
+                <!-- JS sẽ tự động đổ các voucher ĐÃ NHẬN vào lưới này -->
+                <div class="vouchers-grid" id="myClaimedVouchersList">
+                    <!-- Nếu chưa có mã nào thì hiện thông báo rỗng -->
                 </div>
             </div>
+
+            <!-- 2. KHO VOUCHER CÓ THỂ THU THẬP (NHẬN XONG SẼ TỰ BIẾN MẤT) -->
+            <div class="profile-panel">
+                <div class="panel-head-row">
+                    <div>
+                        <h3>🎁 Kho Voucher Đang Phát Hành</h3>
+                        <small>Thu thập mã ưu đãi mới từ Rạp ChillFlix (Nhận xong mã sẽ chuyển vào Ví của bạn)</small>
+                    </div>
+                </div>
+
+                <!-- JS sẽ tự động đổ các mã CHƯA NHẬN vào đây (Mã nào nhận rồi sẽ BIẾN MẤT) -->
+                <div class="vouchers-grid" id="availableVouchersList">
+                    <!-- Danh sách mã còn lại -->
+                </div>
+            </div>
+
         </div>
 
         <!-- TAB 4: ĐIỂM & ĐẶC QUYỀN HỘI VIÊN -->

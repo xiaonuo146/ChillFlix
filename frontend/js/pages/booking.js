@@ -1,465 +1,282 @@
+/* ==========================================================================
+   CHILLFLIX - BƯỚC 1: CHỌN PHIM & PHÒNG CHIẾU (CHUẨN HOẠT ĐỘNG 100%)
+   ========================================================================== */
+
 import { getMovieDetails } from "../api.js";
 import { CONFIG } from "../config.js";
 
-// ==========================================
-// CẤU HÌNH 4 PHÒNG CHIẾU CHUẨN MOCKUP 1
-// ==========================================
+// Bảng giá phòng niêm yết
 const ROOM_MAP = {
-    couple_a: { name: "Nest Couple A", price: 120000, maxGuests: 2 },
-    couple_b: { name: "Nest Couple B", price: 120000, maxGuests: 2 },
-    group4:   { name: "Nhóm 4 Sao Hỏa", price: 180000, maxGuests: 6 },
-    vip:      { name: "Nhóm 10 Hành Tinh", price: 350000, maxGuests: 12 }
+    couple_a: { name: "Nest Couple A", price: 120000, category: "couple", max: 2 },
+    couple_b: { name: "Nest Couple B", price: 120000, category: "couple", max: 2 },
+    group4:   { name: "Nhóm 4 Sao Hỏa", price: 180000, category: "group4", max: 6 },
+    vip:      { name: "Nhóm 10 Hành Tinh", price: 350000, category: "vip", max: 12 }
 };
 
+// Đọc tham số URL
+const savedBooking = JSON.parse(sessionStorage.getItem("chillflixBooking") || "{}");
+const urlParams = new URLSearchParams(window.location.search);
+const paramMovieId = urlParams.get("movieId") || urlParams.get("id") || savedBooking.movieId || savedBooking.tmdbMovieId || "693134";
+const paramDate = urlParams.get("date");
+const paramTime = urlParams.get("time") || "18:30";
+const paramRoom = urlParams.get("roomType") || "couple_a";
+
 let currentMovie = null;
-let chosenDate = "";
-let chosenRoomId = "couple_a";
-let baseMovieDuration = 2.0; // Thời lượng chuẩn của phim
-let extraDuration = 0;       // Thời gian khách chọn thêm (+0h, +0.5h, +1.0h)
-let chosenDuration = 2.0;    // Tổng thời lượng = baseMovieDuration + extraDuration
-let chosenTimeSlot = "15:00"; 
+let selectedDate = paramDate || new Date().toISOString().split('T')[0];
+let selectedRoomId = ROOM_MAP[paramRoom] ? paramRoom : "couple_a";
+let selectedTime = paramTime;
+let baseDuration = 2.0; // Giờ chuẩn theo phim
+let extraDuration = 0;   // Giờ chọn thêm (0, 0.5, 1.0)
 let guestCount = 2;
 
 document.addEventListener("DOMContentLoaded", async () => {
-    initHeaderControls();
-
-    // 1. Đọc tham số URL từ trang trước
-    const params = new URLSearchParams(window.location.search);
-    const movieId = params.get("movieId") || params.get("id") || "693134";
-    const dateParam = params.get("date");
-    const roomParam = params.get("roomType");
-    const timeParam = params.get("time");
-
-    if (roomParam) {
-        if (roomParam === "couple") chosenRoomId = "couple_a";
-        else if (ROOM_MAP[roomParam]) chosenRoomId = roomParam;
-    }
-    if (timeParam) chosenTimeSlot = timeParam;
-
-    // 2. Khởi tạo ngày chiếu động
-    initDateTrack(dateParam);
-
-    // 3. Tải thông tin phim TMDB & Tự động tính thời lượng chuẩn
-    await fetchMovieBanner(movieId);
-
-    // 4. Khởi tạo các sự kiện
-    initGuestStepper();
-    initRoomCards();
-    initDurationControls(); // ĐÃ FIX: Bắt đúng class .duration-pill-btn
-    renderTimeSlots();
-    updateLiveSummary();
-
-    // 5. Nút bấm chuyển bước
-    document.getElementById("btnProceedToFnb")?.addEventListener("click", () => saveAndNavigate("booking-food.html"));
-    document.getElementById("btnSkipToPayment")?.addEventListener("click", (e) => {
-        e.preventDefault();
-        saveAndNavigate("booking-payment.html");
-    });
-});
-
-// ==========================================
-// TẢI PHIM & TỰ ĐỘNG ĐỒNG BỘ THỜI LƯỢNG CHUẨN XÁC
-// ==========================================
-async function fetchMovieBanner(movieId) {
     try {
-        currentMovie = await getMovieDetails(movieId);
+        // 1. Tải thông tin phim thật
+        await loadMovieData(paramMovieId);
 
-        document.getElementById("chosenMovieTitle").textContent = currentMovie.title || "Phim chiếu rạp";
-        document.getElementById("sideMovieTitle").textContent = currentMovie.title || "Phim chiếu rạp";
-        document.getElementById("chosenMovieRating").textContent = `★ ${currentMovie.vote_average ? currentMovie.vote_average.toFixed(1) : '8.8'} / 10`;
-        document.getElementById("chosenMovieYear").textContent = (currentMovie.release_date || '2026').slice(0, 4);
+        // 2. Sinh danh sách ngày cuộn ngang
+        renderDateTrack();
 
-        const runtime = Number(currentMovie.runtime) || 110;
-        const hours = (runtime / 60).toFixed(1);
-        document.getElementById("chosenMovieRuntime").textContent = `${runtime} phút`;
-        document.getElementById("chosenMovieHours").textContent = `~${hours} giờ`;
-        document.getElementById("sideMovieSub").textContent = `⏱ ${runtime} phút · Phụ đề Tiếng Việt`;
+        // 3. Đổ danh sách giờ vào Dropdown
+        renderTimeSelect();
 
-        if (currentMovie.poster_path) {
-            document.getElementById("chosenMoviePoster").src = `${CONFIG.TMDB_IMAGE_BASE}${currentMovie.poster_path}`;
-        }
+        // 4. Kích hoạt chọn phòng & số người
+        setupRoomSelection();
+        setupGuestStepper();
+        setupDurationPills();
 
-        // TÍNH TOÁN THỜI LƯỢNG CHUẨN THEO ĐỘ DÀI PHIM
-        calculateDurationByMovie(runtime);
+        // 5. Cập nhật bảng tính tiền & Tóm tắt bên phải
+        updateSummary();
+
+        // 6. Gắn sự kiện nút Tiếp tục
+        setupProceedButton();
 
     } catch (err) {
-        console.warn("Dùng dữ liệu fallback:", err);
-        calculateDurationByMovie(110);
+        console.error("Lỗi khởi tạo booking.js:", err);
     }
-}
+});
 
-// ==========================================
-// TÍNH THỜI LƯỢNG TỰ ĐỘNG KHỚP 100% VỚI PHIM
-// ==========================================
-function calculateDurationByMovie(runtimeMinutes) {
-    const mins = Number(runtimeMinutes) || 110;
+// 1. TẢI VÀ HIỂN THỊ PHIM
+async function loadMovieData(movieId) {
+    try {
+        currentMovie = await getMovieDetails(movieId);
+    } catch (e) {
+        currentMovie = {
+            id: 693134,
+            title: "Dune: Hành Tinh Cát 2",
+            poster_path: "/1pdfLvkbY9ohJlCjQH2CZjjYVvJ.jpg",
+            runtime: 166,
+            vote_average: 8.8
+        };
+    }
+
+    if (!currentMovie) return;
+
+    // Tính thời lượng
+    const runtimeMins = Number(currentMovie.runtime) || 120;
+    baseDuration = Math.max(2.0, Math.ceil((runtimeMins + 15) / 30) * 0.5);
+
+    // Điền lên giao diện
+    setText("chosenMovieTitle", currentMovie.title);
+    setText("sideMovieTitle", currentMovie.title);
+    setText("chosenMovieRuntime", `${runtimeMins} phút`);
+    setText("chosenMovieHours", `~${(runtimeMins / 60).toFixed(1)} giờ`);
+    setText("chosenMovieRating", `★ ${Number(currentMovie.vote_average || 8.5).toFixed(1)} / 10`);
+    setText("sideMovieSub", `⏱ ${runtimeMins} phút · Chuẩn 4K Dolby Atmos`);
+
+    const posterUrl = currentMovie.poster_path 
+        ? `${CONFIG.TMDB_IMAGE_BASE}${currentMovie.poster_path}`
+        : 'https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=300';
     
-    // Quy tắc rạp: Làm tròn lên mốc 30 phút gần nhất (tối thiểu 2.0 giờ)
-    // Ví dụ: 208 phút -> làm tròn thành 3.5 giờ!
-    const roundedHours = Math.ceil(mins / 30) * 0.5;
-    baseMovieDuration = Math.max(2.0, roundedHours);
-    
-    // Tổng thời lượng = Suất chuẩn của phim + Thời gian khách chọn thêm
-    chosenDuration = baseMovieDuration + extraDuration;
-
-    // 1. Cập nhật dòng giải thích
-    const explainEl = document.getElementById("autoDurationExplain");
-    if (explainEl) {
-        explainEl.textContent = `Phim dài ${mins} phút ➔ Quán xếp suất chiếu chuẩn ${baseMovieDuration.toFixed(1)} giờ (Đủ xem trọn vẹn).`;
-    }
-
-    // 2. Cập nhật huy hiệu góc phải (ĐÃ FIX: Bắt đúng ID durationValueBadge)
-    const badgeEl = document.getElementById("durationValueBadge");
-    if (badgeEl) {
-        badgeEl.textContent = `${chosenDuration.toFixed(1)} giờ`;
-    }
-
-    // 3. Cập nhật text trong nút Vừa vặn phim đầu tiên
-    const pillSubText = document.getElementById("baseDurationPillText");
-    if (pillSubText) {
-        pillSubText.textContent = `(${baseMovieDuration.toFixed(1)} giờ)`;
-    }
-
-    updateBufferTimes();
-    updateLiveSummary();
+    const posterImg = document.getElementById("chosenMoviePoster");
+    if (posterImg) posterImg.src = posterUrl;
 }
 
-// ==========================================
-// ĐIỀU KHIỂN CÁC NÚT DÀN NGANG THỜI LƯỢNG (ĐÃ FIX SELECTOR)
-// ==========================================
-function initDurationControls() {
-    // ĐÃ FIX: Tìm đúng class .duration-pill-btn trong #extraDurationContainer
-    const pills = document.querySelectorAll("#extraDurationContainer .duration-pill-btn");
-    const badgeEl = document.getElementById("durationValueBadge");
-
-    pills.forEach(pill => {
-        pill.addEventListener("click", () => {
-            // Đổi active màu vàng cho nút được bấm
-            pills.forEach(p => p.classList.remove("active"));
-            pill.classList.add("active");
-
-            // Lấy số giờ thêm: 0, 0.5 hoặc 1.0
-            extraDuration = parseFloat(pill.dataset.extra) || 0;
-            chosenDuration = baseMovieDuration + extraDuration;
-
-            // Cập nhật huy hiệu góc phải nhảy số ngay lập tức
-            if (badgeEl) {
-                badgeEl.textContent = `${chosenDuration.toFixed(1)} giờ`;
-            }
-
-            // Tính toán lại giờ kết thúc và cập nhật tiền
-            updateBufferTimes();
-            updateLiveSummary();
-        });
-    });
-
-    // Khi khách đổi giờ nhận phòng trên dropdown
-    const timeSelect = document.getElementById("bookingTimeSelect");
-    timeSelect?.addEventListener("change", (e) => {
-        chosenTimeSlot = e.target.value;
-        updateBufferTimes();
-        updateLiveSummary();
-    });
-}
-
-// ==========================================
-// ĐỔ DỮ LIỆU VÀO DROPDOWN GIỜ
-// ==========================================
-function renderTimeSlots() {
-    const timeSelect = document.getElementById("bookingTimeSelect");
-    if (!timeSelect) return;
-    timeSelect.innerHTML = "";
-
-    const todayISO = getISODate(new Date());
-    const isToday = chosenDate === todayISO;
-    const now = new Date();
-    const curHour = now.getHours();
-    const curMin = now.getMinutes();
-
-    let defaultSet = false;
-
-    for (let h = 9; h <= 22; h++) {
-        for (let m = 0; m < 60; m += 30) {
-            const timeStr = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
-            const isPast = isToday && (h < curHour || (h === curHour && m <= curMin));
-
-            if (isPast) continue;
-
-            const opt = document.createElement("option");
-            opt.value = timeStr;
-            const session = h >= 18 ? 'Tối (Giờ Hot)' : (h >= 12 ? 'Chiều' : 'Sáng');
-            opt.textContent = `${timeStr} · ${session}`;
-
-            if (!defaultSet) {
-                if (!chosenTimeSlot || chosenTimeSlot === timeStr) {
-                    opt.selected = true;
-                    chosenTimeSlot = timeStr;
-                    defaultSet = true;
-                }
-            } else if (chosenTimeSlot === timeStr) {
-                opt.selected = true;
-            }
-
-            timeSelect.appendChild(opt);
-        }
-    }
-
-    if (timeSelect.children.length === 0) {
-        const opt = document.createElement("option");
-        opt.value = "";
-        opt.textContent = "Hôm nay đã hết khung giờ (Vui lòng chọn ngày mai)";
-        timeSelect.appendChild(opt);
-        chosenTimeSlot = null;
-    }
-
-    updateBufferTimes();
-    updateLiveSummary();
-}
-
-// ==========================================
-// CẬP NHẬT THANH ĐỆM 15 PHÚT DỌN PHÒNG
-// ==========================================
-function updateBufferTimes() {
-    if (!chosenTimeSlot) return;
-
-    const [startH, startM] = chosenTimeSlot.split(":").map(Number);
-    const durationMins = Math.round(chosenDuration * 60);
-
-    const startTotal = startH * 60 + startM;
-    const endTotal = startTotal + durationMins;
-    const bufferCleanTotal = endTotal + 15; // + 15 phút đệm dọn phòng
-
-    const formatHourMin = (totalMins) => {
-        const h = Math.floor(totalMins / 60) % 24;
-        const m = totalMins % 60;
-        return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
-    };
-
-    const endStr = formatHourMin(endTotal);
-    const cleanStr = formatHourMin(bufferCleanTotal);
-
-    const slotRangeEl = document.getElementById("bufferSlotRange");
-    const cleanUntilEl = document.getElementById("bufferCleanUntil");
-
-    if (slotRangeEl) slotRangeEl.textContent = `${chosenTimeSlot} ➔ ${endStr}`;
-    if (cleanUntilEl) cleanUntilEl.textContent = cleanStr;
-}
-
-// ==========================================
-// CẬP NHẬT BẢNG TÓM TẮT THỜI GIAN THỰC
-// ==========================================
-function updateLiveSummary() {
-    const room = ROOM_MAP[chosenRoomId] || ROOM_MAP.couple_a;
-    const subtotal = room.price * chosenDuration;
-
-    document.getElementById("sideRoomName").textContent = room.name;
-    document.getElementById("sideDate").textContent = chosenDate || "--";
-
-    // Tính toán giờ kết thúc chính xác
-    if (chosenTimeSlot) {
-        const [startH, startM] = chosenTimeSlot.split(":").map(Number);
-        const durationMins = Math.round(chosenDuration * 60);
-        const endTotalMins = startH * 60 + startM + durationMins;
-        
-        const endH = String(Math.floor(endTotalMins / 60) % 24).padStart(2, '0');
-        const endM = String(endTotalMins % 60).padStart(2, '0');
-        const endTimeStr = `${endH}:${endM}`;
-
-        document.getElementById("sideTimeSlot").textContent = `${chosenTimeSlot} ➔ ${endTimeStr} (${chosenDuration.toFixed(1)}h)`;
-    } else {
-        document.getElementById("sideTimeSlot").textContent = "Chưa chọn giờ";
-    }
-
-    document.getElementById("sidePriceRate").textContent = `${new Intl.NumberFormat('vi-VN').format(room.price)}đ / giờ`;
-    document.getElementById("sideDurationMult").textContent = `× ${chosenDuration.toFixed(1)} giờ`;
-    document.getElementById("sideRoomSubtotal").textContent = `${new Intl.NumberFormat('vi-VN').format(subtotal)}đ`;
-    document.getElementById("sideGrandTotal").textContent = `${new Intl.NumberFormat('vi-VN').format(subtotal)}đ`;
-
-    const btnSubmit = document.getElementById("btnProceedToFnb");
-    if (btnSubmit) btnSubmit.disabled = !chosenTimeSlot || !chosenDate;
-}
-
-// ==========================================
-// KHỞI TẠO THANH THẺ NGÀY CUỘN NGANG ĐỘNG
-// ==========================================
-function initDateTrack(initialDate) {
+// 2. SINH THANH NGÀY CUỘN NGANG (7 NGÀY TỚI)
+function renderDateTrack() {
     const track = document.getElementById("dynamicDateTrack");
-    const nativePicker = document.getElementById("hiddenDateNative");
-    const expandBtn = document.getElementById("btnOpenCalendarModal");
+    if (!track) return;
+    track.innerHTML = "";
 
+    const daysOfWeek = ["CN", "T2", "T3", "T4", "T5", "T6", "T7"];
     const today = new Date();
-    const todayISO = getISODate(today);
-    chosenDate = (initialDate && initialDate >= todayISO) ? initialDate : todayISO;
-
-    const weekdays = ["CN", "T2", "T3", "T4", "T5", "T6", "T7"];
-    let html = "";
 
     for (let i = 0; i < 7; i++) {
         const d = new Date();
         d.setDate(today.getDate() + i);
-        const iso = getISODate(d);
-        const dayNum = String(d.getDate()).padStart(2, '0');
-        const monthNum = String(d.getMonth() + 1).padStart(2, '0');
-        const wDay = weekdays[d.getDay()];
 
-        let prefix = wDay;
-        if (i === 0) prefix = "HÔM NAY";
-        else if (i === 1) prefix = "NGÀY MAI";
-        else if (d.getDay() === 5 || d.getDay() === 6) prefix = "CUỐI TUẦN";
+        const isoDate = d.toISOString().split('T')[0];
+        const dayNum = d.getDate();
+        const monthNum = d.getMonth() + 1;
+        const dayName = i === 0 ? "HÔM NAY" : daysOfWeek[d.getDay()];
 
-        const isActive = iso === chosenDate ? "active" : "";
-
-        html += `
-            <div class="date-tab-card ${isActive}" data-iso="${iso}">
-                <span class="day-prefix">${prefix}</span>
-                <span class="day-number">${dayNum}</span>
-                <span class="day-weekday">${wDay} · Th${monthNum}</span>
-            </div>
+        const card = document.createElement("div");
+        card.className = `date-tab-card ${isoDate === selectedDate ? 'active' : ''}`;
+        card.dataset.date = isoDate;
+        card.innerHTML = `
+            <span class="day-prefix">${dayName}</span>
+            <span class="day-number">${dayNum}</span>
+            <span class="day-weekday">Tháng ${monthNum}</span>
         `;
-    }
-    track.innerHTML = html;
 
-    track.querySelectorAll(".date-tab-card").forEach(card => {
         card.addEventListener("click", () => {
             track.querySelectorAll(".date-tab-card").forEach(c => c.classList.remove("active"));
             card.classList.add("active");
-            chosenDate = card.dataset.iso;
-            renderTimeSlots();
-            updateLiveSummary();
+            selectedDate = isoDate;
+            updateSummary();
         });
-    });
 
-    if (expandBtn && nativePicker) {
-        nativePicker.min = todayISO;
-        expandBtn.addEventListener("click", () => {
-            nativePicker.showPicker ? nativePicker.showPicker() : nativePicker.click();
-        });
-        nativePicker.addEventListener("change", (e) => {
-            chosenDate = e.target.value;
-            track.querySelectorAll(".date-tab-card").forEach(c => c.classList.remove("active"));
-            renderTimeSlots();
-            updateLiveSummary();
-        });
+        track.appendChild(card);
     }
 }
 
-// ==========================================
-// BỘ CHỌN KHÁCH & LỌC PHÒNG
-// ==========================================
-function initGuestStepper() {
-    const valDisplay = document.getElementById("guestCountVal");
-    const hintEl = document.getElementById("guestFitHint");
+// 3. ĐỔ DANH SÁCH GIỜ TỪ 09:00 ĐẾN 22:30
+function renderTimeSelect() {
+    const select = document.getElementById("bookingTimeSelect");
+    if (!select) return;
+    select.innerHTML = "";
 
-    const updateHints = () => {
-        valDisplay.textContent = guestCount;
-        if (guestCount <= 2) {
-            hintEl.textContent = "Phù hợp nhất: Phòng Couple (1-2 người)";
-        } else if (guestCount <= 6) {
-            hintEl.textContent = "Phù hợp nhất: Phòng Nhóm 4 Sao Hỏa (3-6 người)";
-        } else {
-            hintEl.textContent = "Phù hợp nhất: VIP Lounge (8-12 người)";
-        }
-    };
+    const timeSlots = [
+        "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
+        "13:00", "13:30", "14:00", "14:30", "15:00", "15:30",
+        "16:00", "16:30", "17:00", "17:30", "18:00", "18:30",
+        "19:00", "19:30", "20:00", "20:30", "21:00", "21:30", "22:00"
+    ];
 
-    document.getElementById("btnMinusGuests")?.addEventListener("click", () => {
-        if (guestCount > 1) { guestCount--; updateHints(); }
-    });
-    document.getElementById("btnPlusGuests")?.addEventListener("click", () => {
-        if (guestCount < 12) { guestCount++; updateHints(); }
+    timeSlots.forEach(t => {
+        const opt = document.createElement("option");
+        opt.value = t;
+        opt.textContent = `${t} ${t === "18:30" ? "🔥 (Giờ Hot Buổi Tối)" : ""}`;
+        if (t === selectedTime) opt.selected = true;
+        select.appendChild(opt);
     });
 
-    const chips = document.querySelectorAll("#roomCategoryChips .category-chip");
-    chips.forEach(chip => {
+    select.addEventListener("change", (e) => {
+        selectedTime = e.target.value;
+        updateSummary();
+    });
+}
+
+// 4. CHỌN PHÒNG & THỜI LƯỢNG
+function setupRoomSelection() {
+    const roomCards = document.querySelectorAll(".rich-room-card");
+    roomCards.forEach(card => {
+        const rId = card.dataset.roomId;
+        if (rId === selectedRoomId) card.classList.add("active");
+        else card.classList.remove("active");
+
+        card.addEventListener("click", () => {
+            roomCards.forEach(c => c.classList.remove("active"));
+            card.classList.add("active");
+            selectedRoomId = rId;
+            updateSummary();
+        });
+    });
+
+    // Lọc loại phòng
+    document.querySelectorAll(".category-chip").forEach(chip => {
         chip.addEventListener("click", () => {
-            chips.forEach(c => c.classList.remove("active"));
+            document.querySelectorAll(".category-chip").forEach(c => c.classList.remove("active"));
             chip.classList.add("active");
-
             const filter = chip.dataset.filter;
-            document.querySelectorAll("#roomsListGrid .rich-room-card").forEach(roomCard => {
-                const cat = roomCard.dataset.category;
-                if (filter === "all" || cat === filter) {
-                    roomCard.style.display = "flex";
+            roomCards.forEach(card => {
+                if (filter === "all" || card.dataset.category === filter) {
+                    card.style.display = "flex";
                 } else {
-                    roomCard.style.display = "none";
+                    card.style.display = "none";
                 }
             });
         });
     });
 }
 
-// ==========================================
-// CHỌN PHÒNG CHIẾU CÓ ẢNH
-// ==========================================
-function initRoomCards() {
-    const cards = document.querySelectorAll("#roomsListGrid .rich-room-card");
-    cards.forEach(card => {
-        if (card.dataset.roomId === chosenRoomId) card.classList.add("active");
-        else card.classList.remove("active");
-
-        card.addEventListener("click", () => {
-            cards.forEach(c => c.classList.remove("active"));
-            card.classList.add("active");
-            chosenRoomId = card.dataset.roomId;
-            updateLiveSummary();
+function setupDurationPills() {
+    const pills = document.querySelectorAll(".duration-pill-btn");
+    pills.forEach(pill => {
+        pill.addEventListener("click", () => {
+            pills.forEach(p => p.classList.remove("active"));
+            pill.classList.add("active");
+            extraDuration = Number(pill.dataset.extra) || 0;
+            updateSummary();
         });
     });
 }
 
-// ==========================================
-// LƯU SESSIONSTORAGE VÀ CHUYỂN BƯỚC
-// ==========================================
-function saveAndNavigate(targetUrl) {
-    if (!chosenTimeSlot || !chosenDate) {
-        alert("Vui lòng chọn khung giờ chiếu trước khi tiếp tục!");
-        return;
-    }
+function setupGuestStepper() {
+    const display = document.getElementById("guestCountVal");
+    document.getElementById("btnMinusGuests")?.addEventListener("click", () => {
+        if (guestCount > 1) {
+            guestCount--;
+            if (display) display.textContent = guestCount;
+        }
+    });
+    document.getElementById("btnPlusGuests")?.addEventListener("click", () => {
+        if (guestCount < 12) {
+            guestCount++;
+            if (display) display.textContent = guestCount;
+        }
+    });
+}
 
-    const room = ROOM_MAP[chosenRoomId] || ROOM_MAP.couple_a;
-    const roomAmount = room.price * chosenDuration;
+// 5. TÍNH TIỀN & CẬP NHẬT TÓM TẮT
+function updateSummary() {
+    const roomInfo = ROOM_MAP[selectedRoomId] || ROOM_MAP.couple_a;
+    const totalDuration = baseDuration + extraDuration;
+    const roomTotal = Math.round(roomInfo.price * totalDuration);
 
-    const payload = {
-        movieId: currentMovie ? currentMovie.id : 693134,
-        movieTitle: currentMovie ? currentMovie.title : "Phim chiếu rạp",
-        posterPath: currentMovie ? currentMovie.poster_path : "",
-        date: chosenDate,
-        roomType: chosenRoomId,
-        roomName: room.name,
-        startTime: chosenTimeSlot,
-        duration: chosenDuration,
-        roomTotal: roomAmount,
+    // Tính mốc giờ xem & giờ dọn
+    const [sH, sM] = selectedTime.split(":").map(Number);
+    const endMinutes = sH * 60 + sM + Math.round(totalDuration * 60);
+    const endH = Math.floor(endMinutes / 60) % 24;
+    const endM = endMinutes % 60;
+    const endTimeStr = `${String(endH).padStart(2, '0')}:${String(endM).padStart(2, '0')}`;
+
+    const cleanMinutes = endMinutes + 15;
+    const cleanH = Math.floor(cleanMinutes / 60) % 24;
+    const cleanM = cleanMinutes % 60;
+    const cleanTimeStr = `${String(cleanH).padStart(2, '0')}:${String(cleanM).padStart(2, '0')}`;
+
+    // Cập nhật giao diện
+    setText("durationValueBadge", `${totalDuration.toFixed(1)} giờ`);
+    setText("baseDurationPillText", `(${baseDuration.toFixed(1)} giờ)`);
+    setText("bufferSlotRange", `${selectedTime} ➔ ${endTimeStr}`);
+    setText("bufferCleanUntil", cleanTimeStr);
+
+    setText("sideRoomName", roomInfo.name);
+    setText("sideDate", selectedDate);
+    setText("sideTimeSlot", `${selectedTime} ➔ ${endTimeStr}`);
+    setText("sidePriceRate", `${new Intl.NumberFormat('vi-VN').format(roomInfo.price)}đ / giờ`);
+    setText("sideDurationMult", `× ${totalDuration.toFixed(1)} giờ`);
+    setText("sideRoomSubtotal", `${new Intl.NumberFormat('vi-VN').format(roomTotal)}đ`);
+    setText("sideGrandTotal", `${new Intl.NumberFormat('vi-VN').format(roomTotal)}đ`);
+
+    // Lưu tạm vào sessionStorage để Bước 2 & 3 sử dụng
+    const bookingPayload = {
+        movieId: currentMovie?.id || 693134,
+        movieTitle: currentMovie?.title || "Dune: Hành Tinh Cát 2",
+        posterPath: currentMovie?.poster_path || "",
+        roomType: selectedRoomId,
+        roomName: roomInfo.name,
+        date: selectedDate,
+        startTime: selectedTime,
+        duration: totalDuration,
+        roomTotal: roomTotal,
+        grandTotal: roomTotal,
         foods: [],
-        foodTotal: 0,
-        grandTotal: roomAmount
+        foodTotal: 0
     };
-
-    sessionStorage.setItem("chillflixBooking", JSON.stringify(payload));
-    window.location.href = targetUrl;
+    sessionStorage.setItem("chillflixBooking", JSON.stringify(bookingPayload));
 }
 
-function getISODate(d) {
-    return [
-        d.getFullYear(),
-        String(d.getMonth() + 1).padStart(2, '0'),
-        String(d.getDate()).padStart(2, '0')
-    ].join('-');
+// 6. NÚT TIẾP TỤC CHỌN ĐỒ ĂN
+function setupProceedButton() {
+    const btn = document.getElementById("btnProceedToFnb");
+    btn?.addEventListener("click", () => {
+        window.location.href = "booking-food.html";
+    });
 }
 
-function initHeaderControls() {
-    const themeBtn = document.getElementById("themeToggle");
-    const themeIcon = document.getElementById("themeIcon");
-    themeBtn?.addEventListener("click", () => {
-        const cur = document.documentElement.getAttribute("data-theme");
-        const next = cur === "light" ? "dark" : "light";
-        document.documentElement.setAttribute("data-theme", next);
-        if (themeIcon) themeIcon.textContent = next === "light" ? "☀️" : "🌙";
-        localStorage.setItem("chillflix-theme", next);
-    });
-
-    const userBtn = document.getElementById("userMenuBtn");
-    const userDropdown = document.getElementById("userDropdown");
-    userBtn?.addEventListener("click", (e) => {
-        e.stopPropagation();
-        userDropdown.classList.toggle("show");
-    });
-    document.addEventListener("click", () => userDropdown?.classList.remove("show"));
+function setText(id, val) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = val ?? "--";
 }

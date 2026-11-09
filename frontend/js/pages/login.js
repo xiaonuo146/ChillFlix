@@ -1,53 +1,14 @@
-/* ==========================================================================
-   CHILLFLIX - LOGIC ĐĂNG NHẬP, ĐĂNG KÝ & PHÂN QUYỀN (ADMIN / CUSTOMER)
-   ========================================================================== */
-
-// 1. ĐỊNH NGHĨA 2 TÀI KHOẢN MẪU TEST
-const DEMO_ACCOUNTS = {
-    // Tài khoản Khách hàng mới (0 Điểm, 0 Voucher)
-    customer: {
-        id: "usr_cust_01",
-        fullName: "Trần Văn An",
-        email: "khachhang@chillflix.vn",
-        phone: "0912345678",
-        password: "123",
-        role: "customer",
-        rank: "Thành viên Mới",
-        points: 0,              // <--- ĐÚNG YÊU CẦU: 0 ĐIỂM BAN ĐẦU
-        claimedVouchers: []     // <--- ĐÚNG YÊU CẦU: 0 VOUCHER TRONG VÍ
-    },
-
-    // Tài khoản Quản trị viên (Admin)
-    admin: {
-        id: "usr_admin_01",
-        fullName: "Trần Minh Đạt (Quản Lý Rạp)",
-        email: "admin@chillflix.vn",
-        phone: "0988234567",
-        password: "admin",
-        role: "admin",          // <--- QUYỀN ADMIN
-        rank: "Quản Trị Viên",
-        points: 9999,
-        claimedVouchers: ["PHIM20", "CHILL10", "FNBCOUPLE"]
-    }
-};
+import { API } from '../apiClient.js';
 
 let currentTab = "login";
-let currentRoleToLogin = "customer";
 
 document.addEventListener("DOMContentLoaded", () => {
-    // Nếu đã đăng nhập trước đó -> Tự chuyển về trang chủ
-    const token = localStorage.getItem("chillflix_token");
-    if (token) {
-        // window.location.href = "index.html";
-    }
-
     setupTabs();
     setupDemoButtons();
     setupPasswordToggle();
     setupFormSubmit();
 });
 
-// Chuyển tab Đăng nhập / Đăng ký
 function setupTabs() {
     const tabs = document.querySelectorAll(".auth-tab-btn");
     const groupName = document.getElementById("groupRegisterName");
@@ -60,17 +21,15 @@ function setupTabs() {
             currentTab = tab.dataset.tab;
 
             if (currentTab === "register") {
-                groupName.style.display = "flex";
-                submitBtn.textContent = "Tạo Tài Khoản Mới ➔";
+                if (groupName) groupName.style.display = "flex";
+                if (submitBtn) submitBtn.textContent = "Tạo Tài Khoản Mới ➔";
             } else {
-                groupName.style.display = "none";
-                submitBtn.textContent = "Đăng Nhập Ngay ➔";
+                if (groupName) groupName.style.display = "none";
+                if (submitBtn) submitBtn.textContent = "Đăng Nhập Ngay ➔";
             }
         });
     });
 }
-
-// 2 Nút 1 chạm điền mẫu tự động
 function setupDemoButtons() {
     const btnCust = document.getElementById("btnFillNewCustomer");
     const btnAdmin = document.getElementById("btnFillAdmin");
@@ -78,20 +37,24 @@ function setupDemoButtons() {
     const passInp = document.getElementById("inpPassword");
     const roleIndicator = document.getElementById("roleIndicator");
 
+    // Nút 1: Khách hàng mới (0 điểm, 0 voucher)
     btnCust?.addEventListener("click", () => {
-        accountInp.value = DEMO_ACCOUNTS.customer.email;
-        passInp.value = DEMO_ACCOUNTS.customer.password;
-        currentRoleToLogin = "customer";
-        roleIndicator.textContent = "👤 Khách Hàng (0đ · 0 voucher)";
-        roleIndicator.style.color = "var(--primary)";
+        accountInp.value = "khachhang@chillflix.vn";
+        passInp.value = "123";
+        if (roleIndicator) {
+            roleIndicator.textContent = "👤 Khách Mới (0đ · 0 voucher)";
+            roleIndicator.style.color = "var(--primary)";
+        }
     });
 
+    // Nút 2: Quản trị viên Admin
     btnAdmin?.addEventListener("click", () => {
-        accountInp.value = DEMO_ACCOUNTS.admin.email;
-        passInp.value = DEMO_ACCOUNTS.admin.password;
-        currentRoleToLogin = "admin";
-        roleIndicator.textContent = "⚙️ Quản Trị Viên (Admin)";
-        roleIndicator.style.color = "var(--danger)";
+        accountInp.value = "admin@chillflix.vn";
+        passInp.value = "admin";
+        if (roleIndicator) {
+            roleIndicator.textContent = "⚙️ Quản Trị Viên (Admin)";
+            roleIndicator.style.color = "var(--danger)";
+        }
     });
 }
 
@@ -105,83 +68,54 @@ function setupPasswordToggle() {
     });
 }
 
-// Xử lý đăng nhập / đăng ký
 function setupFormSubmit() {
     const form = document.getElementById("loginMainForm");
     const alertBox = document.getElementById("authAlertMessage");
 
-    form?.addEventListener("submit", (e) => {
+    form?.addEventListener("submit", async (e) => {
         e.preventDefault();
 
         const account = document.getElementById("inpAccount").value.trim();
-        const pass = document.getElementById("inpPassword").value;
+        const password = document.getElementById("inpPassword").value;
         const regName = document.getElementById("inpFullName")?.value.trim();
 
-        let loggedUser = null;
+        if (alertBox) alertBox.style.display = "none";
 
-        if (currentTab === "login") {
-            // Kiểm tra đăng nhập
-            if (account === DEMO_ACCOUNTS.admin.email && pass === DEMO_ACCOUNTS.admin.password) {
-                loggedUser = DEMO_ACCOUNTS.admin;
-            } else if (account === DEMO_ACCOUNTS.customer.email && pass === DEMO_ACCOUNTS.customer.password) {
-                loggedUser = DEMO_ACCOUNTS.customer;
+        try {
+            let res;
+            if (currentTab === "login") {
+                // Đăng nhập thật qua API Backend
+                res = await API.login(account, password);
             } else {
-                // Đăng nhập tự do tài khoản bất kỳ (mặc định role customer, 0 điểm)
-                loggedUser = {
-                    id: "usr_" + Date.now(),
-                    fullName: account.split("@")[0] || "Khách Xem Phim",
+                // Đăng ký tài khoản mới lên Atlas
+                res = await API.register({
+                    fullName: regName || "Khách Hàng Mới",
                     email: account.includes("@") ? account : `${account}@chillflix.vn`,
-                    phone: !account.includes("@") ? account : "0988123456",
-                    role: "customer",
-                    rank: "Thành viên Mới",
-                    points: 0,
-                    claimedVouchers: []
-                };
+                    phone: !account.includes("@") ? account : "09" + Math.floor(10000000 + Math.random() * 90000000),
+                    password: password
+                });
             }
-        } else {
-            // Đăng ký mới -> Khởi tạo 0 điểm, 0 voucher
-            loggedUser = {
-                id: "usr_" + Date.now(),
-                fullName: regName || "Khách Hàng Mới",
-                email: account.includes("@") ? account : `${account}@chillflix.vn`,
-                phone: !account.includes("@") ? account : "0988123456",
-                role: "customer",
-                rank: "Thành viên Mới",
-                points: 0,
-                claimedVouchers: []
-            };
+
+            // Lưu JWT token thật và thông tin User
+            localStorage.setItem("chillflix_token", res.token);
+            localStorage.setItem("chillflix_user", JSON.stringify(res.user));
+
+            if (res.user.role === "admin") {
+                alert(`👑 Đăng nhập thành công với quyền QUẢN TRỊ VIÊN!\nXin chào ${res.user.fullName}.`);
+                window.location.href = "admin/dashboard.html";
+            } else {
+                alert(`🎉 Đăng nhập thành công! Chào mừng ${res.user.fullName}.`);
+                window.location.href = "profile.html";
+            }
+
+        } catch (err) {
+            if (alertBox) {
+                alertBox.textContent = err.message || "Tài khoản hoặc mật khẩu không đúng!";
+                alertBox.className = "auth-alert-box error";
+                alertBox.style.display = "block";
+            } else {
+                alert(err.message || "Đăng nhập thất bại!");
+            }
         }
-
-        // Lưu vào LocalStorage
-        localStorage.setItem("chillflix_user", JSON.stringify(loggedUser));
-        localStorage.setItem("chillflix_token", "jwt_token_" + loggedUser.role + "_" + Date.now());
-
-        // Nếu là Admin -> Chuyển sang trang Quản Trị
-        if (loggedUser.role === "admin") {
-            alert(`👑 Đăng nhập thành công với quyền QUẢN TRỊ VIÊN!\nXin chào ${loggedUser.fullName}. Chuyển tiếp vào Dashboard rạp.`);
-            window.location.href = "admin/dashboard.html";
-        } else {
-            // Nếu là Khách hàng -> Chuyển về trang cá nhân
-            alert(`🎉 Chào mừng ${loggedUser.fullName}!\nBạn đã đăng nhập thành công. Điểm tích lũy: ${loggedUser.points}đ.`);
-            window.location.href = "profile.html";
-        }
-    });
-
-    // Nút Google
-    document.getElementById("btnSocialGoogle")?.addEventListener("click", () => {
-        const googleUser = {
-            id: "usr_google_01",
-            fullName: "Nguyễn Hoàng Nam (Google)",
-            email: "nam.nguyen@gmail.com",
-            phone: "0988234567",
-            role: "customer",
-            rank: "Thành viên Mới",
-            points: 0,
-            claimedVouchers: []
-        };
-        localStorage.setItem("chillflix_user", JSON.stringify(googleUser));
-        localStorage.setItem("chillflix_token", "jwt_google_sample");
-        alert("🎉 Đăng nhập qua tài khoản Google thành công!");
-        window.location.href = "profile.html";
     });
 }

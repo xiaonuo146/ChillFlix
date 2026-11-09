@@ -1,7 +1,7 @@
 /* ==========================================================================
    CHILLFLIX ADMIN - DASHBOARD CONTROLLER (CHUẨN DỮ LIỆU THẬT 100%)
    ========================================================================== */
-
+import { API } from '../../apiClient.js';
 function formatMoney(amount) {
     return new Intl.NumberFormat("vi-VN").format(Math.max(0, Math.round(Number(amount) || 0))) + "đ";
 }
@@ -90,18 +90,23 @@ function startAdminClock() {
 // ==========================================
 // 2. TẢI ĐƠN HÀNG THẬT (BẮT ĐẦU TỪ 0)
 // ==========================================
-function loadRealBookings() {
+async function loadRealBookings() {
     try {
-        const raw = localStorage.getItem("chillflix_booking_history");
-        allAdminBookings = raw ? JSON.parse(raw) : [];
+        const res = await API.getAdminBookings();
+        allAdminBookings = res.data || [];
     } catch (e) {
         allAdminBookings = [];
     }
 
     const badgeEl = document.getElementById("pendingBookingsBadge");
     if (badgeEl) badgeEl.textContent = allAdminBookings.length;
-}
 
+    // Tính toán lại toàn bộ bảng Gantt và chỉ số sau khi có dữ liệu từ Database
+    calculateKpiStats();
+    renderGanttMatrix();
+    renderUrgentTasks();
+    render7DaysRevenue();
+}
 // ==========================================
 // 3. TÍNH TOÁN 4 THẺ SỐ LIỆU KPI
 // ==========================================
@@ -309,6 +314,10 @@ function initDrawerEvents() {
 
     checkinBtn?.addEventListener("click", () => {
         if (!currentDrawerBooking) return;
+        if (currentDrawerBooking.status === "cancelled") {
+            alert(" Đơn này đã hủy, không thể check-in!");
+            return;
+        }
         currentDrawerBooking.status = "checked_in";
 
         try {
@@ -349,12 +358,18 @@ function openDrawerWithBooking(booking) {
 
     const checkinBtn = document.getElementById("btnDrawerCheckin");
     if (checkinBtn) {
-        if (booking.status === "checked_in") {
+        if (booking.status === "cancelled") {
+            checkinBtn.textContent = "✕ ĐƠN ĐÃ HỦY (KHÔNG THỂ CHECK-IN)";
+            checkinBtn.disabled = true;
+            checkinBtn.style.cursor = "not-allowed";
+        } else if (booking.status === "checked_in") {
             checkinBtn.textContent = "✓ Đã nhận phòng (Đang xem)";
             checkinBtn.disabled = true;
+            checkinBtn.style.cursor = "not-allowed";
         } else {
             checkinBtn.textContent = "✓ Xác Nhận Nhận Phòng (Check-in)";
             checkinBtn.disabled = false;
+            checkinBtn.style.cursor = "pointer";
         }
     }
 

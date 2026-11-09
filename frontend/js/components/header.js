@@ -3,18 +3,11 @@
    Tự động dọn sạch code cũ, đồng bộ Dark/Light, Avatar Dropdown và Phân quyền
    ========================================================================== */
 
-function initMasterHeader() {
-    setupMasterTheme();
-    setupMasterUser();
-    setupMasterSearch();
-    setupMasterDrawer();
-}
-
 // Chạy an toàn bất kể trang web load nhanh hay chậm
 if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initMasterHeader);
+    document.addEventListener("DOMContentLoaded", runHeaderInit);
 } else {
-    initMasterHeader();
+    runHeaderInit();
 }
 
 // ==========================================
@@ -229,5 +222,5 @@ function runHeaderInit() {
     setupMasterUser();
     setupMasterSearch();
     setupMasterDrawer();
-    setupGlobalVoucherClaim(); // <--- THÊM DÒNG NÀY
+    setupGlobalVoucherClaim(); 
 }

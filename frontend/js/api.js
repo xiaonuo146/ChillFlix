@@ -1,7 +1,7 @@
 import { CONFIG } from "./config.js";
 
 // ======================================
-// 1. DỮ LIỆU PHIM MẪU CHUẨN (MOCK DATA)
+// 1. DỮ LIỆU PHIM MẪU CHUẨN DỰ PHÒNG (MOCK DATA KHI MẤT MẠNG)
 // ======================================
 const MOCK_TRENDING_MOVIES = [
     {
@@ -42,124 +42,88 @@ const MOCK_TRENDING_MOVIES = [
     }
 ];
 
-// Kiểm tra TMDB API Key có khả dụng không
-function hasTMDBKey() {
-    return Boolean(
-        CONFIG.TMDB_API_KEY &&
-        CONFIG.TMDB_API_KEY !== "YOUR_TMDB_API_KEY_HERE" &&
-        !CONFIG.TMDB_API_KEY.includes("...")
-    );
-}
-
+// Cho phép cả số lẫn chuỗi ID hợp lệ
 function validateMovieId(movieId) {
-    const id = Number(movieId);
-    if (!Number.isInteger(id) || id <= 0) {
-        throw new Error("ID phim không hợp lệ");
+    if (!movieId || movieId === "undefined" || movieId === "null") {
+        return 693134; // Mặc định Dune 2
     }
-    return id;
-}
-
-// Gọi TMDB API
-async function fetchTMDB(endpoint, language = CONFIG.DEFAULT_LANG || "vi-VN") {
-    const separator = endpoint.includes("?") ? "&" : "?";
-    const url = `${CONFIG.TMDB_BASE_URL}${endpoint}${separator}api_key=${encodeURIComponent(CONFIG.TMDB_API_KEY)}&language=${encodeURIComponent(language)}`;
-
-    const response = await fetch(url);
+    return Number(movieId) || movieId;
+} 
+// Gọi thông qua Backend Proxy (Giấu API Key hoàn toàn)
+async function fetchFromBackend(endpoint) {
+    const baseUrl = CONFIG.API_BASE_URL || 'http://localhost:5000';
+    const response = await fetch(`${baseUrl}/api/movies${endpoint}`);
     if (!response.ok) {
-        throw new Error(`Lỗi TMDB: ${response.status}`);
+        throw new Error(`Lỗi máy chủ: ${response.status}`);
     }
-    return await response.json();
+    const result = await response.json();
+    return result.data;
 }
 
 // ======================================
-// 2. LẤY DANH SÁCH PHIM ĐANG HOT
+// 2. LẤY DANH SÁCH 20 PHIM ĐANG HOT (THẬT 100%)
 // ======================================
 export async function getTrendingMovies() {
-    if (!hasTMDBKey()) {
-        console.info("⚡ Đang dùng Mock Data (Chưa có key TMDB).");
-        return MOCK_TRENDING_MOVIES;
-    }
-
     try {
-        const data = await fetchTMDB("/trending/movie/week");
-        return (data.results && data.results.length > 0) ? data.results : MOCK_TRENDING_MOVIES;
+        const movies = await fetchFromBackend("/trending");
+        return (Array.isArray(movies) && movies.length > 0) ? movies : MOCK_TRENDING_MOVIES;
     } catch (error) {
-        console.warn("⚠️ Không kết nối được TMDB, tự động dùng dữ liệu dự phòng:", error.message);
+        console.warn("⚠️ Không kết nối được Backend proxy, dùng mock data:", error.message);
         return MOCK_TRENDING_MOVIES;
     }
 }
 
 // ======================================
-// 3. LẤY CHI TIẾT PHIM
+// 3. LẤY CHI TIẾT PHIM (THẬT 100%)
 // ======================================
 export async function getMovieDetails(movieId) {
     const id = validateMovieId(movieId);
     const mockMovie = MOCK_TRENDING_MOVIES.find(m => m.id === id);
 
-    if (!hasTMDBKey()) {
-        return mockMovie || MOCK_TRENDING_MOVIES[0];
-    }
-
     try {
-        return await fetchTMDB(`/movie/${id}`);
+        const movie = await fetchFromBackend(`/${id}`);
+        return movie || mockMovie || MOCK_TRENDING_MOVIES[0];
     } catch (error) {
         return mockMovie || MOCK_TRENDING_MOVIES[0];
     }
 }
 
 // ======================================
-// 4. LẤY DIỄN VIÊN
+// 4. LẤY DIỄN VIÊN (THẬT 100%)
 // ======================================
 export async function getMovieCredits(movieId) {
     const id = validateMovieId(movieId);
-    if (!hasTMDBKey()) return [];
-
     try {
-        const data = await fetchTMDB(`/movie/${id}/credits`);
-        return {
-            cast: (data.cast || []).slice(0, 8),
-            crew: data.crew || []   
-        };
+        const credits = await fetchFromBackend(`/${id}/credits`);
+        return credits || { cast: [], crew: [] };
     } catch (error) {
-        return [];
+        return { cast: [], crew: [] };
     }
 }
 
 // ======================================
-// 5. LẤY PHIM TƯƠNG TỰ
+// 5. LẤY PHIM TƯƠNG TỰ (THẬT 100%)
 // ======================================
 export async function getSimilarMovies(movieId) {
     const id = validateMovieId(movieId);
-    if (!hasTMDBKey()) {
-        return MOCK_TRENDING_MOVIES.filter(m => m.id !== id);
-    }
-
     try {
-        const data = await fetchTMDB(`/movie/${id}/similar`);
-        return (data.results || []).slice(0, 8);
+        const similar = await fetchFromBackend(`/${id}/similar`);
+        return (Array.isArray(similar) && similar.length > 0) 
+            ? similar 
+            : MOCK_TRENDING_MOVIES.filter(m => m.id !== id);
     } catch (error) {
         return MOCK_TRENDING_MOVIES.filter(m => m.id !== id);
     }
 }
 
 // ======================================
-// 6. LẤY TRAILER (ĐÃ FIX LỖI CÚ PHÁP)
+// 6. LẤY TRAILER YOUTUBE (THẬT 100%)
 // ======================================
 export async function getMovieTrailer(movieId) {
     const id = validateMovieId(movieId);
-    if (!hasTMDBKey()) return null;
-
     try {
-        const data = await fetchTMDB(`/movie/${id}/videos`, "en-US");
-        const videos = data.results || [];
-
-        const trailer = videos.find(v => v.site === "YouTube" && v.type === "Trailer" && v.official) ||
-                        videos.find(v => v.site === "YouTube" && v.type === "Trailer");
-
-        if (!trailer || !trailer.key) return null;
-
-        // Chuỗi YouTube hoàn chỉnh, không còn lỗi cú pháp
-        return `https://www.youtube.com/watch?v=${encodeURIComponent(trailer.key)}`;
+        const trailerUrl = await fetchFromBackend(`/${id}/trailer`);
+        return trailerUrl || null;
     } catch (error) {
         return null;
     }

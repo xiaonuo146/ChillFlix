@@ -207,27 +207,25 @@ export function closeAuthModal() {
     const overlay = document.getElementById("authModalOverlay");
     if (overlay) overlay.classList.remove("open");
 }
-
 // 5. ĐỒNG BỘ TRẠNG THÁI NGƯỜI DÙNG LÊN HEADER TRÊN TẤT CẢ CÁC TRANG
 export function updateHeaderUserUI() {
     const raw = localStorage.getItem("chillflix_user");
     const nameEl = document.querySelector(".dropdown__name");
     const rankEl = document.querySelector(".dropdown__rank");
     const userBtn = document.getElementById("userMenuBtn");
-    const logoutBtn = document.querySelector('a[href*="logout"]');
+    const logoutBtn = document.querySelector('a[href*="logout"]') || document.getElementById("btnLogout");
     const adminLink = document.getElementById("menuLinkAdmin") || document.querySelector('a[href*="admin/dashboard.html"]');
-    if (adminLink) {
-        if (user.role === "admin") {
-            adminLink.style.display = "block";
-        } else {
-            adminLink.style.display = "none";
-        }
-    }
+
     if (raw) {
-        // ĐÃ ĐĂNG NHẬP: Hiển thị tên & rank của người dùng
+        // ĐÃ ĐĂNG NHẬP: Parse user trước rồi mới dùng
         const user = JSON.parse(raw);
-        if (nameEl) nameEl.textContent = user.fullName;
-        if (rankEl) rankEl.textContent = `${user.rank} · ${new Intl.NumberFormat('vi-VN').format(user.points)} CinePoint`;
+
+        if (adminLink) {
+            adminLink.style.display = (user.role === "admin") ? "block" : "none";
+        }
+
+        if (nameEl) nameEl.textContent = user.fullName || "Khách xem phim";
+        if (rankEl) rankEl.textContent = `${user.rank || 'Thành viên Mới'} · ${new Intl.NumberFormat('vi-VN').format(user.points || 0)} CinePoint`;
         
         // Sự kiện Đăng xuất
         logoutBtn?.addEventListener("click", (e) => {
@@ -240,7 +238,8 @@ export function updateHeaderUserUI() {
             }
         });
     } else {
-        // CHƯA ĐĂNG NHẬP: Nhấp vào Avatar sẽ mở Modal Đăng nhập
+        // CHƯA ĐĂNG NHẬP
+        if (adminLink) adminLink.style.display = "none";
         if (nameEl) nameEl.textContent = "Khách vãng lai";
         if (rankEl) rankEl.textContent = "Bấm để Đăng nhập / Đăng ký";
 
@@ -249,6 +248,7 @@ export function updateHeaderUserUI() {
             openAuthModal("login");
         });
     }
+
     // KÍCH HOẠT THANH TÌM KIẾM TRÊN HEADER TOÀN HỆ THỐNG
     document.querySelectorAll(".search__input").forEach(input => {
         input.addEventListener("keydown", (e) => {
@@ -256,7 +256,6 @@ export function updateHeaderUserUI() {
                 e.preventDefault();
                 const keyword = input.value.trim();
                 if (keyword) {
-                    // Chuyển hướng sang explore.html kèm từ khóa tìm kiếm
                     window.location.href = `explore.html?q=${encodeURIComponent(keyword)}`;
                 }
             }
