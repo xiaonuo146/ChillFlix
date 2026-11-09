@@ -608,6 +608,37 @@
     background: var(--danger) !important;
     color: #ffffff !important;
 }
+/* BỘ LỌC TRẠNG THÁI VÉ TRONG TAB LỊCH SỬ */
+.history-filter-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.history-filter-chip {
+    padding: 7px 16px;
+    border-radius: 999px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 150ms ease;
+}
+
+.history-filter-chip:hover {
+    border-color: var(--primary);
+    color: var(--text);
+}
+
+.history-filter-chip.active {
+    background: var(--primary);
+    color: var(--on-primary);
+    border-color: var(--primary);
+    font-weight: 700;
+}
 @media (max-width: 900px) {
     .profile-hero-card {
         grid-template-columns: 1fr;

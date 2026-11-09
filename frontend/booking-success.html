@@ -42,38 +42,41 @@
                 <a href="booking-food.html" class="nav__link">Đồ ăn & Uống</a>
                 <a href="booking.html" class="btn-booking-pill">Đặt phòng</a>
             </nav>
-
+<!-- CỤM CÔNG CỤ BÊN PHẢI (CHUẨN DÙNG CHUNG CHO MỌI TRANG) -->
             <div class="header__actions">
+                <!-- Ô tìm kiếm phim nhanh (Bấm Enter là tìm) -->
                 <div class="header__search">
                     <span class="search__icon">🔍</span>
                     <input type="text" class="search__input" placeholder="Tìm phim, phòng chiếu..." aria-label="Tìm kiếm phim" />
                 </div>
 
-                <button id="themeToggle" class="action-btn" title="Chuyển chế độ Sáng / Tối">
+                <!-- Nút bật/tắt Tối - Sáng -->
+                <button id="themeToggle" class="action-btn" title="Chuyển chế độ Sáng / Tối" aria-label="Đổi giao diện">
                     <span id="themeIcon">🌙</span>
                 </button>
 
+                <!-- Avatar Người dùng & Menu thả xuống (JS TỰ ĐỘNG ĐIỀN THÔNG TIN) -->
                 <div class="user-dropdown-wrapper">
-                    <button id="userMenuBtn" class="avatar-btn" aria-expanded="false">
+                    <button id="userMenuBtn" class="avatar-btn" aria-expanded="false" aria-label="Menu tài khoản">
                         <span class="avatar-circle">👤</span>
                         <span class="avatar-arrow">▾</span>
                     </button>
                     <div id="userDropdown" class="user-dropdown-menu">
                         <div class="dropdown__header">
-                            <p class="dropdown__name">Nguyễn Hoàng Nam</p>
-                            <p class="dropdown__rank">Hạng Bạc · 1.379 CinePoint</p>
+                            <p class="dropdown__name">Đang tải...</p>
+                            <p class="dropdown__rank">--</p>
                         </div>
                         <hr class="dropdown__divider" />
                         <a href="profile.html" class="dropdown__item">Hồ sơ cá nhân</a>
-                        <a href="profile.html#history" class="dropdown__item">Lịch sử xem phim</a>
-                        <a href="profile.html#vouchers" class="dropdown__item">Ví Voucher của tôi (3)</a>
-                        <a href="admin/dashboard.html" class="dropdown__item" style="color: var(--primary);">⚙️ Quản trị rạp</a>
+                        <a href="profile.html#history" class="dropdown__item" id="menuLinkHistory">Lịch sử xem phim</a>
+                        <a href="profile.html#vouchers" class="dropdown__item" id="menuLinkVouchers">Ví Voucher của tôi (0)</a>
+                        <a href="admin/dashboard.html" class="dropdown__item" id="menuLinkAdmin" style="display: none; color: var(--primary);">⚙️ Quản trị rạp</a>
                         <hr class="dropdown__divider" />
-                        <a href="index.html" id="btnLogout" class="dropdown__item dropdown__item--danger">Đăng xuất</a>
+                        <a href="login.html" id="btnLogout" class="dropdown__item dropdown__item--danger">Đăng xuất</a>
                     </div>
                 </div>
             </div>
-        </div>
+        </div> <!-- ĐÃ SỬA: Đóng đủ thẻ container header__container -->
     </header>
 
     <!-- MOBILE DRAWER -->
@@ -341,6 +344,7 @@
 
     <!-- SCRIPT CHÍNH CHO BƯỚC 4 -->
     <script type="module" src="js/pages/bookingSuccess.js"></script>
+    <script type="module" src="js/components/header.js"></script>
 </body>
 
 </html>
