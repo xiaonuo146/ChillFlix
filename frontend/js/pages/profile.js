@@ -1,5 +1,5 @@
 /* ==========================================================================
-   CHILLFLIX - TRANG HỒ SƠ & LỊCH SỬ ĐẶT VÉ (CHUẨN 100%)
+   CHILLFLIX - TRANG HỒ SƠ & LỊCH SỬ ĐẶT VÉ 
    ========================================================================== */
 import { API } from '../apiClient.js';
 const SYSTEM_VOUCHERS = [
@@ -133,7 +133,7 @@ async function initHistorySection() {
 
     setText("statBookings", activeList.length);
     setText("statHours", `${totalHours.toFixed(1)}h`);
-    setText("statFnB", totalFnB); // 👈 ĐÃ SỬA CHUẨN XÁC, HẾT BỊ ĐỨNG
+    setText("statFnB", totalFnB); 
 
     // Bắt sự kiện chip lọc
     document.querySelectorAll(".history-filter-chip").forEach(chip => {

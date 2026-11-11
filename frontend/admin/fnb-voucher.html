@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Thực Đơn F&B & Voucher · Admin | ChillFlix</title>
+
+    <!-- CSS dùng chung đồng bộ 100% với hệ thống Admin -->
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/pages/admin.css">
+</head>
+
+<body class="admin-body">
+
+    <div class="admin-layout-wrapper">
+
+        <!-- ==================== 1. SIDEBAR TRÁI ĐỒNG BỘ ==================== -->
+        <aside class="admin-sidebar">
+            <div class="admin-brand-box">
+                <a href="../index.html" class="admin-logo">
+                    <span class="logo__icon">🎬</span>
+                    <div class="logo__text-group">
+                        <span class="logo__brand">ChillFlix</span>
+                        <span class="admin-badge-tag">ADMIN</span>
+                    </div>
+                </a>
+                <span class="os-version-sub">Cinema Lounge OS v3.1</span>
+            </div>
+
+            <nav class="admin-nav-menu">
+                <span class="nav-section-label">KHU VỰC QUẢN TRỊ</span>
+                
+                <a href="dashboard.html" class="admin-nav-item">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-text">Tổng quan</span>
+                </a>
+                
+                <a href="bookings.html" class="admin-nav-item">
+                    <span class="nav-icon">📋</span>
+                    <span class="nav-text">Đơn đặt phòng</span>
+                </a>
+                
+                <a href="rooms.html" class="admin-nav-item">
+                    <span class="nav-icon">🚪</span>
+                    <span class="nav-text">Phòng chiếu</span>
+                </a>
+                
+                <a href="fnb-voucher.html" class="admin-nav-item active" id="navItemFnb">
+                    <span class="nav-icon">🍿</span>
+                    <span class="nav-text">Thực đơn F&amp;B</span>
+                </a>
+                
+                <a href="fnb-voucher.html#vouchers" class="admin-nav-item" id="navItemVoucher">
+                    <span class="nav-icon">🏷</span>
+                    <span class="nav-text">Voucher &amp; Khuyến mãi</span>
+                </a>
+                
+                <a href="analytics.html" class="admin-nav-item">
+                    <span class="nav-icon">📈</span>
+                    <span class="nav-text">Thống kê &amp; Báo cáo</span>
+                </a>
+            </nav>
+
+            <div class="admin-sidebar-footer">
+                <a href="../index.html" class="btn-back-client">
+                    <span>🏠</span> Về trang khách
+                </a>
+                <a href="../login.html" id="btnAdminLogout" class="btn-admin-logout">
+                    <span>🚪</span> Đăng xuất
+                </a>
+            </div>
+        </aside>
+
+        <!-- ==================== 2. KHU VỰC NỘI DUNG CHÍNH ==================== -->
+        <div class="admin-main-area">
+
+            <!-- THANH TOPBAR -->
+            <header class="admin-topbar">
+                <div class="topbar-search-box">
+                    <span class="topbar-search-icon">🔍</span>
+                    <input type="text" id="adminTopSearch" placeholder="Tìm nhanh món ăn, mã voucher..." />
+                </div>
+
+                <div class="topbar-tools-right">
+                    <div class="realtime-status-pill">
+                        <span class="realtime-pulse-dot"></span>
+                        <span>Realtime kết nối</span>
+                    </div>
+
+                    <div class="admin-clock" id="adminLiveClock">
+                        🕒 Đang tải đồng hồ...
+                    </div>
+
+                    <div class="admin-profile-pill">
+                        <span class="admin-avatar">👤</span>
+                        <div class="admin-info-mini">
+                            <strong id="adminNameDisplay">Trần Minh Đạt</strong>
+                            <small>Quản lý trưởng</small>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- VÙNG CUỘN NỘI DUNG -->
+            <main class="admin-content-scroll">
+                
+                <!-- TIÊU ĐỀ TRANG -->
+                <div class="dashboard-header-row">
+                    <div>
+                        <span class="dash-subtitle">CINENEST SUITE V2.4 · QUẢN TRỊ DỊCH VỤ &amp; KHUYẾN MÃI</span>
+                        <h1 class="dash-title" id="pageMainTitle">Quản Lý Thực Đơn &amp; Voucher</h1>
+                        <p style="font-size: 13.5px; color: var(--text-muted); margin: 4px 0 0;">
+                            Cấu hình danh mục ẩm thực phục vụ tại phòng chiếu riêng tư và thiết lập các chiến dịch kích cầu suất chiếu.
+                        </p>
+                    </div>
+
+                    <div class="dash-actions-right">
+                        <button type="button" id="btnOpenAddModal" class="btn btn--primary" style="height: 42px; font-size: 13px;">
+                            <span>+</span> Thêm Món F&amp;B Mới
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 4 THẺ SỐ LIỆU TỔNG QUAN -->
+                <section class="kpi-cards-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-top">
+                            <span class="kpi-label">TỔNG SỐ MÓN F&amp;B</span>
+                            <span class="kpi-icon">🍿</span>
+                        </div>
+                        <div class="kpi-number" id="kpiTotalFood">16 <small>món</small></div>
+                        <div class="kpi-trend">3 phân loại: Combo, Nước, Snack</div>
+                    </div>
+
+                    <div class="kpi-card highlight-gold">
+                        <div class="kpi-top">
+                            <span class="kpi-label">ĐANG PHỤC VỤ</span>
+                            <span class="kpi-icon">✨</span>
+                        </div>
+                        <div class="kpi-number" id="kpiAvailableFood">16 <small>món</small></div>
+                        <div class="kpi-trend" style="color: var(--success);">Sẵn sàng phục vụ tận phòng</div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-top">
+                            <span class="kpi-label">TẠM HẾT / NGỪNG BÁN</span>
+                            <span class="kpi-icon">⚠️</span>
+                        </div>
+                        <div class="kpi-number" id="kpiOutOfStockFood">0 <small>món</small></div>
+                        <div class="kpi-trend">Cần nhập thêm nguyên liệu</div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-top">
+                            <span class="kpi-label">VOUCHER ĐANG CHẠY</span>
+                            <span class="kpi-icon">🏷</span>
+                        </div>
+                        <div class="kpi-number" id="kpiActiveVouchers">3 <small>mã</small></div>
+                        <div class="kpi-trend" style="color: var(--primary);">Áp dụng tự động khi đặt phòng</div>
+                    </div>
+                </section>
+
+                <!-- TAB CHUYỂN ĐỔI CHÍNH (THỰC ĐƠN VS VOUCHER) -->
+                <div class="booking-filter-wrapper" style="padding: 14px 20px;">
+                    <div class="filter-top-row">
+                        <div class="status-filter-tabs">
+                            <button type="button" class="tab-filter-chip active" id="tabBtnFood" data-tab="food">
+                                🍿 Thực Đơn F&amp;B (<span id="countTabFood">16</span>)
+                            </button>
+                            <button type="button" class="tab-filter-chip" id="tabBtnVoucher" data-tab="voucher">
+                                🏷 Voucher &amp; Khuyến Mãi (<span id="countTabVoucher">3</span>)
+                            </button>
+                        </div>
+
+                        <!-- Ô tìm kiếm và lọc danh mục -->
+                        <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+                            <select id="filterCategorySelect" class="filter-dropdown">
+                                <option value="all">Tất cả danh mục</option>
+                                <option value="combo">Combo Siêu Ưu Đãi</option>
+                                <option value="drink">Đồ Uống Pha Chế</option>
+                                <option value="food">Bắp Rang &amp; Snack</option>
+                            </select>
+
+                            <div class="table-search-box" style="width: 260px;">
+                                <span class="t-search-icon">🔍</span>
+                                <input type="text" id="tableLocalSearch" placeholder="Tìm theo tên hoặc mã..." />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== KHỐI 1: BẢNG THỰC ĐƠN F&B ==================== -->
+                <section class="admin-table-card" id="sectionFoodTable">
+                    <div class="table-responsive-box">
+                        <table class="chillflix-data-table">
+                            <thead>
+                                <tr>
+                                    <th>MÓN ĂN / THỨC UỐNG</th>
+                                    <th>DANH MỤC</th>
+                                    <th>ĐƠN GIÁ</th>
+                                    <th>GIÁ GỐC</th>
+                                    <th>NHÃN ĐẶC BIỆT</th>
+                                    <th>TRẠNG THÁI BÁN</th>
+                                    <th style="text-align: right;">THAO TÁC</th>
+                                </tr>
+                            </thead>
+                            <tbody id="fnbTableBody">
+                                <!-- JS tự động render danh sách món ăn vào đây -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- ==================== KHỐI 2: BẢNG VOUCHER KHUYẾN MÃI (MẶC ĐỊNH ẨN) ==================== -->
+                <section class="admin-table-card" id="sectionVoucherTable" style="display: none;">
+                    <div class="table-responsive-box">
+                        <table class="chillflix-data-table">
+                            <thead>
+                                <tr>
+                                    <th>MÃ VOUCHER</th>
+                                    <th>LOẠI GIẢM GIÁ</th>
+                                    <th>GIÁ TRỊ GIẢM</th>
+                                    <th>ÁP DỤNG CHO</th>
+                                    <th>HẠN SỬ DỤNG</th>
+                                    <th>TRẠNG THÁI</th>
+                                    <th style="text-align: right;">THAO TÁC</th>
+                                </tr>
+                            </thead>
+                            <tbody id="voucherTableBody">
+                                <!-- JS tự động render danh sách voucher vào đây -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+
+        <!-- ==================== MODAL THÊM / SỬA MÓN F&B ==================== -->
+        <div id="modalFnbOverlay" class="admin-drawer-overlay"></div>
+        <div id="modalFnbBox" class="admin-order-drawer" style="width: 480px;">
+            <div class="drawer-top-header">
+                <div>
+                    <span class="drawer-pre-title">QUẢN LÝ ẨM THỰC</span>
+                    <h3 id="fnbModalTitle">Thêm Món F&amp;B Mới</h3>
+                </div>
+                <button type="button" id="btnCloseFnbModal" class="btn-close-drawer">✕</button>
+            </div>
+
+            <form id="formFnbItem" style="display: flex; flex-direction: column; height: calc(100% - 75px);">
+                <div class="drawer-content-scroll">
+                    <input type="hidden" id="fnbItemId" />
+
+                    <div class="drawer-info-block">
+                        <label class="compact-label" for="fnbItemName">Tên món / Combo *</label>
+                        <input type="text" id="fnbItemName" class="compact-input" placeholder="Ví dụ: Combo Couple Lãng Mạn" required />
+                    </div>
+
+                    <div class="drawer-info-block">
+                        <label class="compact-label" for="fnbItemCategory">Danh mục phục vụ *</label>
+                        <select id="fnbItemCategory" class="compact-input" style="height: 46px;" required>
+                            <option value="combo">Combo Siêu Ưu Đãi</option>
+                            <option value="drink">Đồ Uống Pha Chế</option>
+                            <option value="food">Bắp Rang &amp; Snack</option>
+                        </select>
+                    </div>
+
+                    <div class="drawer-info-block" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                        <div>
+                            <label class="compact-label" for="fnbItemPrice">Đơn giá bán (VNĐ) *</label>
+                            <input type="number" id="fnbItemPrice" class="compact-input" placeholder="99000" min="0" required />
+                        </div>
+                        <div>
+                            <label class="compact-label" for="fnbItemOrigPrice">Giá gốc (nếu có)</label>
+                            <input type="number" id="fnbItemOrigPrice" class="compact-input" placeholder="125000" min="0" />
+                        </div>
+                    </div>
+
+                    <div class="drawer-info-block">
+                        <label class="compact-label" for="fnbItemTag">Nhãn nổi bật</label>
+                        <input type="text" id="fnbItemTag" class="compact-input" placeholder="Bán chạy / Hot Trend / Mới..." />
+                    </div>
+
+                    <div class="drawer-info-block">
+                        <label class="compact-label" for="fnbItemImg">URL Ảnh món ăn</label>
+                        <input type="url" id="fnbItemImg" class="compact-input" placeholder="https://images.unsplash.com/..." />
+                    </div>
+
+                    <div class="drawer-info-block">
+                        <label class="compact-label" for="fnbItemDesc">Mô tả thành phần món</label>
+                        <textarea id="fnbItemDesc" class="compact-input" style="height: 70px; padding-top: 10px;" placeholder="Ví dụ: 1 bắp phô mai lớn + 2 ly trà đào cam sả ướp lạnh..."></textarea>
+                    </div>
+                </div>
+
+                <div class="drawer-footer-actions">
+                    <button type="submit" class="btn btn--primary btn-drawer-main">
+                        💾 Lưu Thông Tin Món
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- ==================== MODAL THÊM / SỬA VOUCHER ==================== -->
+        <div id="modalVoucherOverlay" class="admin-drawer-overlay"></div>
+        <div id="modalVoucherBox" class="admin-order-drawer" style="width: 480px;">
+            <div class="drawer-top-header">
+                <div>
+                    <span class="drawer-pre-title">QUẢN LÝ KHUYẾN MÃI</span>
+                    <h3 id="voucherModalTitle">Tạo Mã Voucher Mới</h3>
+                </div>
+                <button type="button" id="btnCloseVoucherModal" class="btn-close-drawer">✕</button>
+            </div>
+
+            <form id="formVoucherItem" style="display: flex; flex-direction: column; height: calc(100% - 75px);">
+                <div class="drawer-content-scroll">
+                    <input type="hidden" id="voucherItemOldCode" />
+
+                    <div class="drawer-info-block">
+                        <label class="compact-label" for="vCode">Mã Voucher (Viết hoa, không dấu) *</label>
+                        <input type="text" id="vCode" class="compact-input" placeholder="Ví dụ: BANMOI30" required style="text-transform: uppercase;" />
+                    </div>
+
+                    <div class="drawer-info-block" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                        <div>
+                            <label class="compact-label" for="vType">Kiểu giảm giá *</label>
+                            <select id="vType" class="compact-input" style="height: 46px;">
+                                <option value="percent">Theo phần trăm (%)</option>
+                                <option value="fixed">Số tiền cố định (VNĐ)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="compact-label" for="vValue">Giá trị giảm *</label>
+                            <input type="number" id="vValue" class="compact-input" placeholder="Ví dụ: 20 hoặc 50000" min="1" required />
+                        </div>
+                    </div>
+
+                    <div class="drawer-info-block">
+                        <label class="compact-label" for="vAppliesTo">Phạm vi áp dụng *</label>
+                        <select id="vAppliesTo" class="compact-input" style="height: 46px;">
+                            <option value="room">Tiền giờ phòng chiếu</option>
+                            <option value="total">Tổng hóa đơn</option>
+                            <option value="fnb">Ẩm thực F&amp;B</option>
+                        </select>
+                    </div>
+
+                    <div class="drawer-info-block">
+                        <label class="compact-label" for="vExp">Hạn sử dụng (Đến ngày) *</label>
+                        <input type="date" id="vExp" class="compact-input" required />
+                    </div>
+
+                    <div class="drawer-info-block">
+                        <label class="compact-label" for="vDesc">Nội dung ưu đãi mô tả</label>
+                        <input type="text" id="vDesc" class="compact-input" placeholder="Ví dụ: Giảm 20% tiền phòng cho thành viên mới" />
+                    </div>
+                </div>
+
+                <div class="drawer-footer-actions">
+                    <button type="submit" class="btn btn--primary btn-drawer-main">
+                        🎟 Phát Hành Mã Voucher
+                    </button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+    <script type="module" src="../js/pages/admin/fnbVoucher.js"></script>
+</body>
+
+</html>

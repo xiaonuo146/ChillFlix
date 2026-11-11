@@ -1,5 +1,5 @@
 /* ==========================================================================
-   CHILLFLIX - BƯỚC 1: CHỌN PHIM & PHÒNG CHIẾU (CHUẨN HOẠT ĐỘNG 100%)
+   CHILLFLIX - BƯỚC 1: CHỌN PHIM & PHÒNG CHIẾU 
    ========================================================================== */
 
 import { getMovieDetails } from "../api.js";

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   CHILLFLIX ADMIN - DASHBOARD CONTROLLER (CHUẨN DỮ LIỆU THẬT 100%)
+   CHILLFLIX ADMIN - DASHBOARD CONTROLLER 
    ========================================================================== */
 import { API } from '../../apiClient.js';
 function formatMoney(amount) {

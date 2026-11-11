@@ -1,8 +1,8 @@
 /* ==========================================================================
-   CHILLFLIX - BƯỚC 2: ĐỒ ĂN & THỨC UỐNG (ĐÃ TÍCH HỢP ẢNH THẬT SẴN CÓ)
+   CHILLFLIX - BƯỚC 2: ĐỒ ĂN & THỨC UỐNG 
    ========================================================================== */
 
-// 1. DANH SÁCH THỰC ĐƠN CHUẨN MOCKUP 4 (KÈM ẢNH ĐỒ ĂN THẬT SẴN CÓ)
+// 1. DANH SÁCH THỰC ĐƠN 
 const menuItems = [
     // ===== COMBO ƯU ĐÃI =====
     {

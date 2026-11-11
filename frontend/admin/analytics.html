@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thống Kê & Báo Cáo Doanh Thu · Admin | ChillFlix</title>
+
+
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/pages/admin.css">
+
+    <!-- Thư viện vẽ biểu đồ chuyên nghiệp Chart.js (CDN tải cực nhanh) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="admin-body">
+
+    <div class="admin-layout-wrapper">
+
+        <!-- ==================== 1. SIDEBAR BÊN TRÁI ==================== -->
+        <aside class="admin-sidebar">
+            <div class="admin-brand-box">
+                <a href="../index.html" class="admin-logo">
+                    <span class="logo__icon">🎬</span>
+                    <div class="logo__text-group">
+                        <span class="logo__brand">ChillFlix</span>
+                        <span class="admin-badge-tag">ADMIN</span>
+                    </div>
+                </a>
+                <span class="os-version-sub">Cinema Lounge OS v3.1</span>
+            </div>
+
+            <nav class="admin-nav-menu">
+                <span class="nav-section-label">KHU VỰC QUẢN TRỊ</span>
+                
+                <a href="dashboard.html" class="admin-nav-item">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-text">Tổng quan</span>
+                </a>
+                
+                <a href="bookings.html" class="admin-nav-item">
+                    <span class="nav-icon">📋</span>
+                    <span class="nav-text">Đơn đặt phòng</span>
+                </a>
+                
+                <a href="rooms.html" class="admin-nav-item">
+                    <span class="nav-icon">🚪</span>
+                    <span class="nav-text">Phòng chiếu</span>
+                </a>
+                
+                <a href="fnb-voucher.html" class="admin-nav-item">
+                    <span class="nav-icon">🍿</span>
+                    <span class="nav-text">Thực đơn F&amp;B</span>
+                </a>
+                
+                <a href="fnb-voucher.html#vouchers" class="admin-nav-item">
+                    <span class="nav-icon">🏷</span>
+                    <span class="nav-text">Voucher &amp; Khuyến mãi</span>
+                </a>
+                
+                <a href="analytics.html" class="admin-nav-item active">
+                    <span class="nav-icon">📈</span>
+                    <span class="nav-text">Thống kê &amp; Báo cáo</span>
+                </a>
+            </nav>
+
+            <div class="admin-sidebar-footer">
+                <a href="../index.html" class="btn-back-client">
+                    <span>🏠</span> Về trang khách
+                </a>
+                <a href="../login.html" id="btnAdminLogout" class="btn-admin-logout">
+                    <span>🚪</span> Đăng xuất
+                </a>
+            </div>
+        </aside>
+
+        <!-- ==================== 2. MAIN VÙNG NỘI DUNG ==================== -->
+        <div class="admin-main-area">
+
+            <!-- THANH TOPBAR -->
+            <header class="admin-topbar">
+                <div class="topbar-search-box">
+                    <span class="topbar-search-icon">🔍</span>
+                    <input type="text" placeholder="Tìm kiếm nhanh chỉ số, phim, món..." />
+                </div>
+
+                <div class="topbar-tools-right">
+                    <div class="realtime-status-pill">
+                        <span class="realtime-pulse-dot"></span>
+                        <span>Dữ liệu tài chính live</span>
+                    </div>
+
+                    <div class="admin-clock" id="adminLiveClock">
+                        🕒 Đang tải đồng hồ...
+                    </div>
+
+                    <div class="admin-profile-pill">
+                        <span class="admin-avatar">👤</span>
+                        <div class="admin-info-mini">
+                            <strong id="adminNameDisplay">Trần Minh Đạt</strong>
+                            <small>Quản lý trưởng</small>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- VÙNG CUỘN NỘI DUNG CHÍNH -->
+            <main class="admin-content-scroll">
+                
+                <!-- TIÊU ĐỀ TRANG & BỘ LỌC KHOẢNG THỜI GIAN -->
+                <div class="dashboard-header-row">
+                    <div>
+                        <span class="dash-subtitle">TRUNG TÂM PHÂN TÍCH TÀI CHÍNH &amp; HIỆU SUẤT PHÒNG CHIẾU</span>
+                        <h1 class="dash-title">Thống Kê &amp; Báo Cáo Doanh Thu</h1>
+                        <p style="font-size: 13.5px; color: var(--text-muted); margin: 4px 0 0;">
+                            Phân tích dữ liệu doanh thu tiền phòng, ẩm thực F&amp;B, tỷ lệ lấp đầy và xu hướng khách hàng.
+                        </p>
+                    </div>
+
+                    <div class="dash-actions-right">
+                        <!-- Bộ chọn khoảng thời gian -->
+                        <div class="status-filter-tabs" id="analyticsRangeChips">
+                            <button type="button" class="tab-filter-chip" data-range="today">Hôm nay</button>
+                            <button type="button" class="tab-filter-chip active" data-range="7days">7 ngày qua</button>
+                            <button type="button" class="tab-filter-chip" data-range="30days">30 ngày qua</button>
+                        </div>
+
+                        <button type="button" id="btnExportAnalyticsCsv" class="btn btn--outline" style="height: 42px; font-size: 13px;">
+                            📥 Xuất Báo Cáo CSV
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 5 THẺ CHỈ SỐ KPI CHÍNH (CHUẨN MOCKUP 12) -->
+                <section class="kpi-cards-grid" style="grid-template-columns: repeat(5, 1fr) !important;">
+                    <div class="kpi-card highlight-gold">
+                        <div class="kpi-top">
+                            <span class="kpi-label">DOANH THU THỰC</span>
+                            <span class="kpi-icon">💰</span>
+                        </div>
+                        <div class="kpi-number" id="anlTotalRevenue">0đ</div>
+                        <div class="kpi-trend" style="color: var(--success);" id="anlRevGrowth">▲ +14.8% so với kỳ trước</div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-top">
+                            <span class="kpi-label">TỔNG ĐƠN ĐẶT</span>
+                            <span class="kpi-icon">📋</span>
+                        </div>
+                        <div class="kpi-number" id="anlTotalBookings">0 <small>đơn</small></div>
+                        <div class="kpi-trend" id="anlBookingTrend">Đã đối soát hoàn tất</div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-top">
+                            <span class="kpi-label">GIÁ TRỊ ĐƠN TB (AOV)</span>
+                            <span class="kpi-icon">🎯</span>
+                        </div>
+                        <div class="kpi-number" id="anlAov">0đ</div>
+                        <div class="kpi-trend">Trung bình phòng + F&amp;B</div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-top">
+                            <span class="kpi-label">TỶ LỆ LẤP ĐẦY PHÒNG</span>
+                            <span class="kpi-icon">🚪</span>
+                        </div>
+                        <div class="kpi-number" id="anlOccupancyRate">76.4%</div>
+                        <div class="kpi-trend" style="color: var(--success);">▲ Cao điểm 18:00 - 22:00</div>
+                    </div>
+
+                    <div class="kpi-card">
+                        <div class="kpi-top">
+                            <span class="kpi-label">TỶ LỆ HỦY PHÒNG</span>
+                            <span class="kpi-icon">🛡</span>
+                        </div>
+                        <div class="kpi-number" id="anlCancelRate">3.8%</div>
+                        <div class="kpi-trend" style="color: var(--success);">▼ Giữ chân khách rất tốt</div>
+                    </div>
+                </section>
+
+                <!-- KHỐI BIỂU ĐỒ 1: BIỂU ĐỒ DOANH THU THEO THỜI GIAN & SO SÁNH -->
+                <section class="admin-table-card" style="padding: 24px; margin-bottom: 24px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
+                        <div>
+                            <h3 style="font-size: 16px; margin: 0 0 4px; color: var(--text);">📈 Xu Hướng Doanh Thu &amp; Cơ Cấu Theo Ngày</h3>
+                            <small style="color: var(--text-muted);">Biểu diễn cột doanh thu hàng ngày kết hợp đường đối chiếu kỳ trước</small>
+                        </div>
+                        <div style="display: flex; gap: 16px; font-size: 12.5px;">
+                            <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 12px; height: 12px; background: var(--primary); border-radius: 2px;"></span> Tiền Giờ Phòng</span>
+                            <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 12px; height: 12px; background: var(--info); border-radius: 2px;"></span> Ẩm Thực F&amp;B</span>
+                        </div>
+                    </div>
+                    <div style="height: 320px; position: relative;">
+                        <canvas id="revenueTimelineChart"></canvas>
+                    </div>
+                </section>
+
+                <!-- KHỐI BIỂU ĐỒ 2: CƠ CẤU DOANH THU & HIỆU SUẤT THEO PHÒNG (CHIA 2 CỘT) -->
+                <section class="bottom-split-grid" style="grid-template-columns: 1fr 1.3fr !important; margin-bottom: 24px;">
+                    
+                    <!-- Cột 1: Cơ cấu Nguồn thu Doughnut -->
+                    <div class="urgent-tasks-panel" style="padding: 24px;">
+                        <h3 style="font-size: 16px; margin: 0 0 6px; color: var(--text);">🍩 Tỷ Trọng Nguồn Thu</h3>
+                        <small style="color: var(--text-muted); display: block; margin-bottom: 16px;">Phân bổ giữa Tiền phòng và Combo F&amp;B</small>
+                        <div style="height: 220px; position: relative;">
+                            <canvas id="revenueSourceDoughnutChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Cột 2: Doanh thu theo Loại phòng Bar -->
+                    <div class="revenue-overview-panel" style="padding: 24px;">
+                        <h3 style="font-size: 16px; margin: 0 0 6px; color: var(--text);">🚪 Doanh Thu Theo Không Gian Phòng</h3>
+                        <small style="color: var(--text-muted); display: block; margin-bottom: 16px;">Hiệu suất khai thác giữa Phòng Couple, Nhóm 4 và VIP</small>
+                        <div style="height: 220px; position: relative;">
+                            <canvas id="roomPerformanceBarChart"></canvas>
+                        </div>
+                    </div>
+
+                </section>
+
+                <!-- KHỐI BẢNG XẾP HẠNG TOP PHIM VÀ TOP F&B (CHIA 2 CỘT) -->
+                <section class="bottom-split-grid" style="grid-template-columns: 1fr 1fr !important; margin-bottom: 24px;">
+                    
+                    <!-- Top 5 Phim hot -->
+                    <div class="urgent-tasks-panel" style="padding: 24px;">
+                        <div class="panel-header-flex" style="margin-bottom: 16px;">
+                            <div>
+                                <h3 style="font-size: 16px; color: var(--text); margin: 0 0 4px;">🎬 Top 5 Phim Được Xem Nhiều Nhất</h3>
+                                <small style="color: var(--text-muted);">Xếp hạng theo số suất chiếu được khách chọn</small>
+                            </div>
+                        </div>
+                        <div id="topMoviesList" style="display: flex; flex-direction: column; gap: 12px;">
+                            <!-- JS tự động render -->
+                        </div>
+                    </div>
+
+                    <!-- Top 5 Món F&B -->
+                    <div class="revenue-overview-panel" style="padding: 24px;">
+                        <div class="panel-header-flex" style="margin-bottom: 16px;">
+                            <div>
+                                <h3 style="font-size: 16px; color: var(--text); margin: 0 0 4px;">🍿 Top 5 Món F&amp;B Bán Chạy Nhất</h3>
+                                <small style="color: var(--text-muted);">Món ăn &amp; Đồ uống mang lại lợi nhuận cao nhất</small>
+                            </div>
+                        </div>
+                        <div id="topFnbList" style="display: flex; flex-direction: column; gap: 12px;">
+                            <!-- JS tự động render -->
+                        </div>
+                    </div>
+
+                </section>
+
+                <!-- BẢNG KÊ CHI TIẾT DOANH THU THEO NGÀY (DATA TABLE) -->
+                <section class="admin-table-card">
+                    <div style="padding: 18px 24px; border-bottom: 1px solid var(--border);">
+                        <h3 style="font-size: 16px; margin: 0 0 4px; color: var(--text);">📅 Bảng Kê Chi Tiết Doanh Thu Theo Ngày</h3>
+                        <small style="color: var(--text-muted);">Dữ liệu kế toán phục vụ đối soát định kỳ</small>
+                    </div>
+
+                    <div class="table-responsive-box">
+                        <table class="chillflix-data-table">
+                            <thead>
+                                <tr>
+                                    <th>NGÀY GIAO DỊCH</th>
+                                    <th>SỐ ĐƠN HOÀN THÀNH</th>
+                                    <th>DOANH THU PHÒNG</th>
+                                    <th>DOANH THU F&amp;B</th>
+                                    <th>GIẢM GIÁ VOUCHER</th>
+                                    <th>THỰC THU</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dailyAccountingTableBody">
+                                <!-- JS tự động đổ dữ liệu bảng -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+
+    </div>
+
+    <script type="module" src="../js/pages/admin/analytics.js"></script>
+</body>
+
+</html>

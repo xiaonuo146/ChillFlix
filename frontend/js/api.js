@@ -61,20 +61,20 @@ async function fetchFromBackend(endpoint) {
 }
 
 // ======================================
-// 2. LẤY DANH SÁCH 20 PHIM ĐANG HOT (THẬT 100%)
+// 2. LẤY DANH SÁCH 60 PHIM ĐANG HOT 
 // ======================================
 export async function getTrendingMovies() {
     try {
         const movies = await fetchFromBackend("/trending");
         return (Array.isArray(movies) && movies.length > 0) ? movies : MOCK_TRENDING_MOVIES;
     } catch (error) {
-        console.warn("⚠️ Không kết nối được Backend proxy, dùng mock data:", error.message);
+        console.warn("Không kết nối được Backend proxy, dùng mock data:", error.message);
         return MOCK_TRENDING_MOVIES;
     }
 }
 
 // ======================================
-// 3. LẤY CHI TIẾT PHIM (THẬT 100%)
+// 3. LẤY CHI TIẾT PHIM 
 // ======================================
 export async function getMovieDetails(movieId) {
     const id = validateMovieId(movieId);
@@ -89,7 +89,7 @@ export async function getMovieDetails(movieId) {
 }
 
 // ======================================
-// 4. LẤY DIỄN VIÊN (THẬT 100%)
+// 4. LẤY DIỄN VIÊN 
 // ======================================
 export async function getMovieCredits(movieId) {
     const id = validateMovieId(movieId);
@@ -102,7 +102,7 @@ export async function getMovieCredits(movieId) {
 }
 
 // ======================================
-// 5. LẤY PHIM TƯƠNG TỰ (THẬT 100%)
+// 5. LẤY PHIM TƯƠNG TỰ
 // ======================================
 export async function getSimilarMovies(movieId) {
     const id = validateMovieId(movieId);
@@ -117,7 +117,7 @@ export async function getSimilarMovies(movieId) {
 }
 
 // ======================================
-// 6. LẤY TRAILER YOUTUBE (THẬT 100%)
+// 6. LẤY TRAILER YOUTUBE 
 // ======================================
 export async function getMovieTrailer(movieId) {
     const id = validateMovieId(movieId);

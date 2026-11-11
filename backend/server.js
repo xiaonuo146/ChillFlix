@@ -44,7 +44,7 @@ async function autoProvision() {
             console.log('👤 [AUTO-SEED] Đã tạo tài khoản Khách: khachhang@chillflix.vn / 123');
         }
 
-        // Kiểm tra 4 phòng chiếu (nếu chưa có thì tạo luôn để không bị trống rạp)
+        // Kiểm tra 4 phòng chiếu 
         const roomCount = await Room.countDocuments();
         if (roomCount === 0) {
             await Room.insertMany([
@@ -65,7 +65,7 @@ connectDB().then(() => {
     autoProvision();
 });
 
-app.use(helmet({ contentSecurityPolicy: false })); // Tắt CSP để load ảnh TMDB thoải mái
+app.use(helmet({ contentSecurityPolicy: false })); 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -113,5 +113,5 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, (err) => {
     if (err) return console.error('Không khởi động được:', err);
-    console.log(`🚀 ChillFlix Backend chạy tại http://localhost:${PORT}`);
+    console.log(` ChillFlix Backend chạy tại http://localhost:${PORT}`);
 });

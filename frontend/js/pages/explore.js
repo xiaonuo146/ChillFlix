@@ -4,7 +4,7 @@ import { CONFIG } from "../config.js";
 let allMovies = [];
 let filteredMovies = [];
 let currentPage = 1;
-const ITEMS_PER_PAGE = 16; 
+const ITEMS_PER_PAGE = 16;   // thông số trang 4*4
 let searchTimeout = null;
 
 document.addEventListener("DOMContentLoaded", async () => {

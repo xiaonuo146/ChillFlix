@@ -1,5 +1,5 @@
     /* ==========================================================================
-    CHILLFLIX ADMIN - ROOMS CONTROLLER (DỮ LIỆU THẬT 100% - KHÔNG CÓ TÊN GIẢ)
+    CHILLFLIX ADMIN - ROOMS CONTROLLER 
     Tự động kiểm tra đơn thật của khách, quản lý bảo trì và lịch tuần
     ========================================================================== */
 
